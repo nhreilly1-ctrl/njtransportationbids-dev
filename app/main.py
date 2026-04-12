@@ -1,9 +1,12 @@
 import os
+import secrets
 import psycopg2
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 app = FastAPI(title="NJ Bid Registry")
+security = HTTPBasic()
 
 
 def get_conn():
@@ -11,6 +14,22 @@ def get_conn():
     if not database_url:
         raise RuntimeError("DATABASE_URL is not set")
     return psycopg2.connect(database_url)
+
+
+def check_auth(credentials: HTTPBasicCredentials = Depends(security)):
+    expected_username = os.environ.get("ADMIN_USERNAME", "")
+    expected_password = os.environ.get("ADMIN_PASSWORD", "")
+
+    username_ok = secrets.compare_digest(credentials.username, expected_username)
+    password_ok = secrets.compare_digest(credentials.password, expected_password)
+
+    if not (username_ok and password_ok):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 
 def init_db():
@@ -207,9 +226,8 @@ def fetch_sources():
             """)
             rows = cur.fetchall()
 
-    data = []
-    for row in rows:
-        data.append({
+    return [
+        {
             "source_id": row[0],
             "source_name": row[1],
             "entity_type": row[2],
@@ -217,8 +235,9 @@ def fetch_sources():
             "source_url": row[4],
             "priority_tier": row[5],
             "website_ready": row[6],
-        })
-    return data
+        }
+        for row in rows
+    ]
 
 
 def fetch_opportunities():
@@ -232,9 +251,8 @@ def fetch_opportunities():
             """)
             rows = cur.fetchall()
 
-    data = []
-    for row in rows:
-        data.append({
+    return [
+        {
             "opportunity_id": row[0],
             "title": row[1],
             "agency": row[2],
@@ -243,8 +261,9 @@ def fetch_opportunities():
             "due_date": row[5],
             "status": row[6],
             "opportunity_url": row[7],
-        })
-    return data
+        }
+        for row in rows
+    ]
 
 
 @app.on_event("startup")
@@ -304,6 +323,7 @@ def home():
               <a href="/opportunities">View Opportunities</a>
               <a href="/api/sources" class="secondary">Sources JSON</a>
               <a href="/api/opportunities" class="secondary">Opportunities JSON</a>
+              <a href="/admin" class="secondary">Admin</a>
               <a href="/health" class="secondary">Health</a>
               <a href="/ready" class="secondary">Readiness</a>
             </div>
@@ -316,14 +336,7 @@ def home():
               <li>Health and readiness checks passing</li>
               <li>Database-backed source registry working</li>
               <li>Database-backed opportunities page working</li>
-            </ul>
-
-            <h2>Next build phase</h2>
-            <ul>
-              <li>Expand source registry beyond top 10</li>
-              <li>Replace sample opportunities with crawler-fed records</li>
-              <li>Add admin review workflow</li>
-              <li>Add protected admin functions</li>
+              <li>Admin route available with auth</li>
             </ul>
           </div>
         </div>
@@ -466,6 +479,53 @@ def opportunities_page():
               {items}
             </tbody>
           </table>
+        </div>
+      </body>
+    </html>
+    """
+
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin_page(username: str = Depends(check_auth)):
+    sources = fetch_sources()
+    opportunities = fetch_opportunities()
+
+    return f"""
+    <html>
+      <head>
+        <title>Admin</title>
+        <style>
+          body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
+          .wrap {{ max-width: 900px; margin: 0 auto; }}
+          .card {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; }}
+          .stats {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 18px 0; }}
+          .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
+          a {{ color: #0b57d0; text-decoration: none; }}
+        </style>
+      </head>
+      <body>
+        <div class="wrap">
+          <div class="card">
+            <a href="/">← Back to home</a>
+            <h1>Admin</h1>
+            <p>Signed in as <strong>{username}</strong></p>
+
+            <div class="stats">
+              <div class="stat">
+                <strong>{len(sources)}</strong><br>
+                source records
+              </div>
+              <div class="stat">
+                <strong>{len(opportunities)}</strong><br>
+                opportunity records
+              </div>
+            </div>
+
+            <p><a href="/api/sources">View sources JSON</a></p>
+            <p><a href="/api/opportunities">View opportunities JSON</a></p>
+            <p><a href="/sources">View sources page</a></p>
+            <p><a href="/opportunities">View opportunities page</a></p>
+          </div>
         </div>
       </body>
     </html>
