@@ -530,3 +530,13 @@ def admin_page(username: str = Depends(check_auth)):
       </body>
     </html>
     """
+
+
+@app.get("/debug-auth")
+def debug_auth():
+    return {
+        "admin_username_set": bool(os.environ.get("ADMIN_USERNAME")),
+        "admin_password_set": bool(os.environ.get("ADMIN_PASSWORD")),
+        "admin_username_length": len(os.environ.get("ADMIN_USERNAME", "")),
+        "admin_password_length": len(os.environ.get("ADMIN_PASSWORD", "")),
+    }
