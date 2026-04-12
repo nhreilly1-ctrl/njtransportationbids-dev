@@ -3,7 +3,7 @@ import re
 import secrets
 import psycopg2
 import requests
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Query
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
@@ -83,6 +83,19 @@ def init_db():
                     source_url TEXT,
                     raw_text TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS crawl_runs (
+                    id SERIAL PRIMARY KEY,
+                    crawl_run_id TEXT UNIQUE NOT NULL,
+                    source_id TEXT NOT NULL,
+                    source_name TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    leads_found INTEGER DEFAULT 0,
+                    notes TEXT,
+                    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
 
@@ -187,23 +200,32 @@ def fetch_opportunities():
     ]
 
 
-def fetch_leads():
+def fetch_leads(status_filter: str | None = None):
     with get_conn() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, created_at
-                FROM opportunity_leads
-                ORDER BY
-                    CASE
-                        WHEN status = 'New' THEN 1
-                        WHEN status = 'Promoted' THEN 2
-                        WHEN status = 'Rejected' THEN 3
-                        ELSE 4
-                    END,
-                    created_at DESC,
-                    title
-                LIMIT 200
-            """)
+            if status_filter and status_filter in {"New", "Promoted", "Rejected"}:
+                cur.execute("""
+                    SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, created_at
+                    FROM opportunity_leads
+                    WHERE status = %s
+                    ORDER BY created_at DESC, title
+                    LIMIT 200
+                """, (status_filter,))
+            else:
+                cur.execute("""
+                    SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, created_at
+                    FROM opportunity_leads
+                    ORDER BY
+                        CASE
+                            WHEN status = 'New' THEN 1
+                            WHEN status = 'Promoted' THEN 2
+                            WHEN status = 'Rejected' THEN 3
+                            ELSE 4
+                        END,
+                        created_at DESC,
+                        title
+                    LIMIT 200
+                """)
             rows = cur.fetchall()
 
     return [
@@ -218,6 +240,31 @@ def fetch_leads():
             "status": row[7],
             "source_url": row[8],
             "created_at": str(row[9]),
+        }
+        for row in rows
+    ]
+
+
+def fetch_crawl_runs(limit: int = 50):
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT crawl_run_id, source_id, source_name, status, leads_found, notes, started_at
+                FROM crawl_runs
+                ORDER BY started_at DESC
+                LIMIT %s
+            """, (limit,))
+            rows = cur.fetchall()
+
+    return [
+        {
+            "crawl_run_id": row[0],
+            "source_id": row[1],
+            "source_name": row[2],
+            "status": row[3],
+            "leads_found": row[4],
+            "notes": row[5],
+            "started_at": str(row[6]),
         }
         for row in rows
     ]
@@ -244,6 +291,15 @@ def fetch_admin_summary():
             cur.execute("SELECT COUNT(*) FROM opportunity_leads WHERE status = 'Rejected'")
             rejected_lead_count = cur.fetchone()[0]
 
+            cur.execute("SELECT COUNT(*) FROM crawl_runs")
+            crawl_run_count = cur.fetchone()[0]
+
+            cur.execute("SELECT COUNT(*) FROM crawl_runs WHERE status = 'Success'")
+            successful_crawl_count = cur.fetchone()[0]
+
+            cur.execute("SELECT COUNT(*) FROM crawl_runs WHERE status = 'Failed'")
+            failed_crawl_count = cur.fetchone()[0]
+
             cur.execute("""
                 SELECT COALESCE(entity_type, 'Unknown'), COUNT(*)
                 FROM registry_sources
@@ -268,6 +324,9 @@ def fetch_admin_summary():
         "new_lead_count": new_lead_count,
         "promoted_lead_count": promoted_lead_count,
         "rejected_lead_count": rejected_lead_count,
+        "crawl_run_count": crawl_run_count,
+        "successful_crawl_count": successful_crawl_count,
+        "failed_crawl_count": failed_crawl_count,
         "by_entity_type": [{"entity_type": row[0], "count": row[1]} for row in entity_rows],
         "top_counties": [{"county": row[0], "count": row[1]} for row in county_rows],
     }
@@ -280,14 +339,6 @@ def strip_html(text: str) -> str:
     text = re.sub(r"&nbsp;|&#160;", " ", text)
     text = re.sub(r"\s+", " ", text)
     return text.strip()
-
-
-def extract_long_dates(text: str):
-    return re.findall(
-        r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}",
-        text,
-        flags=re.I,
-    )
 
 
 def upsert_leads(source_key: str, source_id: str, agency: str, county: str, source_url: str, titles: list[str]):
@@ -341,6 +392,31 @@ def upsert_leads(source_key: str, source_id: str, agency: str, county: str, sour
         conn.commit()
 
     return inserted
+
+
+def log_crawl_run(source_id: str, source_name: str, status_text: str, leads_found: int, notes: str):
+    crawl_run_id = f"crawl-{source_id}-{int(__import__('time').time())}"
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO crawl_runs (
+                    crawl_run_id,
+                    source_id,
+                    source_name,
+                    status,
+                    leads_found,
+                    notes
+                )
+                VALUES (%s,%s,%s,%s,%s,%s)
+            """, (
+                crawl_run_id,
+                source_id,
+                source_name,
+                status_text,
+                leads_found,
+                notes
+            ))
+        conn.commit()
 
 
 def parse_construction_titles(cleaned: str):
@@ -397,44 +473,70 @@ def parse_profserv_titles(cleaned: str):
 
 def manual_crawl_njdot_construction():
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
-    resp = requests.get(NJDOT_CONSTRUCTION_URL, headers=headers, timeout=30)
-    resp.raise_for_status()
-
-    cleaned = strip_html(resp.text)
-    if not cleaned:
-        return {"inserted": 0, "titles": []}
-
-    deduped = parse_construction_titles(cleaned)
-    inserted = upsert_leads(
-        source_key="njdot-construction",
-        source_id="state-njdot-construction",
-        agency="NJDOT Construction Services",
-        county="Statewide",
-        source_url=NJDOT_CONSTRUCTION_URL,
-        titles=deduped,
-    )
-    return {"inserted": inserted, "titles": deduped}
+    try:
+        resp = requests.get(NJDOT_CONSTRUCTION_URL, headers=headers, timeout=30)
+        resp.raise_for_status()
+        cleaned = strip_html(resp.text)
+        deduped = parse_construction_titles(cleaned) if cleaned else []
+        inserted = upsert_leads(
+            source_key="njdot-construction",
+            source_id="state-njdot-construction",
+            agency="NJDOT Construction Services",
+            county="Statewide",
+            source_url=NJDOT_CONSTRUCTION_URL,
+            titles=deduped,
+        )
+        log_crawl_run(
+            source_id="state-njdot-construction",
+            source_name="NJDOT Construction Services",
+            status_text="Success",
+            leads_found=inserted,
+            notes="Manual crawl completed"
+        )
+        return {"inserted": inserted, "titles": deduped}
+    except Exception as e:
+        log_crawl_run(
+            source_id="state-njdot-construction",
+            source_name="NJDOT Construction Services",
+            status_text="Failed",
+            leads_found=0,
+            notes=str(e)
+        )
+        raise
 
 
 def manual_crawl_njdot_profserv():
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
-    resp = requests.get(NJDOT_PROFSERV_URL, headers=headers, timeout=30)
-    resp.raise_for_status()
-
-    cleaned = strip_html(resp.text)
-    if not cleaned:
-        return {"inserted": 0, "titles": []}
-
-    deduped = parse_profserv_titles(cleaned)
-    inserted = upsert_leads(
-        source_key="njdot-profserv",
-        source_id="state-njdot-profserv",
-        agency="NJDOT Professional Services",
-        county="Statewide",
-        source_url=NJDOT_PROFSERV_URL,
-        titles=deduped,
-    )
-    return {"inserted": inserted, "titles": deduped}
+    try:
+        resp = requests.get(NJDOT_PROFSERV_URL, headers=headers, timeout=30)
+        resp.raise_for_status()
+        cleaned = strip_html(resp.text)
+        deduped = parse_profserv_titles(cleaned) if cleaned else []
+        inserted = upsert_leads(
+            source_key="njdot-profserv",
+            source_id="state-njdot-profserv",
+            agency="NJDOT Professional Services",
+            county="Statewide",
+            source_url=NJDOT_PROFSERV_URL,
+            titles=deduped,
+        )
+        log_crawl_run(
+            source_id="state-njdot-profserv",
+            source_name="NJDOT Professional Services",
+            status_text="Success",
+            leads_found=inserted,
+            notes="Manual crawl completed"
+        )
+        return {"inserted": inserted, "titles": deduped}
+    except Exception as e:
+        log_crawl_run(
+            source_id="state-njdot-profserv",
+            source_name="NJDOT Professional Services",
+            status_text="Failed",
+            leads_found=0,
+            notes=str(e)
+        )
+        raise
 
 
 def promote_lead(lead_id: str):
@@ -509,6 +611,17 @@ def reject_lead(lead_id: str):
         conn.commit()
 
 
+def reset_lead_to_new(lead_id: str):
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE opportunity_leads
+                SET status = 'New'
+                WHERE lead_id = %s
+            """, (lead_id,))
+        conn.commit()
+
+
 @app.on_event("startup")
 def startup_event():
     init_db()
@@ -560,6 +673,10 @@ def home():
                 <strong>{summary['lead_count']}</strong><br>
                 total leads
               </div>
+              <div class="stat">
+                <strong>{summary['crawl_run_count']}</strong><br>
+                crawl runs logged
+              </div>
             </div>
 
             <div class="nav">
@@ -578,8 +695,8 @@ def home():
               <li>Health and readiness checks passing</li>
               <li>Database-backed source registry working</li>
               <li>Published opportunities are driven by promoted leads</li>
-              <li>Admin leads workflow supports crawl, promote, and reject</li>
-              <li>NJDOT Construction and NJDOT Professional Services manual crawl buttons are live</li>
+              <li>Admin leads workflow supports crawl, promote, reject, and reset</li>
+              <li>Crawl runs are logged and visible in admin</li>
             </ul>
           </div>
         </div>
@@ -624,8 +741,16 @@ def api_admin_summary(username: str = Depends(check_auth)):
 
 
 @app.get("/api/admin/leads")
-def api_admin_leads(username: str = Depends(check_auth)):
-    return JSONResponse(content=fetch_leads())
+def api_admin_leads(
+    username: str = Depends(check_auth),
+    status_filter: str | None = Query(default=None, alias="status")
+):
+    return JSONResponse(content=fetch_leads(status_filter=status_filter))
+
+
+@app.get("/api/admin/crawl-runs")
+def api_admin_crawl_runs(username: str = Depends(check_auth)):
+    return JSONResponse(content=fetch_crawl_runs())
 
 
 @app.post("/admin/crawl/njdot-construction")
@@ -649,6 +774,12 @@ def admin_promote_lead(lead_id: str, username: str = Depends(check_auth)):
 @app.post("/admin/leads/{lead_id}/reject")
 def admin_reject_lead(lead_id: str, username: str = Depends(check_auth)):
     reject_lead(lead_id)
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
+@app.post("/admin/leads/{lead_id}/reset")
+def admin_reset_lead(lead_id: str, username: str = Depends(check_auth)):
+    reset_lead_to_new(lead_id)
     return RedirectResponse(url="/admin/leads", status_code=303)
 
 
@@ -780,6 +911,7 @@ def opportunities_page():
 @app.get("/admin", response_class=HTMLResponse)
 def admin_page(username: str = Depends(check_auth)):
     summary = fetch_admin_summary()
+    crawl_runs = fetch_crawl_runs(limit=10)
 
     entity_items = ""
     for row in summary["by_entity_type"]:
@@ -789,19 +921,23 @@ def admin_page(username: str = Depends(check_auth)):
     for row in summary["top_counties"]:
         county_items += f"<li>{row['county']}: {row['count']}</li>"
 
+    crawl_items = ""
+    for row in crawl_runs:
+        crawl_items += f"<li>{row['started_at']} — {row['source_name']} — {row['status']} ({row['leads_found']} leads)</li>"
+
     return f"""
     <html>
       <head>
         <title>Admin</title>
         <style>
           body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
-          .wrap {{ max-width: 1000px; margin: 0 auto; }}
+          .wrap {{ max-width: 1100px; margin: 0 auto; }}
           .card {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; }}
           .stats {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 18px 0 24px 0; }}
           .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
           .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }}
           .panel {{ background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; }}
-          .nav a, a {{ color: #0b57d0; text-decoration: none; }}
+          a {{ color: #0b57d0; text-decoration: none; }}
           .button {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border: none; border-radius: 10px; cursor: pointer; margin-right:8px; }}
           form {{ margin: 0; display:inline-block; }}
           ul {{ padding-left: 18px; }}
@@ -839,6 +975,18 @@ def admin_page(username: str = Depends(check_auth)):
                 <strong>{summary['rejected_lead_count']}</strong><br>
                 rejected leads
               </div>
+              <div class="stat">
+                <strong>{summary['crawl_run_count']}</strong><br>
+                crawl runs
+              </div>
+              <div class="stat">
+                <strong>{summary['successful_crawl_count']}</strong><br>
+                successful crawls
+              </div>
+              <div class="stat">
+                <strong>{summary['failed_crawl_count']}</strong><br>
+                failed crawls
+              </div>
             </div>
 
             <div class="grid">
@@ -853,18 +1001,28 @@ def admin_page(username: str = Depends(check_auth)):
               </div>
             </div>
 
-            <h3>Manual crawl controls</h3>
-            <form action="/admin/crawl/njdot-construction" method="post">
-              <button class="button" type="submit">Run NJDOT Construction Crawl</button>
-            </form>
-            <form action="/admin/crawl/njdot-profserv" method="post">
-              <button class="button" type="submit">Run NJDOT Professional Services Crawl</button>
-            </form>
+            <div class="grid" style="margin-top:20px;">
+              <div class="panel">
+                <h3>Manual crawl controls</h3>
+                <form action="/admin/crawl/njdot-construction" method="post">
+                  <button class="button" type="submit">Run NJDOT Construction Crawl</button>
+                </form>
+                <form action="/admin/crawl/njdot-profserv" method="post">
+                  <button class="button" type="submit">Run NJDOT Professional Services Crawl</button>
+                </form>
+              </div>
+
+              <div class="panel">
+                <h3>Latest crawl runs</h3>
+                <ul>{crawl_items}</ul>
+              </div>
+            </div>
 
             <h3>Admin links</h3>
             <p><a href="/admin/leads">View admin leads page</a></p>
             <p><a href="/api/admin/summary">Admin summary JSON</a></p>
             <p><a href="/api/admin/leads">Admin leads JSON</a></p>
+            <p><a href="/api/admin/crawl-runs">Admin crawl runs JSON</a></p>
             <p><a href="/sources">View sources page</a></p>
             <p><a href="/opportunities">View opportunities page</a></p>
           </div>
@@ -875,14 +1033,17 @@ def admin_page(username: str = Depends(check_auth)):
 
 
 @app.get("/admin/leads", response_class=HTMLResponse)
-def admin_leads_page(username: str = Depends(check_auth)):
-    leads = fetch_leads()
+def admin_leads_page(
+    username: str = Depends(check_auth),
+    status_filter: str | None = Query(default=None, alias="status")
+):
+    leads = fetch_leads(status_filter=status_filter)
+    summary = fetch_admin_summary()
 
     items = ""
     for row in leads:
         source_label = row["source_id"].replace("state-", "").replace("county-", "").replace("-", " ").title()
 
-        action_html = ""
         if row["status"] == "New":
             action_html = f"""
                 <form action="/admin/leads/{row['lead_id']}/promote" method="post" style="display:inline-block; margin-right:8px;">
@@ -890,6 +1051,12 @@ def admin_leads_page(username: str = Depends(check_auth)):
                 </form>
                 <form action="/admin/leads/{row['lead_id']}/reject" method="post" style="display:inline-block;">
                     <button type="submit" style="background:#b91c1c;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reject</button>
+                </form>
+            """
+        elif row["status"] in {"Promoted", "Rejected"}:
+            action_html = f"""
+                <form action="/admin/leads/{row['lead_id']}/reset" method="post" style="display:inline-block;">
+                    <button type="submit" style="background:#374151;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reset to New</button>
                 </form>
             """
         else:
@@ -909,6 +1076,8 @@ def admin_leads_page(username: str = Depends(check_auth)):
         </tr>
         """
 
+    current_label = status_filter if status_filter else "All"
+
     return f"""
     <html>
       <head>
@@ -922,6 +1091,16 @@ def admin_leads_page(username: str = Depends(check_auth)):
           th, td {{ border: 1px solid #e5e7eb; padding: 10px; text-align: left; vertical-align: top; }}
           th {{ background: #f3f4f6; }}
           .muted {{ color: #4b5563; }}
+          .filters a {{
+            display:inline-block;
+            margin-right:8px;
+            margin-bottom:8px;
+            padding:8px 12px;
+            border-radius:8px;
+            background:#e5e7eb;
+            color:#111827;
+            text-decoration:none;
+          }}
         </style>
       </head>
       <body>
@@ -929,7 +1108,14 @@ def admin_leads_page(username: str = Depends(check_auth)):
           <div class="top">
             <a href="/admin">← Back to admin</a>
             <h1>Admin Leads</h1>
-            <p class="muted">{len(leads)} leads currently loaded</p>
+            <p class="muted">{len(leads)} leads currently shown — filter: {current_label}</p>
+
+            <div class="filters">
+              <a href="/admin/leads">All ({summary['lead_count']})</a>
+              <a href="/admin/leads?status=New">New ({summary['new_lead_count']})</a>
+              <a href="/admin/leads?status=Promoted">Promoted ({summary['promoted_lead_count']})</a>
+              <a href="/admin/leads?status=Rejected">Rejected ({summary['rejected_lead_count']})</a>
+            </div>
           </div>
 
           <table>
