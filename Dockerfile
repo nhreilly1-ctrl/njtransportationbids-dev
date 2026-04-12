@@ -10,8 +10,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY . /app
 
-RUN chmod +x /app/scripts/start_production.sh
-
 EXPOSE 10000
 
-CMD ["/app/scripts/start_production.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
