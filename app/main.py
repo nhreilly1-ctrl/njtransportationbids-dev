@@ -29,7 +29,7 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
-            cur.execute("""
+                        cur.execute("""
                 INSERT INTO registry_sources (
                     source_id,
                     source_name,
@@ -64,6 +64,69 @@ def init_db():
                     'Transportation Authority',
                     'Statewide',
                     'https://www.njta.gov/business-hub/current-solicitations/',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-njtransit',
+                    'NJ TRANSIT Procurement Calendar',
+                    'Transit Agency',
+                    'Statewide',
+                    'https://www.njtransit.com/procurement/calendar',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-sjta',
+                    'South Jersey Transportation Authority Legal Notices',
+                    'Transportation Authority',
+                    'Atlantic',
+                    'https://www.sjta.com/legal-notices',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-drjtbc-construction',
+                    'DRJTBC Notice To Contractors',
+                    'Bi-State Authority',
+                    'Warren/Hunterdon/Mercer',
+                    'https://www.drjtbc.org/construction-services/notice-to-contractors/',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-drjtbc-profserv',
+                    'DRJTBC Current Procurements',
+                    'Bi-State Authority',
+                    'Warren/Hunterdon/Mercer',
+                    'https://www.drjtbc.org/professional-services/current/',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-panynj-construction',
+                    'Port Authority Construction Opportunities',
+                    'Bi-State Authority',
+                    'Hudson/Essex/Union',
+                    'https://www.panynj.gov/port-authority/en/business-opportunities/solicitations-advertisements/Construction.html',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'state-panynj-profserv',
+                    'Port Authority Professional Services',
+                    'Bi-State Authority',
+                    'Hudson/Essex/Union',
+                    'https://www.panynj.gov/port-authority/en/business-opportunities/solicitations-advertisements/professional-services.html',
+                    'Tier 1',
+                    'Yes'
+                ),
+                (
+                    'county-monmouth',
+                    'Monmouth County Purchasing',
+                    'County',
+                    'Monmouth',
+                    'https://pol.co.monmouth.nj.us/',
                     'Tier 1',
                     'Yes'
                 )
