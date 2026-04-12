@@ -4,7 +4,7 @@ import time
 import secrets
 import psycopg2
 import requests
-from fastapi import FastAPI, Depends, HTTPException, status, Query
+from fastapi import FastAPI, Depends, HTTPException, status, Query, Form
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
@@ -15,6 +15,7 @@ NJDOT_CONSTRUCTION_URL = "https://www.nj.gov/transportation/business/procurement
 NJDOT_PROFSERV_URL = "https://www.nj.gov/transportation/business/procurement/ProfServ/CurrentSolic.shtm"
 NJTA_URL = "https://www.njta.gov/business-hub/current-solicitations/"
 MONMOUTH_URL = "https://pol.co.monmouth.nj.us/"
+NJTRANSIT_URL = "https://www.njtransit.com/procurement/calendar"
 
 
 def get_conn():
@@ -140,7 +141,7 @@ def init_db():
                 ('state-njdot-construction','NJDOT Construction Services','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-njdot-profserv','NJDOT Professional Services','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-njta','NJ Turnpike Authority Current Solicitations','Transportation Authority','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
-                ('state-njtransit','NJ TRANSIT Procurement Calendar','Transit Agency','Statewide','https://www.njtransit.com/procurement/calendar','Tier 1','Yes',FALSE,'manual_html'),
+                ('state-njtransit','NJ TRANSIT Procurement Calendar','Transit Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-sjta','South Jersey Transportation Authority Legal Notices','Transportation Authority','Atlantic','https://www.sjta.com/legal-notices','Tier 1','Yes',FALSE,'manual_html'),
                 ('state-drjtbc-construction','DRJTBC Notice To Contractors','Bi-State Authority','Warren/Hunterdon/Mercer','https://www.drjtbc.org/construction-services/notice-to-contractors/','Tier 1','Yes',FALSE,'manual_html'),
                 ('state-drjtbc-profserv','DRJTBC Current Procurements','Bi-State Authority','Warren/Hunterdon/Mercer','https://www.drjtbc.org/professional-services/current/','Tier 1','Yes',FALSE,'manual_html'),
@@ -175,6 +176,7 @@ def init_db():
                 NJDOT_CONSTRUCTION_URL,
                 NJDOT_PROFSERV_URL,
                 NJTA_URL,
+                NJTRANSIT_URL,
                 MONMOUTH_URL
             ))
 
@@ -258,7 +260,7 @@ def fetch_opportunities(
         like_val = f"%{q.lower()}%"
         params.extend([like_val, like_val, like_val])
 
-    sql += " ORDER BY created_at DESC, due_date NULLS LAST, title LIMIT 200"
+    sql += " ORDER BY created_at DESC, due_date NULLS LAST, title LIMIT 300"
 
     with get_conn() as conn:
         with conn.cursor() as cur:
@@ -310,32 +312,52 @@ def fetch_opportunity_by_id(opportunity_id: str):
     }
 
 
-def fetch_leads(status_filter: str | None = None):
+def fetch_leads(
+    status_filter: str | None = None,
+    q: str | None = None,
+    sort_by: str | None = None,
+):
+    sql = """
+        SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, duplicate_key, created_at
+        FROM opportunity_leads
+        WHERE 1=1
+    """
+    params = []
+
+    if status_filter and status_filter in {"New", "Promoted", "Rejected"}:
+        sql += " AND status = %s"
+        params.append(status_filter)
+
+    if q:
+        like_val = f"%{q.lower()}%"
+        sql += " AND (LOWER(title) LIKE %s OR LOWER(COALESCE(agency,'')) LIKE %s OR LOWER(COALESCE(county,'')) LIKE %s OR LOWER(source_id) LIKE %s)"
+        params.extend([like_val, like_val, like_val, like_val])
+
+    if sort_by == "due_date":
+        sql += """
+            ORDER BY
+                CASE WHEN due_date IS NULL OR due_date = '' THEN 1 ELSE 0 END,
+                due_date,
+                created_at DESC
+            LIMIT 400
+        """
+    else:
+        sql += """
+            ORDER BY
+                CASE
+                    WHEN status = 'New' THEN 1
+                    WHEN status = 'Promoted' THEN 2
+                    WHEN status = 'Rejected' THEN 3
+                    ELSE 4
+                END,
+                created_at DESC,
+                title
+            LIMIT 400
+        """
+
     with get_conn() as conn:
         with conn.cursor() as cur:
-            if status_filter and status_filter in {"New", "Promoted", "Rejected"}:
-                cur.execute("""
-                    SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, duplicate_key, created_at
-                    FROM opportunity_leads
-                    WHERE status = %s
-                    ORDER BY created_at DESC, title
-                    LIMIT 300
-                """, (status_filter,))
-            else:
-                cur.execute("""
-                    SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, duplicate_key, created_at
-                    FROM opportunity_leads
-                    ORDER BY
-                        CASE
-                            WHEN status = 'New' THEN 1
-                            WHEN status = 'Promoted' THEN 2
-                            WHEN status = 'Rejected' THEN 3
-                            ELSE 4
-                        END,
-                        created_at DESC,
-                        title
-                    LIMIT 300
-                """)
+            cur.execute(sql, tuple(params))
             rows = cur.fetchall()
 
     source_map = fetch_source_map()
@@ -661,6 +683,31 @@ def parse_monmouth_titles(cleaned: str):
     return deduped[:15]
 
 
+def parse_njtransit_titles(cleaned: str):
+    titles = []
+    for match in re.finditer(r"((IFB|RFP|RFQ|P\d{4,}|T\d{4,}).*?)(?=(IFB|RFP|RFQ|P\d{4,}|T\d{4,}).*?|$)", cleaned, flags=re.I):
+        chunk = match.group(1).strip()
+        if len(chunk) > 30:
+            titles.append(chunk)
+
+    if not titles:
+        for sentence in re.split(r"(?<=[.!?])\s+", cleaned):
+            s = sentence.lower()
+            if "invitation for bid" in s or "request for proposals" in s or "procurement" in s:
+                if len(sentence.strip()) > 30:
+                    titles.append(sentence.strip())
+
+    deduped = []
+    seen = set()
+    for title in titles:
+        short = normalize_title(title)
+        if short and short not in seen:
+            seen.add(short)
+            deduped.append(short)
+
+    return deduped[:15]
+
+
 def crawl_generic(url: str, parser, source_key: str, source_id: str, agency: str, county: str, source_name: str):
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
     try:
@@ -733,6 +780,18 @@ def manual_crawl_monmouth():
     )
 
 
+def manual_crawl_njtransit():
+    return crawl_generic(
+        url=NJTRANSIT_URL,
+        parser=parse_njtransit_titles,
+        source_key="njtransit",
+        source_id="state-njtransit",
+        agency="NJ TRANSIT Procurement Calendar",
+        county="Statewide",
+        source_name="NJ TRANSIT Procurement Calendar",
+    )
+
+
 def run_enabled_crawlers():
     results = []
     for source in fetch_enabled_crawl_sources():
@@ -746,6 +805,8 @@ def run_enabled_crawlers():
                 result = manual_crawl_njta()
             elif sid == "county-monmouth":
                 result = manual_crawl_monmouth()
+            elif sid == "state-njtransit":
+                result = manual_crawl_njtransit()
             else:
                 continue
 
@@ -821,26 +882,84 @@ def promote_lead(lead_id: str):
                     row[6]
                 ))
 
-            cur.execute("""
-                UPDATE opportunity_leads
-                SET status = 'Promoted'
-                WHERE lead_id = %s
-            """, (lead_id,))
+            cur.execute("UPDATE opportunity_leads SET status = 'Promoted' WHERE lead_id = %s", (lead_id,))
+        conn.commit()
+
+
+def bulk_update_leads(lead_ids: list[str], action: str):
+    if not lead_ids:
+        return
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            for lead_id in lead_ids:
+                if action == "promote":
+                    cur.execute("""
+                        SELECT lead_id, source_id, title, agency, county, due_date, source_url
+                        FROM opportunity_leads
+                        WHERE lead_id = %s
+                    """, (lead_id,))
+                    row = cur.fetchone()
+                    if not row:
+                        continue
+
+                    cur.execute("""
+                        SELECT COUNT(*)
+                        FROM opportunities
+                        WHERE source_id = %s
+                          AND title = %s
+                          AND COALESCE(due_date, '') = COALESCE(%s, '')
+                    """, (row[1], row[2], row[5]))
+                    duplicate_count = cur.fetchone()[0]
+
+                    if duplicate_count == 0:
+                        opportunity_id = f"opp-{row[0]}"
+                        cur.execute("""
+                            INSERT INTO opportunities (
+                                opportunity_id,
+                                title,
+                                agency,
+                                county,
+                                source_id,
+                                due_date,
+                                status,
+                                opportunity_url
+                            )
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                            ON CONFLICT (opportunity_id) DO UPDATE SET
+                                title = EXCLUDED.title,
+                                agency = EXCLUDED.agency,
+                                county = EXCLUDED.county,
+                                source_id = EXCLUDED.source_id,
+                                due_date = EXCLUDED.due_date,
+                                status = EXCLUDED.status,
+                                opportunity_url = EXCLUDED.opportunity_url
+                        """, (
+                            opportunity_id,
+                            row[2],
+                            row[3] or "Unknown Agency",
+                            row[4],
+                            row[1],
+                            row[5],
+                            "Open",
+                            row[6]
+                        ))
+                    cur.execute("UPDATE opportunity_leads SET status = 'Promoted' WHERE lead_id = %s", (lead_id,))
+
+                elif action == "reject":
+                    cur.execute("UPDATE opportunity_leads SET status = 'Rejected' WHERE lead_id = %s", (lead_id,))
+                elif action == "reset":
+                    cur.execute("UPDATE opportunity_leads SET status = 'New' WHERE lead_id = %s", (lead_id,))
+
         conn.commit()
 
 
 def reject_lead(lead_id: str):
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute("UPDATE opportunity_leads SET status = 'Rejected' WHERE lead_id = %s", (lead_id,))
-        conn.commit()
+    bulk_update_leads([lead_id], "reject")
 
 
 def reset_lead_to_new(lead_id: str):
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute("UPDATE opportunity_leads SET status = 'New' WHERE lead_id = %s", (lead_id,))
-        conn.commit()
+    bulk_update_leads([lead_id], "reset")
 
 
 @app.on_event("startup")
@@ -855,56 +974,47 @@ def home():
     summary = fetch_admin_summary()
 
     return f"""
-    <html>
-      <head>
-        <title>NJ Transportation Bids</title>
-        <style>
-          body {{ font-family: Arial, sans-serif; margin: 40px; line-height: 1.5; background: #f8fafc; color: #111827; }}
-          .wrap {{ max-width: 1000px; margin: 0 auto; }}
-          .hero {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 24px; }}
-          .stats {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 18px 0; }}
-          .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
-          .nav {{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }}
-          .nav a {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border-radius: 10px; text-decoration: none; }}
-          .nav a.secondary {{ background: #374151; }}
-          .section {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; }}
-          ul {{ padding-left: 18px; }}
-        </style>
-      </head>
-      <body>
-        <div class="wrap">
-          <div class="hero">
-            <h1>NJ Transportation Bids</h1>
-
-            <div class="stats">
-              <div class="stat"><strong>{len(sources)}</strong><br>live source records</div>
-              <div class="stat"><strong>{len(opportunities)}</strong><br>published opportunities</div>
-              <div class="stat"><strong>{summary['lead_count']}</strong><br>total leads</div>
-              <div class="stat"><strong>{summary['crawl_run_count']}</strong><br>crawl runs</div>
-            </div>
-
-            <div class="nav">
-              <a href="/sources">View Sources</a>
-              <a href="/opportunities">View Opportunities</a>
-              <a href="/admin" class="secondary">Admin</a>
-              <a href="/health" class="secondary">Health</a>
-              <a href="/ready" class="secondary">Readiness</a>
-            </div>
-          </div>
-
-          <div class="section">
-            <h2>Current build stage</h2>
-            <ul>
-              <li>Manual crawlers for NJDOT Construction, NJDOT Professional Services, NJTA, and Monmouth County</li>
-              <li>Published opportunities with detail pages</li>
-              <li>Basic duplicate protection on promotion</li>
-              <li>Source operational metadata and crawl status tracking</li>
-              <li>Public opportunities filters by county, agency, source, and search term</li>
-            </ul>
-          </div>
+    <html><head><title>NJ Transportation Bids</title>
+    <style>
+      body {{ font-family: Arial, sans-serif; margin: 40px; line-height: 1.5; background: #f8fafc; color: #111827; }}
+      .wrap {{ max-width: 1000px; margin: 0 auto; }}
+      .hero {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 24px; }}
+      .stats {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 18px 0; }}
+      .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
+      .nav {{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }}
+      .nav a {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border-radius: 10px; text-decoration: none; }}
+      .nav a.secondary {{ background: #374151; }}
+      .section {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; }}
+    </style></head>
+    <body><div class="wrap">
+      <div class="hero">
+        <h1>NJ Transportation Bids</h1>
+        <div class="stats">
+          <div class="stat"><strong>{len(sources)}</strong><br>live source records</div>
+          <div class="stat"><strong>{len(opportunities)}</strong><br>published opportunities</div>
+          <div class="stat"><strong>{summary['lead_count']}</strong><br>total leads</div>
+          <div class="stat"><strong>{summary['crawl_run_count']}</strong><br>crawl runs</div>
         </div>
-      </body>
-    </html>
+        <div class="nav">
+          <a href="/sources">View Sources</a>
+          <a href="/opportunities">View Opportunities</a>
+          <a href="/admin" class="secondary">Admin</a>
+          <a href="/health" class="secondary">Health</a>
+          <a href="/ready" class="secondary">Readiness</a>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Latest big bundle</h2>
+        <ul>
+          <li>NJ TRANSIT crawler added</li>
+          <li>Bulk lead actions added</li>
+          <li>Public opportunities filters added</li>
+          <li>Source crawl status page added</li>
+          <li>Run-all-enabled-crawlers button added</li>
+        </ul>
+      </div>
+    </div></body></html>
     """
 
 
@@ -946,9 +1056,11 @@ def api_admin_summary(username: str = Depends(check_auth)):
 @app.get("/api/admin/leads")
 def api_admin_leads(
     username: str = Depends(check_auth),
-    status_filter: str | None = Query(default=None, alias="status")
+    status_filter: str | None = Query(default=None, alias="status"),
+    q: str | None = None,
+    sort_by: str | None = None,
 ):
-    return JSONResponse(content=fetch_leads(status_filter=status_filter))
+    return JSONResponse(content=fetch_leads(status_filter=status_filter, q=q, sort_by=sort_by))
 
 
 @app.get("/api/admin/crawl-runs")
@@ -980,6 +1092,12 @@ def admin_crawl_monmouth(username: str = Depends(check_auth)):
     return RedirectResponse(url="/admin/leads", status_code=303)
 
 
+@app.post("/admin/crawl/njtransit")
+def admin_crawl_njtransit(username: str = Depends(check_auth)):
+    manual_crawl_njtransit()
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
 @app.post("/admin/crawl/run-enabled")
 def admin_run_enabled(username: str = Depends(check_auth)):
     run_enabled_crawlers()
@@ -1001,6 +1119,17 @@ def admin_reject_lead(lead_id: str, username: str = Depends(check_auth)):
 @app.post("/admin/leads/{lead_id}/reset")
 def admin_reset_lead(lead_id: str, username: str = Depends(check_auth)):
     reset_lead_to_new(lead_id)
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
+@app.post("/admin/leads/bulk")
+def admin_bulk_leads_action(
+    username: str = Depends(check_auth),
+    action: str = Form(...),
+    selected_lead_ids: list[str] = Form(default=[]),
+):
+    if action in {"promote", "reject", "reset"} and selected_lead_ids:
+        bulk_update_leads(selected_lead_ids, action)
     return RedirectResponse(url="/admin/leads", status_code=303)
 
 
@@ -1194,6 +1323,7 @@ def admin_page(username: str = Depends(check_auth)):
           <form action="/admin/crawl/njdot-profserv" method="post"><button class="button" type="submit">Run NJDOT Professional Services Crawl</button></form>
           <form action="/admin/crawl/njta" method="post"><button class="button" type="submit">Run NJTA Crawl</button></form>
           <form action="/admin/crawl/monmouth" method="post"><button class="button" type="submit">Run Monmouth County Crawl</button></form>
+          <form action="/admin/crawl/njtransit" method="post"><button class="button" type="submit">Run NJ TRANSIT Crawl</button></form>
           <form action="/admin/crawl/run-enabled" method="post"><button class="button" type="submit">Run All Enabled Crawlers</button></form>
         </div>
         <div class="panel"><h3>Latest crawl runs</h3><ul>{crawl_items}</ul></div>
@@ -1253,9 +1383,11 @@ def admin_sources_page(username: str = Depends(check_auth)):
 @app.get("/admin/leads", response_class=HTMLResponse)
 def admin_leads_page(
     username: str = Depends(check_auth),
-    status_filter: str | None = Query(default=None, alias="status")
+    status_filter: str | None = Query(default=None, alias="status"),
+    q: str | None = None,
+    sort_by: str | None = None,
 ):
-    leads = fetch_leads(status_filter=status_filter)
+    leads = fetch_leads(status_filter=status_filter, q=q, sort_by=sort_by)
     summary = fetch_admin_summary()
 
     items = ""
@@ -1278,6 +1410,7 @@ def admin_leads_page(
 
         items += f"""
         <tr>
+            <td><input type="checkbox" name="selected_lead_ids" value="{row['lead_id']}"></td>
             <td>{row['title']}</td>
             <td>{row['source_name']}</td>
             <td>{row['lead_id']}</td>
@@ -1297,7 +1430,7 @@ def admin_leads_page(
     <html><head><title>Admin Leads</title>
     <style>
       body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
-      .wrap {{ max-width: 1500px; margin: 0 auto; }}
+      .wrap {{ max-width: 1600px; margin: 0 auto; }}
       table {{ border-collapse: collapse; width: 100%; background: white; }}
       th, td {{ border: 1px solid #e5e7eb; padding: 10px; text-align: left; vertical-align: top; }}
       th {{ background: #f3f4f6; }}
@@ -1305,21 +1438,64 @@ def admin_leads_page(
         display:inline-block; margin-right:8px; margin-bottom:8px; padding:8px 12px;
         border-radius:8px; background:#e5e7eb; color:#111827; text-decoration:none;
       }}
+      .searchbar {{ background:white; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin-bottom:16px; }}
+      .searchbar input, .searchbar select {{ margin-right:8px; padding:8px; }}
+      .bulkbar {{ background:white; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin-bottom:16px; }}
+      .bulkbar button {{ margin-right:8px; padding:8px 12px; }}
       a {{ color: #0b57d0; text-decoration: none; }}
     </style></head>
     <body><div class="wrap">
       <a href="/admin">← Back to admin</a>
       <h1>Admin Leads</h1>
       <p>{len(leads)} leads currently shown — filter: {current_label}</p>
+
       <div class="filters">
         <a href="/admin/leads">All ({summary['lead_count']})</a>
         <a href="/admin/leads?status=New">New ({summary['new_lead_count']})</a>
         <a href="/admin/leads?status=Promoted">Promoted ({summary['promoted_lead_count']})</a>
         <a href="/admin/leads?status=Rejected">Rejected ({summary['rejected_lead_count']})</a>
       </div>
-      <table>
-        <thead><tr><th>Title</th><th>Source</th><th>Lead ID</th><th>Agency</th><th>County</th><th>Due Date</th><th>Status</th><th>Duplicate Key</th><th>Link</th><th>Actions</th></tr></thead>
-        <tbody>{items}</tbody>
-      </table>
+
+      <form method="get" action="/admin/leads" class="searchbar">
+        <input type="text" name="q" placeholder="Search title / source / agency / county" value="{q or ''}">
+        <select name="status">
+          <option value="" {"selected" if not status_filter else ""}>All statuses</option>
+          <option value="New" {"selected" if status_filter == "New" else ""}>New</option>
+          <option value="Promoted" {"selected" if status_filter == "Promoted" else ""}>Promoted</option>
+          <option value="Rejected" {"selected" if status_filter == "Rejected" else ""}>Rejected</option>
+        </select>
+        <select name="sort_by">
+          <option value="" {"selected" if not sort_by else ""}>Default sort</option>
+          <option value="due_date" {"selected" if sort_by == "due_date" else ""}>Sort by due date</option>
+        </select>
+        <button type="submit">Apply</button>
+      </form>
+
+      <form method="post" action="/admin/leads/bulk">
+        <div class="bulkbar">
+          <button type="submit" name="action" value="promote">Bulk Promote</button>
+          <button type="submit" name="action" value="reject">Bulk Reject</button>
+          <button type="submit" name="action" value="reset">Bulk Reset to New</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>Title</th>
+              <th>Source</th>
+              <th>Lead ID</th>
+              <th>Agency</th>
+              <th>County</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Duplicate Key</th>
+              <th>Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{items}</tbody>
+        </table>
+      </form>
     </div></body></html>
     """
