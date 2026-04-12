@@ -1,11 +1,14 @@
+import csv
+import io
 import os
 import re
-import time
 import secrets
+import time
+
 import psycopg2
 import requests
-from fastapi import FastAPI, Depends, HTTPException, status, Query, Form
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi import FastAPI, Depends, HTTPException, Query, Form, status
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 app = FastAPI(title="NJ Bid Registry")
@@ -16,6 +19,8 @@ NJDOT_PROFSERV_URL = "https://www.nj.gov/transportation/business/procurement/Pro
 NJTA_URL = "https://www.njta.gov/business-hub/current-solicitations/"
 MONMOUTH_URL = "https://pol.co.monmouth.nj.us/"
 NJTRANSIT_URL = "https://www.njtransit.com/procurement/calendar"
+DRJTBC_CONSTRUCTION_URL = "https://www.drjtbc.org/construction-services/notice-to-contractors/"
+DRJTBC_PROFSERV_URL = "https://www.drjtbc.org/professional-services/current/"
 
 
 def get_conn():
@@ -39,6 +44,31 @@ def check_auth(credentials: HTTPBasicCredentials = Depends(security)):
             headers={"WWW-Authenticate": "Basic"},
         )
     return credentials.username
+
+
+def build_redirect_url(base: str, status_filter: str | None = None, q: str | None = None, sort_by: str | None = None):
+    params = []
+    if status_filter:
+        params.append(f"status={requests.utils.quote(status_filter)}")
+    if q:
+        params.append(f"q={requests.utils.quote(q)}")
+    if sort_by:
+        params.append(f"sort_by={requests.utils.quote(sort_by)}")
+    if not params:
+        return base
+    return f"{base}?{'&'.join(params)}"
+
+
+def csv_response(filename: str, headers: list[str], rows: list[list[str]]):
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(headers)
+    writer.writerows(rows)
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 def init_db():
@@ -109,7 +139,6 @@ def init_db():
                 );
             """)
 
-            # Upgrade older tables in place
             cur.execute("ALTER TABLE registry_sources ADD COLUMN IF NOT EXISTS crawl_enabled BOOLEAN DEFAULT FALSE;")
             cur.execute("ALTER TABLE registry_sources ADD COLUMN IF NOT EXISTS crawl_method TEXT;")
             cur.execute("ALTER TABLE registry_sources ADD COLUMN IF NOT EXISTS last_crawl_at TIMESTAMP NULL;")
@@ -127,15 +156,8 @@ def init_db():
 
             cur.execute("""
                 INSERT INTO registry_sources (
-                    source_id,
-                    source_name,
-                    entity_type,
-                    county,
-                    source_url,
-                    priority_tier,
-                    website_ready,
-                    crawl_enabled,
-                    crawl_method
+                    source_id, source_name, entity_type, county, source_url,
+                    priority_tier, website_ready, crawl_enabled, crawl_method
                 )
                 VALUES
                 ('state-njdot-construction','NJDOT Construction Services','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
@@ -143,8 +165,8 @@ def init_db():
                 ('state-njta','NJ Turnpike Authority Current Solicitations','Transportation Authority','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-njtransit','NJ TRANSIT Procurement Calendar','Transit Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-sjta','South Jersey Transportation Authority Legal Notices','Transportation Authority','Atlantic','https://www.sjta.com/legal-notices','Tier 1','Yes',FALSE,'manual_html'),
-                ('state-drjtbc-construction','DRJTBC Notice To Contractors','Bi-State Authority','Warren/Hunterdon/Mercer','https://www.drjtbc.org/construction-services/notice-to-contractors/','Tier 1','Yes',FALSE,'manual_html'),
-                ('state-drjtbc-profserv','DRJTBC Current Procurements','Bi-State Authority','Warren/Hunterdon/Mercer','https://www.drjtbc.org/professional-services/current/','Tier 1','Yes',FALSE,'manual_html'),
+                ('state-drjtbc-construction','DRJTBC Notice To Contractors','Bi-State Authority','Warren/Hunterdon/Mercer',%s,'Tier 1','Yes',TRUE,'manual_html'),
+                ('state-drjtbc-profserv','DRJTBC Current Procurements','Bi-State Authority','Warren/Hunterdon/Mercer',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-panynj-construction','Port Authority Construction Opportunities','Bi-State Authority','Hudson/Essex/Union','https://www.panynj.gov/port-authority/en/business-opportunities/solicitations-advertisements/Construction.html','Tier 1','Yes',FALSE,'manual_html'),
                 ('state-panynj-profserv','Port Authority Professional Services','Bi-State Authority','Hudson/Essex/Union','https://www.panynj.gov/port-authority/en/business-opportunities/solicitations-advertisements/professional-services.html','Tier 1','Yes',FALSE,'manual_html'),
                 ('county-monmouth','Monmouth County Purchasing','County','Monmouth',%s,'Tier 1','Yes',TRUE,'manual_html'),
@@ -177,17 +199,10 @@ def init_db():
                 NJDOT_PROFSERV_URL,
                 NJTA_URL,
                 NJTRANSIT_URL,
+                DRJTBC_CONSTRUCTION_URL,
+                DRJTBC_PROFSERV_URL,
                 MONMOUTH_URL
             ))
-
-            cur.execute("""
-                DELETE FROM opportunities
-                WHERE opportunity_id IN (
-                    'opp-njdot-001',
-                    'opp-njta-001',
-                    'opp-monmouth-001'
-                );
-            """)
         conn.commit()
 
 
@@ -199,7 +214,7 @@ def fetch_sources():
                        crawl_enabled, crawl_method, last_crawl_at, last_crawl_status, last_leads_found
                 FROM registry_sources
                 ORDER BY source_name
-                LIMIT 200
+                LIMIT 250
             """)
             rows = cur.fetchall()
 
@@ -230,14 +245,9 @@ def fetch_enabled_crawl_sources():
     return [s for s in fetch_sources() if s["crawl_enabled"]]
 
 
-def fetch_opportunities(
-    county_filter: str | None = None,
-    agency_filter: str | None = None,
-    source_filter: str | None = None,
-    q: str | None = None,
-):
+def fetch_opportunities(county_filter=None, agency_filter=None, source_filter=None, q=None):
     sql = """
-        SELECT opportunity_id, title, agency, county, source_id, due_date, status, opportunity_url
+        SELECT opportunity_id, title, agency, county, source_id, due_date, status, opportunity_url, created_at
         FROM opportunities
         WHERE 1=1
     """
@@ -246,21 +256,18 @@ def fetch_opportunities(
     if county_filter:
         sql += " AND county = %s"
         params.append(county_filter)
-
     if agency_filter:
         sql += " AND agency = %s"
         params.append(agency_filter)
-
     if source_filter:
         sql += " AND source_id = %s"
         params.append(source_filter)
-
     if q:
-        sql += " AND (LOWER(title) LIKE %s OR LOWER(agency) LIKE %s OR LOWER(COALESCE(county, '')) LIKE %s)"
         like_val = f"%{q.lower()}%"
+        sql += " AND (LOWER(title) LIKE %s OR LOWER(agency) LIKE %s OR LOWER(COALESCE(county, '')) LIKE %s)"
         params.extend([like_val, like_val, like_val])
 
-    sql += " ORDER BY created_at DESC, due_date NULLS LAST, title LIMIT 300"
+    sql += " ORDER BY created_at DESC, due_date NULLS LAST, title LIMIT 500"
 
     with get_conn() as conn:
         with conn.cursor() as cur:
@@ -279,12 +286,13 @@ def fetch_opportunities(
             "due_date": row[5],
             "status": row[6],
             "opportunity_url": row[7],
+            "created_at": str(row[8]),
         }
         for row in rows
     ]
 
 
-def fetch_opportunity_by_id(opportunity_id: str):
+def fetch_opportunity_by_id(opportunity_id):
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -312,11 +320,7 @@ def fetch_opportunity_by_id(opportunity_id: str):
     }
 
 
-def fetch_leads(
-    status_filter: str | None = None,
-    q: str | None = None,
-    sort_by: str | None = None,
-):
+def fetch_leads(status_filter=None, q=None, sort_by=None):
     sql = """
         SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status, source_url, duplicate_key, created_at
         FROM opportunity_leads
@@ -339,7 +343,7 @@ def fetch_leads(
                 CASE WHEN due_date IS NULL OR due_date = '' THEN 1 ELSE 0 END,
                 due_date,
                 created_at DESC
-            LIMIT 400
+            LIMIT 500
         """
     else:
         sql += """
@@ -352,7 +356,7 @@ def fetch_leads(
                 END,
                 created_at DESC,
                 title
-            LIMIT 400
+            LIMIT 500
         """
 
     with get_conn() as conn:
@@ -380,7 +384,7 @@ def fetch_leads(
     ]
 
 
-def fetch_crawl_runs(limit: int = 100):
+def fetch_crawl_runs(limit=150):
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -410,47 +414,22 @@ def fetch_admin_summary():
         with conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) FROM registry_sources")
             source_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM opportunities")
             opportunity_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM opportunity_leads")
             lead_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM opportunity_leads WHERE status = 'New'")
             new_lead_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM opportunity_leads WHERE status = 'Promoted'")
             promoted_lead_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM opportunity_leads WHERE status = 'Rejected'")
             rejected_lead_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM crawl_runs")
             crawl_run_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM crawl_runs WHERE status = 'Success'")
             successful_crawl_count = cur.fetchone()[0]
-
             cur.execute("SELECT COUNT(*) FROM crawl_runs WHERE status = 'Failed'")
             failed_crawl_count = cur.fetchone()[0]
-
-            cur.execute("""
-                SELECT COALESCE(entity_type, 'Unknown'), COUNT(*)
-                FROM registry_sources
-                GROUP BY COALESCE(entity_type, 'Unknown')
-                ORDER BY COUNT(*) DESC, COALESCE(entity_type, 'Unknown')
-            """)
-            entity_rows = cur.fetchall()
-
-            cur.execute("""
-                SELECT COALESCE(county, 'Unknown'), COUNT(*)
-                FROM registry_sources
-                GROUP BY COALESCE(county, 'Unknown')
-                ORDER BY COUNT(*) DESC, COALESCE(county, 'Unknown')
-                LIMIT 10
-            """)
-            county_rows = cur.fetchall()
 
     return {
         "source_count": source_count,
@@ -462,12 +441,10 @@ def fetch_admin_summary():
         "crawl_run_count": crawl_run_count,
         "successful_crawl_count": successful_crawl_count,
         "failed_crawl_count": failed_crawl_count,
-        "by_entity_type": [{"entity_type": row[0], "count": row[1]} for row in entity_rows],
-        "top_counties": [{"county": row[0], "count": row[1]} for row in county_rows],
     }
 
 
-def strip_html(text: str) -> str:
+def strip_html(text):
     text = re.sub(r"<script.*?</script>", " ", text, flags=re.S | re.I)
     text = re.sub(r"<style.*?</style>", " ", text, flags=re.S | re.I)
     text = re.sub(r"<[^>]+>", " ", text)
@@ -476,19 +453,19 @@ def strip_html(text: str) -> str:
     return text.strip()
 
 
-def normalize_title(title: str) -> str:
+def normalize_title(title):
     title = re.sub(r"\s+", " ", title).strip()
     title = re.sub(r"\s*-\s*", " - ", title)
     return title[:220]
 
 
-def make_duplicate_key(source_id: str, title: str, due_date: str | None):
+def make_duplicate_key(source_id, title, due_date):
     norm_title = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
     norm_date = (due_date or "nodate").lower().replace(" ", "-").replace(",", "")
     return f"{source_id}|{norm_title}|{norm_date}"[:500]
 
 
-def upsert_leads(source_key: str, source_id: str, agency: str, county: str, source_url: str, titles: list[str]):
+def upsert_leads(source_key, source_id, agency, county, source_url, titles):
     inserted = 0
     with get_conn() as conn:
         with conn.cursor() as cur:
@@ -505,17 +482,8 @@ def upsert_leads(source_key: str, source_id: str, agency: str, county: str, sour
 
                 cur.execute("""
                     INSERT INTO opportunity_leads (
-                        lead_id,
-                        source_id,
-                        title,
-                        agency,
-                        county,
-                        posted_date,
-                        due_date,
-                        status,
-                        source_url,
-                        raw_text,
-                        duplicate_key
+                        lead_id, source_id, title, agency, county, posted_date, due_date, status,
+                        source_url, raw_text, duplicate_key
                     )
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     ON CONFLICT (lead_id) DO UPDATE SET
@@ -528,17 +496,8 @@ def upsert_leads(source_key: str, source_id: str, agency: str, county: str, sour
                         raw_text = EXCLUDED.raw_text,
                         duplicate_key = EXCLUDED.duplicate_key
                 """, (
-                    lead_id,
-                    source_id,
-                    title,
-                    agency,
-                    county,
-                    None,
-                    due_date,
-                    "New",
-                    source_url,
-                    title,
-                    duplicate_key
+                    lead_id, source_id, title, agency, county, None, due_date, "New",
+                    source_url, title, duplicate_key
                 ))
                 inserted += 1
         conn.commit()
@@ -546,32 +505,20 @@ def upsert_leads(source_key: str, source_id: str, agency: str, county: str, sour
     return inserted
 
 
-def log_crawl_run(source_id: str, source_name: str, status_text: str, leads_found: int, notes: str):
+def log_crawl_run(source_id, source_name, status_text, leads_found, notes):
     crawl_run_id = f"crawl-{source_id}-{int(time.time())}"
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
                 INSERT INTO crawl_runs (
-                    crawl_run_id,
-                    source_id,
-                    source_name,
-                    status,
-                    leads_found,
-                    notes
+                    crawl_run_id, source_id, source_name, status, leads_found, notes
                 )
                 VALUES (%s,%s,%s,%s,%s,%s)
-            """, (
-                crawl_run_id,
-                source_id,
-                source_name,
-                status_text,
-                leads_found,
-                notes
-            ))
+            """, (crawl_run_id, source_id, source_name, status_text, leads_found, notes))
         conn.commit()
 
 
-def update_source_crawl_status(source_id: str, status_text: str, leads_found: int):
+def update_source_crawl_status(source_id, status_text, leads_found):
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -584,7 +531,7 @@ def update_source_crawl_status(source_id: str, status_text: str, leads_found: in
         conn.commit()
 
 
-def parse_construction_titles(cleaned: str):
+def parse_construction_titles(cleaned):
     titles = []
     for match in re.finditer(r"(Contract [A-Z0-9\-.]+.*?)(?=Contract [A-Z0-9\-.]+|$)", cleaned, flags=re.I):
         chunk = match.group(1).strip()
@@ -604,11 +551,10 @@ def parse_construction_titles(cleaned: str):
         if short and short not in seen:
             seen.add(short)
             deduped.append(short)
-
     return deduped[:15]
 
 
-def parse_profserv_titles(cleaned: str):
+def parse_profserv_titles(cleaned):
     titles = []
     for match in re.finditer(r"(TP[-\s]?\d+.*?)(?=TP[-\s]?\d+|$)", cleaned, flags=re.I):
         chunk = match.group(1).strip()
@@ -629,11 +575,10 @@ def parse_profserv_titles(cleaned: str):
         if short and short not in seen:
             seen.add(short)
             deduped.append(short)
-
     return deduped[:15]
 
 
-def parse_njta_titles(cleaned: str):
+def parse_njta_titles(cleaned):
     titles = []
     for match in re.finditer(r"((Order for Professional Services|Contract No\.|Request for Expression of Interest|Solicitation)\s+.*?)(?=(Order for Professional Services|Contract No\.|Request for Expression of Interest|Solicitation)\s+|$)", cleaned, flags=re.I):
         chunk = match.group(1).strip()
@@ -654,11 +599,10 @@ def parse_njta_titles(cleaned: str):
         if short and short not in seen:
             seen.add(short)
             deduped.append(short)
-
     return deduped[:15]
 
 
-def parse_monmouth_titles(cleaned: str):
+def parse_monmouth_titles(cleaned):
     titles = []
     for match in re.finditer(r"((Request ID|RFB|RFQ|RFP).*?)(?=(Request ID|RFB|RFQ|RFP).*?|$)", cleaned, flags=re.I):
         chunk = match.group(1).strip()
@@ -679,11 +623,10 @@ def parse_monmouth_titles(cleaned: str):
         if short and short not in seen:
             seen.add(short)
             deduped.append(short)
-
     return deduped[:15]
 
 
-def parse_njtransit_titles(cleaned: str):
+def parse_njtransit_titles(cleaned):
     titles = []
     for match in re.finditer(r"((IFB|RFP|RFQ|P\d{4,}|T\d{4,}).*?)(?=(IFB|RFP|RFQ|P\d{4,}|T\d{4,}).*?|$)", cleaned, flags=re.I):
         chunk = match.group(1).strip()
@@ -704,11 +647,58 @@ def parse_njtransit_titles(cleaned: str):
         if short and short not in seen:
             seen.add(short)
             deduped.append(short)
-
     return deduped[:15]
 
 
-def crawl_generic(url: str, parser, source_key: str, source_id: str, agency: str, county: str, source_name: str):
+def parse_drjtbc_construction_titles(cleaned):
+    titles = []
+    for match in re.finditer(r"((Contract|Notice To Contractors|Project)\s+.*?)(?=(Contract|Notice To Contractors|Project)\s+|$)", cleaned, flags=re.I):
+        chunk = match.group(1).strip()
+        if len(chunk) > 30:
+            titles.append(chunk)
+
+    if not titles:
+        for sentence in re.split(r"(?<=[.!?])\s+", cleaned):
+            s = sentence.lower()
+            if "notice to contractors" in s or "bridge" in s or "project" in s or "contract" in s:
+                if len(sentence.strip()) > 30:
+                    titles.append(sentence.strip())
+
+    deduped = []
+    seen = set()
+    for title in titles:
+        short = normalize_title(title)
+        if short and short not in seen:
+            seen.add(short)
+            deduped.append(short)
+    return deduped[:15]
+
+
+def parse_drjtbc_profserv_titles(cleaned):
+    titles = []
+    for match in re.finditer(r"((Professional Services|Request for Proposal|RFP|RFQ).*?)(?=(Professional Services|Request for Proposal|RFP|RFQ).*?|$)", cleaned, flags=re.I):
+        chunk = match.group(1).strip()
+        if len(chunk) > 30:
+            titles.append(chunk)
+
+    if not titles:
+        for sentence in re.split(r"(?<=[.!?])\s+", cleaned):
+            s = sentence.lower()
+            if "professional services" in s or "request for proposal" in s or "rfp" in s or "rfq" in s:
+                if len(sentence.strip()) > 30:
+                    titles.append(sentence.strip())
+
+    deduped = []
+    seen = set()
+    for title in titles:
+        short = normalize_title(title)
+        if short and short not in seen:
+            seen.add(short)
+            deduped.append(short)
+    return deduped[:15]
+
+
+def crawl_generic(url, parser, source_key, source_id, agency, county, source_name):
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
     try:
         resp = requests.get(url, headers=headers, timeout=30)
@@ -734,61 +724,57 @@ def crawl_generic(url: str, parser, source_key: str, source_id: str, agency: str
 
 def manual_crawl_njdot_construction():
     return crawl_generic(
-        url=NJDOT_CONSTRUCTION_URL,
-        parser=parse_construction_titles,
-        source_key="njdot-construction",
-        source_id="state-njdot-construction",
-        agency="NJDOT Construction Services",
-        county="Statewide",
-        source_name="NJDOT Construction Services",
+        NJDOT_CONSTRUCTION_URL, parse_construction_titles, "njdot-construction",
+        "state-njdot-construction", "NJDOT Construction Services", "Statewide",
+        "NJDOT Construction Services"
     )
 
 
 def manual_crawl_njdot_profserv():
     return crawl_generic(
-        url=NJDOT_PROFSERV_URL,
-        parser=parse_profserv_titles,
-        source_key="njdot-profserv",
-        source_id="state-njdot-profserv",
-        agency="NJDOT Professional Services",
-        county="Statewide",
-        source_name="NJDOT Professional Services",
+        NJDOT_PROFSERV_URL, parse_profserv_titles, "njdot-profserv",
+        "state-njdot-profserv", "NJDOT Professional Services", "Statewide",
+        "NJDOT Professional Services"
     )
 
 
 def manual_crawl_njta():
     return crawl_generic(
-        url=NJTA_URL,
-        parser=parse_njta_titles,
-        source_key="njta",
-        source_id="state-njta",
-        agency="NJ Turnpike Authority Current Solicitations",
-        county="Statewide",
-        source_name="NJ Turnpike Authority Current Solicitations",
+        NJTA_URL, parse_njta_titles, "njta",
+        "state-njta", "NJ Turnpike Authority Current Solicitations", "Statewide",
+        "NJ Turnpike Authority Current Solicitations"
     )
 
 
 def manual_crawl_monmouth():
     return crawl_generic(
-        url=MONMOUTH_URL,
-        parser=parse_monmouth_titles,
-        source_key="monmouth",
-        source_id="county-monmouth",
-        agency="Monmouth County Purchasing",
-        county="Monmouth",
-        source_name="Monmouth County Purchasing",
+        MONMOUTH_URL, parse_monmouth_titles, "monmouth",
+        "county-monmouth", "Monmouth County Purchasing", "Monmouth",
+        "Monmouth County Purchasing"
     )
 
 
 def manual_crawl_njtransit():
     return crawl_generic(
-        url=NJTRANSIT_URL,
-        parser=parse_njtransit_titles,
-        source_key="njtransit",
-        source_id="state-njtransit",
-        agency="NJ TRANSIT Procurement Calendar",
-        county="Statewide",
-        source_name="NJ TRANSIT Procurement Calendar",
+        NJTRANSIT_URL, parse_njtransit_titles, "njtransit",
+        "state-njtransit", "NJ TRANSIT Procurement Calendar", "Statewide",
+        "NJ TRANSIT Procurement Calendar"
+    )
+
+
+def manual_crawl_drjtbc_construction():
+    return crawl_generic(
+        DRJTBC_CONSTRUCTION_URL, parse_drjtbc_construction_titles, "drjtbc-construction",
+        "state-drjtbc-construction", "DRJTBC Notice To Contractors", "Warren/Hunterdon/Mercer",
+        "DRJTBC Notice To Contractors"
+    )
+
+
+def manual_crawl_drjtbc_profserv():
+    return crawl_generic(
+        DRJTBC_PROFSERV_URL, parse_drjtbc_profserv_titles, "drjtbc-profserv",
+        "state-drjtbc-profserv", "DRJTBC Current Procurements", "Warren/Hunterdon/Mercer",
+        "DRJTBC Current Procurements"
     )
 
 
@@ -807,6 +793,10 @@ def run_enabled_crawlers():
                 result = manual_crawl_monmouth()
             elif sid == "state-njtransit":
                 result = manual_crawl_njtransit()
+            elif sid == "state-drjtbc-construction":
+                result = manual_crawl_drjtbc_construction()
+            elif sid == "state-drjtbc-profserv":
+                result = manual_crawl_drjtbc_profserv()
             else:
                 continue
 
@@ -827,66 +817,11 @@ def run_enabled_crawlers():
     return results
 
 
-def promote_lead(lead_id: str):
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT lead_id, source_id, title, agency, county, due_date, source_url
-                FROM opportunity_leads
-                WHERE lead_id = %s
-            """, (lead_id,))
-            row = cur.fetchone()
-
-            if not row:
-                raise ValueError("Lead not found")
-
-            cur.execute("""
-                SELECT COUNT(*)
-                FROM opportunities
-                WHERE source_id = %s
-                  AND title = %s
-                  AND COALESCE(due_date, '') = COALESCE(%s, '')
-            """, (row[1], row[2], row[5]))
-            duplicate_count = cur.fetchone()[0]
-
-            if duplicate_count == 0:
-                opportunity_id = f"opp-{row[0]}"
-                cur.execute("""
-                    INSERT INTO opportunities (
-                        opportunity_id,
-                        title,
-                        agency,
-                        county,
-                        source_id,
-                        due_date,
-                        status,
-                        opportunity_url
-                    )
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (opportunity_id) DO UPDATE SET
-                        title = EXCLUDED.title,
-                        agency = EXCLUDED.agency,
-                        county = EXCLUDED.county,
-                        source_id = EXCLUDED.source_id,
-                        due_date = EXCLUDED.due_date,
-                        status = EXCLUDED.status,
-                        opportunity_url = EXCLUDED.opportunity_url
-                """, (
-                    opportunity_id,
-                    row[2],
-                    row[3] or "Unknown Agency",
-                    row[4],
-                    row[1],
-                    row[5],
-                    "Open",
-                    row[6]
-                ))
-
-            cur.execute("UPDATE opportunity_leads SET status = 'Promoted' WHERE lead_id = %s", (lead_id,))
-        conn.commit()
+def promote_lead(lead_id):
+    bulk_update_leads([lead_id], "promote")
 
 
-def bulk_update_leads(lead_ids: list[str], action: str):
+def bulk_update_leads(lead_ids, action):
     if not lead_ids:
         return
 
@@ -916,14 +851,7 @@ def bulk_update_leads(lead_ids: list[str], action: str):
                         opportunity_id = f"opp-{row[0]}"
                         cur.execute("""
                             INSERT INTO opportunities (
-                                opportunity_id,
-                                title,
-                                agency,
-                                county,
-                                source_id,
-                                due_date,
-                                status,
-                                opportunity_url
+                                opportunity_id, title, agency, county, source_id, due_date, status, opportunity_url
                             )
                             VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
                             ON CONFLICT (opportunity_id) DO UPDATE SET
@@ -935,14 +863,8 @@ def bulk_update_leads(lead_ids: list[str], action: str):
                                 status = EXCLUDED.status,
                                 opportunity_url = EXCLUDED.opportunity_url
                         """, (
-                            opportunity_id,
-                            row[2],
-                            row[3] or "Unknown Agency",
-                            row[4],
-                            row[1],
-                            row[5],
-                            "Open",
-                            row[6]
+                            opportunity_id, row[2], row[3] or "Unknown Agency",
+                            row[4], row[1], row[5], "Open", row[6]
                         ))
                     cur.execute("UPDATE opportunity_leads SET status = 'Promoted' WHERE lead_id = %s", (lead_id,))
 
@@ -950,15 +872,14 @@ def bulk_update_leads(lead_ids: list[str], action: str):
                     cur.execute("UPDATE opportunity_leads SET status = 'Rejected' WHERE lead_id = %s", (lead_id,))
                 elif action == "reset":
                     cur.execute("UPDATE opportunity_leads SET status = 'New' WHERE lead_id = %s", (lead_id,))
-
         conn.commit()
 
 
-def reject_lead(lead_id: str):
+def reject_lead(lead_id):
     bulk_update_leads([lead_id], "reject")
 
 
-def reset_lead_to_new(lead_id: str):
+def reset_lead_to_new(lead_id):
     bulk_update_leads([lead_id], "reset")
 
 
@@ -1001,17 +922,17 @@ def home():
           <a href="/admin" class="secondary">Admin</a>
           <a href="/health" class="secondary">Health</a>
           <a href="/ready" class="secondary">Readiness</a>
+          <a href="/export/opportunities.csv" class="secondary">Export Opportunities CSV</a>
         </div>
       </div>
 
       <div class="section">
         <h2>Latest big bundle</h2>
         <ul>
-          <li>NJ TRANSIT crawler added</li>
-          <li>Bulk lead actions added</li>
-          <li>Public opportunities filters added</li>
-          <li>Source crawl status page added</li>
-          <li>Run-all-enabled-crawlers button added</li>
+          <li>Filter persistence after admin actions</li>
+          <li>CSV export for leads and opportunities</li>
+          <li>DRJTBC construction crawler added</li>
+          <li>DRJTBC professional services crawler added</li>
         </ul>
       </div>
     </div></body></html>
@@ -1034,18 +955,8 @@ def api_sources():
 
 
 @app.get("/api/opportunities")
-def api_opportunities(
-    county: str | None = None,
-    agency: str | None = None,
-    source_id: str | None = None,
-    q: str | None = None,
-):
-    return JSONResponse(content=fetch_opportunities(
-        county_filter=county,
-        agency_filter=agency,
-        source_filter=source_id,
-        q=q,
-    ))
+def api_opportunities(county: str | None = None, agency: str | None = None, source_id: str | None = None, q: str | None = None):
+    return JSONResponse(content=fetch_opportunities(county, agency, source_id, q))
 
 
 @app.get("/api/admin/summary")
@@ -1060,12 +971,56 @@ def api_admin_leads(
     q: str | None = None,
     sort_by: str | None = None,
 ):
-    return JSONResponse(content=fetch_leads(status_filter=status_filter, q=q, sort_by=sort_by))
+    return JSONResponse(content=fetch_leads(status_filter, q, sort_by))
 
 
 @app.get("/api/admin/crawl-runs")
 def api_admin_crawl_runs(username: str = Depends(check_auth)):
     return JSONResponse(content=fetch_crawl_runs())
+
+
+@app.get("/export/opportunities.csv")
+def export_opportunities_csv(
+    county: str | None = None,
+    agency: str | None = None,
+    source_id: str | None = None,
+    q: str | None = None,
+):
+    opportunities = fetch_opportunities(county, agency, source_id, q)
+    rows = [
+        [
+            o["opportunity_id"], o["title"], o["agency"], o["county"], o["source_id"],
+            o["source_name"], o["due_date"], o["status"], o["opportunity_url"], o["created_at"]
+        ]
+        for o in opportunities
+    ]
+    return csv_response(
+        "opportunities.csv",
+        ["opportunity_id", "title", "agency", "county", "source_id", "source_name", "due_date", "status", "opportunity_url", "created_at"],
+        rows
+    )
+
+
+@app.get("/admin/export/leads.csv")
+def export_leads_csv(
+    username: str = Depends(check_auth),
+    status_filter: str | None = Query(default=None, alias="status"),
+    q: str | None = None,
+    sort_by: str | None = None,
+):
+    leads = fetch_leads(status_filter, q, sort_by)
+    rows = [
+        [
+            l["lead_id"], l["title"], l["source_id"], l["source_name"], l["agency"], l["county"],
+            l["due_date"], l["status"], l["duplicate_key"], l["source_url"], l["created_at"]
+        ]
+        for l in leads
+    ]
+    return csv_response(
+        "leads.csv",
+        ["lead_id", "title", "source_id", "source_name", "agency", "county", "due_date", "status", "duplicate_key", "source_url", "created_at"],
+        rows
+    )
 
 
 @app.post("/admin/crawl/njdot-construction")
@@ -1098,6 +1053,18 @@ def admin_crawl_njtransit(username: str = Depends(check_auth)):
     return RedirectResponse(url="/admin/leads", status_code=303)
 
 
+@app.post("/admin/crawl/drjtbc-construction")
+def admin_crawl_drjtbc_construction(username: str = Depends(check_auth)):
+    manual_crawl_drjtbc_construction()
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
+@app.post("/admin/crawl/drjtbc-profserv")
+def admin_crawl_drjtbc_profserv(username: str = Depends(check_auth)):
+    manual_crawl_drjtbc_profserv()
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
 @app.post("/admin/crawl/run-enabled")
 def admin_run_enabled(username: str = Depends(check_auth)):
     run_enabled_crawlers()
@@ -1105,21 +1072,39 @@ def admin_run_enabled(username: str = Depends(check_auth)):
 
 
 @app.post("/admin/leads/{lead_id}/promote")
-def admin_promote_lead(lead_id: str, username: str = Depends(check_auth)):
+def admin_promote_lead(
+    lead_id: str,
+    username: str = Depends(check_auth),
+    return_status: str | None = Form(default=None),
+    return_q: str | None = Form(default=None),
+    return_sort_by: str | None = Form(default=None),
+):
     promote_lead(lead_id)
-    return RedirectResponse(url="/admin/leads", status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/reject")
-def admin_reject_lead(lead_id: str, username: str = Depends(check_auth)):
+def admin_reject_lead(
+    lead_id: str,
+    username: str = Depends(check_auth),
+    return_status: str | None = Form(default=None),
+    return_q: str | None = Form(default=None),
+    return_sort_by: str | None = Form(default=None),
+):
     reject_lead(lead_id)
-    return RedirectResponse(url="/admin/leads", status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/reset")
-def admin_reset_lead(lead_id: str, username: str = Depends(check_auth)):
+def admin_reset_lead(
+    lead_id: str,
+    username: str = Depends(check_auth),
+    return_status: str | None = Form(default=None),
+    return_q: str | None = Form(default=None),
+    return_sort_by: str | None = Form(default=None),
+):
     reset_lead_to_new(lead_id)
-    return RedirectResponse(url="/admin/leads", status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by), status_code=303)
 
 
 @app.post("/admin/leads/bulk")
@@ -1127,10 +1112,13 @@ def admin_bulk_leads_action(
     username: str = Depends(check_auth),
     action: str = Form(...),
     selected_lead_ids: list[str] = Form(default=[]),
+    return_status: str | None = Form(default=None),
+    return_q: str | None = Form(default=None),
+    return_sort_by: str | None = Form(default=None),
 ):
     if action in {"promote", "reject", "reset"} and selected_lead_ids:
         bulk_update_leads(selected_lead_ids, action)
-    return RedirectResponse(url="/admin/leads", status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by), status_code=303)
 
 
 @app.get("/sources", response_class=HTMLResponse)
@@ -1163,18 +1151,8 @@ def sources_page():
 
 
 @app.get("/opportunities", response_class=HTMLResponse)
-def opportunities_page(
-    county: str | None = None,
-    agency: str | None = None,
-    source_id: str | None = None,
-    q: str | None = None,
-):
-    opportunities = fetch_opportunities(
-        county_filter=county,
-        agency_filter=agency,
-        source_filter=source_id,
-        q=q,
-    )
+def opportunities_page(county: str | None = None, agency: str | None = None, source_id: str | None = None, q: str | None = None):
+    opportunities = fetch_opportunities(county, agency, source_id, q)
     sources = fetch_sources()
 
     counties = sorted({s["county"] for s in sources if s["county"]})
@@ -1216,11 +1194,16 @@ def opportunities_page(
       .filters {{ background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 12px; margin-bottom: 20px; }}
       .filters input, .filters select {{ margin-right: 10px; padding: 8px; }}
       .filters button {{ padding: 8px 12px; }}
+      .tools a {{ display:inline-block; margin-bottom:16px; }}
     </style></head>
     <body><div class="wrap">
       <a href="/">← Back to home</a>
       <h1>Opportunities</h1>
       <p>{len(opportunities)} published opportunities currently loaded</p>
+
+      <div class="tools">
+        <a href="/export/opportunities.csv">Export opportunities CSV</a>
+      </div>
 
       <form method="get" action="/opportunities" class="filters">
         <input type="text" name="q" placeholder="Search title / agency / county" value="{q or ''}">
@@ -1274,8 +1257,6 @@ def admin_page(username: str = Depends(check_auth)):
     summary = fetch_admin_summary()
     crawl_runs = fetch_crawl_runs(limit=10)
 
-    entity_items = "".join(f"<li>{row['entity_type']}: {row['count']}</li>" for row in summary["by_entity_type"])
-    county_items = "".join(f"<li>{row['county']}: {row['count']}</li>" for row in summary["top_counties"])
     crawl_items = "".join(
         f"<li>{row['started_at']} — {row['source_name']} — {row['status']} ({row['leads_found']} leads)</li>"
         for row in crawl_runs
@@ -1311,11 +1292,6 @@ def admin_page(username: str = Depends(check_auth)):
         <div class="stat"><strong>{summary['crawl_run_count']}</strong><br>crawl runs</div>
       </div>
 
-      <div class="grid">
-        <div class="panel"><h3>Sources by entity type</h3><ul>{entity_items}</ul></div>
-        <div class="panel"><h3>Top counties</h3><ul>{county_items}</ul></div>
-      </div>
-
       <div class="grid" style="margin-top:20px;">
         <div class="panel">
           <h3>Manual crawl controls</h3>
@@ -1324,6 +1300,8 @@ def admin_page(username: str = Depends(check_auth)):
           <form action="/admin/crawl/njta" method="post"><button class="button" type="submit">Run NJTA Crawl</button></form>
           <form action="/admin/crawl/monmouth" method="post"><button class="button" type="submit">Run Monmouth County Crawl</button></form>
           <form action="/admin/crawl/njtransit" method="post"><button class="button" type="submit">Run NJ TRANSIT Crawl</button></form>
+          <form action="/admin/crawl/drjtbc-construction" method="post"><button class="button" type="submit">Run DRJTBC Construction Crawl</button></form>
+          <form action="/admin/crawl/drjtbc-profserv" method="post"><button class="button" type="submit">Run DRJTBC Prof Services Crawl</button></form>
           <form action="/admin/crawl/run-enabled" method="post"><button class="button" type="submit">Run All Enabled Crawlers</button></form>
         </div>
         <div class="panel"><h3>Latest crawl runs</h3><ul>{crawl_items}</ul></div>
@@ -1332,6 +1310,7 @@ def admin_page(username: str = Depends(check_auth)):
       <h3>Admin links</h3>
       <p><a href="/admin/sources">View source crawl status page</a></p>
       <p><a href="/admin/leads">View admin leads page</a></p>
+      <p><a href="/admin/export/leads.csv">Export leads CSV</a></p>
       <p><a href="/api/admin/summary">Admin summary JSON</a></p>
       <p><a href="/api/admin/leads">Admin leads JSON</a></p>
       <p><a href="/api/admin/crawl-runs">Admin crawl runs JSON</a></p>
@@ -1387,25 +1366,23 @@ def admin_leads_page(
     q: str | None = None,
     sort_by: str | None = None,
 ):
-    leads = fetch_leads(status_filter=status_filter, q=q, sort_by=sort_by)
+    leads = fetch_leads(status_filter, q, sort_by)
     summary = fetch_admin_summary()
+
+    current_status = status_filter or ""
+    current_q = q or ""
+    current_sort = sort_by or ""
 
     items = ""
     for row in leads:
         if row["status"] == "New":
             action_html = f"""
-                <form action="/admin/leads/{row['lead_id']}/promote" method="post" style="display:inline-block; margin-right:8px;">
-                    <button type="submit" style="background:#0b57d0;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Promote</button>
-                </form>
-                <form action="/admin/leads/{row['lead_id']}/reject" method="post" style="display:inline-block;">
-                    <button type="submit" style="background:#b91c1c;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reject</button>
-                </form>
+                <button type="submit" formaction="/admin/leads/{row['lead_id']}/promote" formmethod="post" style="background:#0b57d0;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;margin-right:6px;">Promote</button>
+                <button type="submit" formaction="/admin/leads/{row['lead_id']}/reject" formmethod="post" style="background:#b91c1c;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reject</button>
             """
         else:
             action_html = f"""
-                <form action="/admin/leads/{row['lead_id']}/reset" method="post" style="display:inline-block;">
-                    <button type="submit" style="background:#374151;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reset to New</button>
-                </form>
+                <button type="submit" formaction="/admin/leads/{row['lead_id']}/reset" formmethod="post" style="background:#374151;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;">Reset to New</button>
             """
 
         items += f"""
@@ -1425,6 +1402,7 @@ def admin_leads_page(
         """
 
     current_label = status_filter if status_filter else "All"
+    export_url = build_redirect_url("/admin/export/leads.csv", status_filter, q, sort_by)
 
     return f"""
     <html><head><title>Admin Leads</title>
@@ -1454,24 +1432,29 @@ def admin_leads_page(
         <a href="/admin/leads?status=New">New ({summary['new_lead_count']})</a>
         <a href="/admin/leads?status=Promoted">Promoted ({summary['promoted_lead_count']})</a>
         <a href="/admin/leads?status=Rejected">Rejected ({summary['rejected_lead_count']})</a>
+        <a href="{export_url}">Export filtered leads CSV</a>
       </div>
 
       <form method="get" action="/admin/leads" class="searchbar">
-        <input type="text" name="q" placeholder="Search title / source / agency / county" value="{q or ''}">
+        <input type="text" name="q" placeholder="Search title / source / agency / county" value="{current_q}">
         <select name="status">
-          <option value="" {"selected" if not status_filter else ""}>All statuses</option>
-          <option value="New" {"selected" if status_filter == "New" else ""}>New</option>
-          <option value="Promoted" {"selected" if status_filter == "Promoted" else ""}>Promoted</option>
-          <option value="Rejected" {"selected" if status_filter == "Rejected" else ""}>Rejected</option>
+          <option value="" {"selected" if not current_status else ""}>All statuses</option>
+          <option value="New" {"selected" if current_status == "New" else ""}>New</option>
+          <option value="Promoted" {"selected" if current_status == "Promoted" else ""}>Promoted</option>
+          <option value="Rejected" {"selected" if current_status == "Rejected" else ""}>Rejected</option>
         </select>
         <select name="sort_by">
-          <option value="" {"selected" if not sort_by else ""}>Default sort</option>
-          <option value="due_date" {"selected" if sort_by == "due_date" else ""}>Sort by due date</option>
+          <option value="" {"selected" if not current_sort else ""}>Default sort</option>
+          <option value="due_date" {"selected" if current_sort == "due_date" else ""}>Sort by due date</option>
         </select>
         <button type="submit">Apply</button>
       </form>
 
       <form method="post" action="/admin/leads/bulk">
+        <input type="hidden" name="return_status" value="{current_status}">
+        <input type="hidden" name="return_q" value="{current_q}">
+        <input type="hidden" name="return_sort_by" value="{current_sort}">
+
         <div class="bulkbar">
           <button type="submit" name="action" value="promote">Bulk Promote</button>
           <button type="submit" name="action" value="reject">Bulk Reject</button>
