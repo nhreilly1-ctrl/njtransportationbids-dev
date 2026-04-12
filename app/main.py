@@ -11,6 +11,7 @@ app = FastAPI(title="NJ Bid Registry")
 security = HTTPBasic()
 
 NJDOT_CONSTRUCTION_URL = "https://www.nj.gov/transportation/business/procurement/ConstrServ/curradvproj.shtm"
+NJDOT_PROFSERV_URL = "https://www.nj.gov/transportation/business/procurement/ProfServ/CurrentSolic.shtm"
 
 
 def get_conn():
@@ -124,7 +125,6 @@ def init_db():
                 ON CONFLICT (source_id) DO NOTHING;
             """)
 
-            # Remove earlier demo/sample opportunities so the page is driven by promoted leads.
             cur.execute("""
                 DELETE FROM opportunities
                 WHERE opportunity_id IN (
@@ -282,43 +282,20 @@ def strip_html(text: str) -> str:
     return text.strip()
 
 
-def manual_crawl_njdot_construction():
-    headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
-    resp = requests.get(NJDOT_CONSTRUCTION_URL, headers=headers, timeout=30)
-    resp.raise_for_status()
+def extract_long_dates(text: str):
+    return re.findall(
+        r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}",
+        text,
+        flags=re.I,
+    )
 
-    cleaned = strip_html(resp.text)
-    if not cleaned:
-        return {"inserted": 0, "titles": []}
 
-    titles = []
-    for match in re.finditer(r"(Contract [A-Z0-9\-.]+.*?)(?=Contract [A-Z0-9\-.]+|$)", cleaned, flags=re.I):
-        chunk = match.group(1).strip()
-        if len(chunk) > 30:
-            titles.append(chunk)
-
-    if not titles:
-        sentences = re.split(r"(?<=[.!?])\s+", cleaned)
-        for sentence in sentences:
-            if "contract" in sentence.lower() or "proposal" in sentence.lower():
-                if len(sentence.strip()) > 30:
-                    titles.append(sentence.strip())
-
-    deduped = []
-    seen = set()
-    for title in titles:
-        short = title[:220].strip()
-        if short and short not in seen:
-            seen.add(short)
-            deduped.append(short)
-
-    deduped = deduped[:15]
-
+def upsert_leads(source_key: str, source_id: str, agency: str, county: str, source_url: str, titles: list[str]):
     inserted = 0
     with get_conn() as conn:
         with conn.cursor() as cur:
-            for idx, title in enumerate(deduped, start=1):
-                lead_id = f"lead-njdot-construction-{idx}"
+            for idx, title in enumerate(titles, start=1):
+                lead_id = f"lead-{source_key}-{idx}"
                 due_date_match = re.search(
                     r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}",
                     title,
@@ -350,19 +327,113 @@ def manual_crawl_njdot_construction():
                         raw_text = EXCLUDED.raw_text
                 """, (
                     lead_id,
-                    "state-njdot-construction",
+                    source_id,
                     title,
-                    "NJDOT Construction Services",
-                    "Statewide",
+                    agency,
+                    county,
                     None,
                     due_date,
                     "New",
-                    NJDOT_CONSTRUCTION_URL,
+                    source_url,
                     title
                 ))
                 inserted += 1
         conn.commit()
 
+    return inserted
+
+
+def parse_construction_titles(cleaned: str):
+    titles = []
+    for match in re.finditer(r"(Contract [A-Z0-9\-.]+.*?)(?=Contract [A-Z0-9\-.]+|$)", cleaned, flags=re.I):
+        chunk = match.group(1).strip()
+        if len(chunk) > 30:
+            titles.append(chunk)
+
+    if not titles:
+        sentences = re.split(r"(?<=[.!?])\s+", cleaned)
+        for sentence in sentences:
+            if "contract" in sentence.lower() or "proposal" in sentence.lower():
+                if len(sentence.strip()) > 30:
+                    titles.append(sentence.strip())
+
+    deduped = []
+    seen = set()
+    for title in titles:
+        short = title[:220].strip()
+        if short and short not in seen:
+            seen.add(short)
+            deduped.append(short)
+
+    return deduped[:15]
+
+
+def parse_profserv_titles(cleaned: str):
+    titles = []
+
+    for match in re.finditer(r"(TP[-\s]?\d+.*?)(?=TP[-\s]?\d+|$)", cleaned, flags=re.I):
+        chunk = match.group(1).strip()
+        if len(chunk) > 30:
+            titles.append(chunk)
+
+    if not titles:
+        sentences = re.split(r"(?<=[.!?])\s+", cleaned)
+        for sentence in sentences:
+            s = sentence.lower()
+            if "tp-" in s or "technical proposal" in s or "professional services" in s:
+                if len(sentence.strip()) > 30:
+                    titles.append(sentence.strip())
+
+    deduped = []
+    seen = set()
+    for title in titles:
+        short = title[:220].strip()
+        if short and short not in seen:
+            seen.add(short)
+            deduped.append(short)
+
+    return deduped[:15]
+
+
+def manual_crawl_njdot_construction():
+    headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
+    resp = requests.get(NJDOT_CONSTRUCTION_URL, headers=headers, timeout=30)
+    resp.raise_for_status()
+
+    cleaned = strip_html(resp.text)
+    if not cleaned:
+        return {"inserted": 0, "titles": []}
+
+    deduped = parse_construction_titles(cleaned)
+    inserted = upsert_leads(
+        source_key="njdot-construction",
+        source_id="state-njdot-construction",
+        agency="NJDOT Construction Services",
+        county="Statewide",
+        source_url=NJDOT_CONSTRUCTION_URL,
+        titles=deduped,
+    )
+    return {"inserted": inserted, "titles": deduped}
+
+
+def manual_crawl_njdot_profserv():
+    headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
+    resp = requests.get(NJDOT_PROFSERV_URL, headers=headers, timeout=30)
+    resp.raise_for_status()
+
+    cleaned = strip_html(resp.text)
+    if not cleaned:
+        return {"inserted": 0, "titles": []}
+
+    deduped = parse_profserv_titles(cleaned)
+    inserted = upsert_leads(
+        source_key="njdot-profserv",
+        source_id="state-njdot-profserv",
+        agency="NJDOT Professional Services",
+        county="Statewide",
+        source_url=NJDOT_PROFSERV_URL,
+        titles=deduped,
+    )
     return {"inserted": inserted, "titles": deduped}
 
 
@@ -506,8 +577,9 @@ def home():
               <li>Custom domain connected</li>
               <li>Health and readiness checks passing</li>
               <li>Database-backed source registry working</li>
-              <li>Published opportunities are now driven by promoted leads</li>
+              <li>Published opportunities are driven by promoted leads</li>
               <li>Admin leads workflow supports crawl, promote, and reject</li>
+              <li>NJDOT Construction and NJDOT Professional Services manual crawl buttons are live</li>
             </ul>
           </div>
         </div>
@@ -559,6 +631,12 @@ def api_admin_leads(username: str = Depends(check_auth)):
 @app.post("/admin/crawl/njdot-construction")
 def admin_crawl_njdot_construction(username: str = Depends(check_auth)):
     manual_crawl_njdot_construction()
+    return RedirectResponse(url="/admin/leads", status_code=303)
+
+
+@app.post("/admin/crawl/njdot-profserv")
+def admin_crawl_njdot_profserv(username: str = Depends(check_auth)):
+    manual_crawl_njdot_profserv()
     return RedirectResponse(url="/admin/leads", status_code=303)
 
 
@@ -724,8 +802,8 @@ def admin_page(username: str = Depends(check_auth)):
           .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }}
           .panel {{ background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; }}
           .nav a, a {{ color: #0b57d0; text-decoration: none; }}
-          .button {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border: none; border-radius: 10px; cursor: pointer; }}
-          form {{ margin: 0; }}
+          .button {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border: none; border-radius: 10px; cursor: pointer; margin-right:8px; }}
+          form {{ margin: 0; display:inline-block; }}
           ul {{ padding-left: 18px; }}
         </style>
       </head>
@@ -779,6 +857,9 @@ def admin_page(username: str = Depends(check_auth)):
             <form action="/admin/crawl/njdot-construction" method="post">
               <button class="button" type="submit">Run NJDOT Construction Crawl</button>
             </form>
+            <form action="/admin/crawl/njdot-profserv" method="post">
+              <button class="button" type="submit">Run NJDOT Professional Services Crawl</button>
+            </form>
 
             <h3>Admin links</h3>
             <p><a href="/admin/leads">View admin leads page</a></p>
@@ -799,6 +880,8 @@ def admin_leads_page(username: str = Depends(check_auth)):
 
     items = ""
     for row in leads:
+        source_label = row["source_id"].replace("state-", "").replace("county-", "").replace("-", " ").title()
+
         action_html = ""
         if row["status"] == "New":
             action_html = f"""
@@ -815,7 +898,8 @@ def admin_leads_page(username: str = Depends(check_auth)):
         items += f"""
         <tr>
             <td>{row['title']}</td>
-            <td>{row['source_id']}</td>
+            <td>{source_label}</td>
+            <td>{row['lead_id']}</td>
             <td>{row['agency'] or ''}</td>
             <td>{row['county'] or ''}</td>
             <td>{row['due_date'] or ''}</td>
@@ -831,7 +915,7 @@ def admin_leads_page(username: str = Depends(check_auth)):
         <title>Admin Leads</title>
         <style>
           body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
-          .wrap {{ max-width: 1300px; margin: 0 auto; }}
+          .wrap {{ max-width: 1400px; margin: 0 auto; }}
           .top {{ margin-bottom: 24px; }}
           .top a {{ color: #0b57d0; text-decoration: none; }}
           table {{ border-collapse: collapse; width: 100%; background: white; }}
@@ -852,7 +936,8 @@ def admin_leads_page(username: str = Depends(check_auth)):
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Source ID</th>
+                <th>Source</th>
+                <th>Lead ID</th>
                 <th>Agency</th>
                 <th>County</th>
                 <th>Due Date</th>
