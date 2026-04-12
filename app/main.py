@@ -25,6 +25,9 @@ NJTRANSIT_URL = "https://www.njtransit.com/procurement/calendar"
 DRJTBC_CONSTRUCTION_URL = "https://www.drjtbc.org/construction-services/notice-to-contractors/"
 DRJTBC_PROFSERV_URL = "https://www.drjtbc.org/professional-services/current/"
 DOS_PUBLIC_NOTICES_URL = "https://www.nj.gov/state/dos-public-notices.shtml"
+DOS_LEGAL_NOTICES_URL = "https://www.nj.gov/state/dos-legal-notices.shtml"
+TREASURY_LEGAL_NOTICES_URL = "https://www.nj.gov/treasury/legalnotices.shtml"
+NJDOT_PROCUREMENT_NOTICES_URL = "https://nj.gov/transportation/business/procurement/notices.shtm"
 
 ACCESS_TYPE_OPTIONS = [
     "Public access",
@@ -131,6 +134,41 @@ PUBLIC_NOTICE_NEGATIVE_TERMS = [
     "marriage",
 ]
 
+PUBLIC_NOTICE_SOURCES = [
+    {
+        "source_key": "dos-public-notices",
+        "source_id": "state-dos-public-notices",
+        "source_name": "NJ Department of State Public Notices",
+        "agency": "NJ Department of State Public Notices",
+        "county": "Statewide",
+        "url": DOS_PUBLIC_NOTICES_URL,
+    },
+    {
+        "source_key": "dos-legal-notices",
+        "source_id": "state-dos-legal-notices",
+        "source_name": "NJ Department of State Legal Notices",
+        "agency": "NJ Department of State Legal Notices",
+        "county": "Statewide",
+        "url": DOS_LEGAL_NOTICES_URL,
+    },
+    {
+        "source_key": "treasury-legal-notices",
+        "source_id": "state-treasury-legal-notices",
+        "source_name": "NJ Treasury Legal Notices",
+        "agency": "NJ Treasury Legal Notices",
+        "county": "Statewide",
+        "url": TREASURY_LEGAL_NOTICES_URL,
+    },
+    {
+        "source_key": "njdot-procurement-notices",
+        "source_id": "state-njdot-procurement-notices",
+        "source_name": "NJDOT Procurement Notices",
+        "agency": "NJDOT Procurement Notices",
+        "county": "Statewide",
+        "url": NJDOT_PROCUREMENT_NOTICES_URL,
+    },
+]
+
 
 def get_conn():
     database_url = os.environ.get("DATABASE_URL")
@@ -161,6 +199,7 @@ def build_redirect_url(
     q: str | None = None,
     sort_by: str | None = None,
     source_id: str | None = None,
+    public_notice_only: bool = False,
 ):
     params = []
     if status_filter:
@@ -171,6 +210,8 @@ def build_redirect_url(
         params.append(f"sort_by={requests.utils.quote(sort_by)}")
     if source_id:
         params.append(f"source_id={requests.utils.quote(source_id)}")
+    if public_notice_only:
+        params.append("public_notice_only=true")
     if not params:
         return base
     return f"{base}?{'&'.join(params)}"
@@ -186,6 +227,10 @@ def csv_response(filename: str, headers: list[str], rows: list[list[str]]):
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+def get_public_notice_source_ids() -> list[str]:
+    return [source["source_id"] for source in PUBLIC_NOTICE_SOURCES]
 
 
 def normalize_for_rules(text: str | None) -> str:
@@ -294,6 +339,27 @@ def get_source_defaults(source_id: str) -> dict:
             "next_step": "Open the notice, identify the issuing agency, and follow the linked procurement instructions",
             "docs_path_note": "Bid documents may be linked in the notice itself or on the issuing agency website",
             "addenda_note": "Monitor the legal notice and issuing agency for updates or addenda",
+        },
+        "state-dos-legal-notices": {
+            "access_type": "Public access",
+            "platform_name": "NJDOS legal notices portal",
+            "next_step": "Open the legal notice and follow the issuing agency's procurement instructions",
+            "docs_path_note": "Supporting bid documents may be linked directly in the notice or on the agency website",
+            "addenda_note": "Check the issuing agency and legal notice posting for updates",
+        },
+        "state-treasury-legal-notices": {
+            "access_type": "Public access",
+            "platform_name": "Agency website",
+            "next_step": "Open the treasury notice and follow the linked procurement or PM&C instructions",
+            "docs_path_note": "Project documents may live on Treasury, PM&C, or a linked procurement page",
+            "addenda_note": "Monitor the treasury notice page and linked procurement source for updates",
+        },
+        "state-njdot-procurement-notices": {
+            "access_type": "Public access",
+            "platform_name": "NJDOT website",
+            "next_step": "Open the NJDOT procurement notice and review linked solicitation details",
+            "docs_path_note": "Notice details and solicitation materials are typically linked from the NJDOT procurement page",
+            "addenda_note": "Check the NJDOT notice page and linked solicitation for updates",
         },
         "state-njtransit": {
             "access_type": "Platform submission required",
@@ -450,6 +516,9 @@ def init_db():
                 ('state-njdot-profserv','NJDOT Professional Services','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-njta','NJ Turnpike Authority Current Solicitations','Transportation Authority','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-dos-public-notices','NJ Department of State Public Notices','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
+                ('state-dos-legal-notices','NJ Department of State Legal Notices','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
+                ('state-treasury-legal-notices','NJ Treasury Legal Notices','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
+                ('state-njdot-procurement-notices','NJDOT Procurement Notices','State Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-njtransit','NJ TRANSIT Procurement Calendar','Transit Agency','Statewide',%s,'Tier 1','Yes',TRUE,'manual_html'),
                 ('state-sjta','South Jersey Transportation Authority Legal Notices','Transportation Authority','Atlantic','https://www.sjta.com/legal-notices','Tier 1','Yes',FALSE,'manual_html'),
                 ('state-drjtbc-construction','DRJTBC Notice To Contractors','Bi-State Authority','Warren/Hunterdon/Mercer',%s,'Tier 1','Yes',TRUE,'manual_html'),
@@ -486,6 +555,9 @@ def init_db():
                 NJDOT_PROFSERV_URL,
                 NJTA_URL,
                 DOS_PUBLIC_NOTICES_URL,
+                DOS_LEGAL_NOTICES_URL,
+                TREASURY_LEGAL_NOTICES_URL,
+                NJDOT_PROCUREMENT_NOTICES_URL,
                 NJTRANSIT_URL,
                 DRJTBC_CONSTRUCTION_URL,
                 DRJTBC_PROFSERV_URL,
@@ -700,7 +772,7 @@ def fetch_opportunity_by_id(opportunity_id):
     }
 
 
-def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False, source_filter=None):
+def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False, source_filter=None, public_notice_only=False):
     sql = """
         SELECT lead_id, source_id, title, agency, county, posted_date, due_date, status,
                source_url, duplicate_key, possible_duplicate, quality_score, admin_notes,
@@ -716,6 +788,12 @@ def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False,
 
     if duplicates_only:
         sql += " AND possible_duplicate = TRUE"
+
+    if public_notice_only:
+        notice_source_ids = get_public_notice_source_ids()
+        placeholders = ", ".join(["%s"] * len(notice_source_ids))
+        sql += f" AND source_id IN ({placeholders})"
+        params.extend(notice_source_ids)
 
     if source_filter:
         sql += " AND source_id = %s"
@@ -917,14 +995,28 @@ def score_public_notice_relevance(title: str, raw_text: str) -> tuple[int, list[
         score += 30
     if professional_matches:
         score += 25
+    if "njdot" in haystack or "department of transportation" in haystack:
+        score += 20
+    if "turnpike" in haystack or "transit" in haystack or "bridge commission" in haystack:
+        score += 15
+    if "contract no" in haystack or "solicitation" in haystack:
+        score += 10
     if "request for proposals" in haystack or "request for qualifications" in haystack:
+        score += 10
+    if "request for bids" in haystack or "invitation for bids" in haystack:
         score += 10
     if "public notice" in haystack or "legal notice" in haystack:
         score += 5
     if "county" in haystack or "municipal" in haystack or "township" in haystack or "borough" in haystack:
         score += 5
-    if negative_matches and score < 60:
-        score -= 20
+    if "proposal" in haystack and ("engineering" in haystack or "construction management" in haystack):
+        score += 10
+    if negative_matches:
+        score -= 25
+    if ("meeting" in haystack or "minutes" in haystack) and not (construction_matches or professional_matches):
+        score -= 25
+    if "award" in haystack and not ("bid" in haystack or "rfp" in haystack or "rfq" in haystack):
+        score -= 10
 
     matched_labels = []
     if transport_matches:
@@ -947,12 +1039,12 @@ def score_public_notice_relevance(title: str, raw_text: str) -> tuple[int, list[
     else:
         category = "General Notice"
 
-    return max(score, 0), matched_labels, category
+    return max(min(score, 100), 0), matched_labels, category
 
 
-def build_public_notice_admin_note(score: int, matched_labels: list[str], category: str) -> str:
+def build_public_notice_admin_note(score: int, matched_labels: list[str], category: str, source_name: str) -> str:
     labels = ", ".join(matched_labels) if matched_labels else "general"
-    return f"DOS public notice review | category: {category} | relevance score: {score} | matched: {labels}"
+    return f"Statewide public notice review | source: {source_name} | category: {category} | relevance score: {score} | matched: {labels}"
 
 
 def make_duplicate_key(source_id, title, due_date):
@@ -1280,7 +1372,7 @@ def parse_drjtbc_profserv_titles(cleaned):
     return deduped[:20]
 
 
-def parse_dos_public_notice_entries(html: str, page_url: str) -> list[dict]:
+def parse_public_notice_entries(html: str, page_url: str, source_key: str, source_name: str) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     entries = []
     seen = set()
@@ -1306,15 +1398,15 @@ def parse_dos_public_notice_entries(html: str, page_url: str) -> list[dict]:
         seen.add(key)
 
         entries.append({
-            "lead_id": build_stable_lead_id("dos-public-notices", title, full_url),
+            "lead_id": build_stable_lead_id(source_key, title, full_url),
             "title": title,
             "posted_date": extract_due_date(context),
             "due_date": extract_due_date(raw_text),
             "source_url": full_url,
             "raw_text": raw_text[:4000],
-            "quality_score": min(100, max(score, compute_quality_score(title, extract_due_date(raw_text), "NJ Department of State Public Notices", "Statewide"))),
-            "admin_notes": build_public_notice_admin_note(score, matched_labels, category),
-            "access_notes": "Imported from the NJ Department of State legal notices portal for admin review before promotion.",
+            "quality_score": min(100, max(score, compute_quality_score(title, extract_due_date(raw_text), source_name, "Statewide"))),
+            "admin_notes": build_public_notice_admin_note(score, matched_labels, category, source_name),
+            "access_notes": f"Imported from {source_name} for admin review before promotion.",
         })
 
     if entries:
@@ -1329,7 +1421,7 @@ def parse_dos_public_notice_entries(html: str, page_url: str) -> list[dict]:
         score, matched_labels, category = score_public_notice_relevance(title, sentence)
         if score < 55:
             continue
-        lead_id = build_stable_lead_id("dos-public-notices", title, page_url)
+        lead_id = build_stable_lead_id(source_key, title, page_url)
         fallback_entries.append({
             "lead_id": lead_id,
             "title": title,
@@ -1338,8 +1430,8 @@ def parse_dos_public_notice_entries(html: str, page_url: str) -> list[dict]:
             "source_url": page_url,
             "raw_text": sentence[:4000],
             "quality_score": min(100, score),
-            "admin_notes": build_public_notice_admin_note(score, matched_labels, category),
-            "access_notes": "Fallback DOS public notice extraction from page text. Review before promotion.",
+            "admin_notes": build_public_notice_admin_note(score, matched_labels, category, source_name),
+            "access_notes": f"Fallback statewide public notice extraction from {source_name}. Review before promotion.",
         })
     return fallback_entries[:40]
 
@@ -1392,27 +1484,46 @@ def manual_crawl_njta():
     )
 
 
-def manual_crawl_dos_public_notices():
+def manual_crawl_public_notice_source(source: dict):
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
     try:
-        resp = requests.get(DOS_PUBLIC_NOTICES_URL, headers=headers, timeout=30)
+        resp = requests.get(source["url"], headers=headers, timeout=30)
         resp.raise_for_status()
-        entries = parse_dos_public_notice_entries(resp.text, resp.url)
+        entries = parse_public_notice_entries(resp.text, resp.url, source["source_key"], source["source_name"])
         inserted = upsert_leads(
-            source_key="dos-public-notices",
-            source_id="state-dos-public-notices",
-            agency="NJ Department of State Public Notices",
-            county="Statewide",
+            source_key=source["source_key"],
+            source_id=source["source_id"],
+            agency=source["agency"],
+            county=source["county"],
             source_url=resp.url,
             titles=entries,
         )
-        log_crawl_run("state-dos-public-notices", "NJ Department of State Public Notices", "Success", inserted, "DOS public notice crawl completed")
-        update_source_crawl_status("state-dos-public-notices", "Success", inserted)
+        log_crawl_run(source["source_id"], source["source_name"], "Success", inserted, "Statewide public notice crawl completed")
+        update_source_crawl_status(source["source_id"], "Success", inserted)
         return {"inserted": inserted, "titles": [entry["title"] for entry in entries]}
     except Exception as e:
-        log_crawl_run("state-dos-public-notices", "NJ Department of State Public Notices", "Failed", 0, str(e))
-        update_source_crawl_status("state-dos-public-notices", "Failed", 0)
+        log_crawl_run(source["source_id"], source["source_name"], "Failed", 0, str(e))
+        update_source_crawl_status(source["source_id"], "Failed", 0)
         raise
+
+
+def manual_crawl_dos_public_notices():
+    source = next(source for source in PUBLIC_NOTICE_SOURCES if source["source_id"] == "state-dos-public-notices")
+    return manual_crawl_public_notice_source(source)
+
+
+def manual_crawl_statewide_public_notices():
+    results = []
+    total_inserted = 0
+    for source in PUBLIC_NOTICE_SOURCES:
+        result = manual_crawl_public_notice_source(source)
+        total_inserted += result["inserted"]
+        results.append({
+            "source_id": source["source_id"],
+            "source_name": source["source_name"],
+            "inserted": result["inserted"],
+        })
+    return {"inserted": total_inserted, "results": results}
 
 
 def manual_crawl_monmouth():
@@ -1458,8 +1569,11 @@ def run_enabled_crawlers():
                 result = manual_crawl_njdot_profserv()
             elif sid == "state-njta":
                 result = manual_crawl_njta()
-            elif sid == "state-dos-public-notices":
-                result = manual_crawl_dos_public_notices()
+            elif sid in get_public_notice_source_ids():
+                source = next((notice_source for notice_source in PUBLIC_NOTICE_SOURCES if notice_source["source_id"] == sid), None)
+                if not source:
+                    continue
+                result = manual_crawl_public_notice_source(source)
             elif sid == "county-monmouth":
                 result = manual_crawl_monmouth()
             elif sid == "state-njtransit":
@@ -1822,9 +1936,10 @@ def api_admin_leads(
     q: str | None = None,
     sort_by: str | None = None,
     source_id: str | None = None,
+    public_notice_only: bool = False,
     duplicates_only: bool = False,
 ):
-    return JSONResponse(content=fetch_leads(status_filter, q, sort_by, duplicates_only, source_id))
+    return JSONResponse(content=fetch_leads(status_filter, q, sort_by, duplicates_only, source_id, public_notice_only))
 
 
 @app.get("/api/admin/crawl-runs")
@@ -1865,9 +1980,10 @@ def export_leads_csv(
     q: str | None = None,
     sort_by: str | None = None,
     source_id: str | None = None,
+    public_notice_only: bool = False,
     duplicates_only: bool = False,
 ):
-    leads = fetch_leads(status_filter, q, sort_by, duplicates_only, source_id)
+    leads = fetch_leads(status_filter, q, sort_by, duplicates_only, source_id, public_notice_only)
     rows = [
         [
             l["lead_id"], l["title"], l["source_id"], l["source_name"], l["agency"], l["county"],
@@ -1909,6 +2025,12 @@ def admin_crawl_dos_public_notices(username: str = Depends(check_auth)):
     return RedirectResponse(url="/admin/leads?source_id=state-dos-public-notices&sort_by=quality", status_code=303)
 
 
+@app.post("/admin/crawl/statewide-public-notices")
+def admin_crawl_statewide_public_notices(username: str = Depends(check_auth)):
+    manual_crawl_statewide_public_notices()
+    return RedirectResponse(url="/admin/leads?public_notice_only=true&sort_by=quality", status_code=303)
+
+
 @app.post("/admin/crawl/monmouth")
 def admin_crawl_monmouth(username: str = Depends(check_auth)):
     manual_crawl_monmouth()
@@ -1947,9 +2069,10 @@ def admin_promote_lead(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     promote_lead(lead_id)
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/reject")
@@ -1960,9 +2083,10 @@ def admin_reject_lead(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     reject_lead(lead_id)
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/reset")
@@ -1973,9 +2097,10 @@ def admin_reset_lead(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     reset_lead_to_new(lead_id)
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/bulk")
@@ -1987,10 +2112,11 @@ def admin_bulk_leads_action(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     if action in {"promote", "reject", "reset"} and selected_lead_ids:
         bulk_update_leads(selected_lead_ids, action)
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/notes")
@@ -2002,9 +2128,10 @@ def admin_update_lead_notes(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     update_lead_notes(lead_id, admin_notes)
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/access")
@@ -2021,6 +2148,7 @@ def admin_update_lead_access(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     update_lead_access_info(
         lead_id,
@@ -2031,7 +2159,7 @@ def admin_update_lead_access(
         addenda_note,
         access_notes,
     )
-    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id), status_code=303)
+    return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
 @app.post("/admin/leads/{lead_id}/auto-guidance")
@@ -2042,10 +2170,11 @@ def admin_rerun_auto_guidance_for_lead(
     return_q: str | None = Form(default=None),
     return_sort_by: str | None = Form(default=None),
     return_source_id: str | None = Form(default=None),
+    return_public_notice_only: bool = Form(default=False),
 ):
     rerun_auto_guidance_for_lead(lead_id)
     return RedirectResponse(
-        url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id),
+        url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only),
         status_code=303,
     )
 
@@ -2398,6 +2527,7 @@ def admin_page(username: str = Depends(check_auth)):
       <div class="grid" style="margin-top:20px;">
         <div class="panel">
           <h3>Manual crawl controls</h3>
+          <form action="/admin/crawl/statewide-public-notices" method="post"><button class="button" type="submit">Run Statewide Public Notice Crawl</button></form>
           <form action="/admin/crawl/njdot-construction" method="post"><button class="button" type="submit">Run NJDOT Construction Crawl</button></form>
           <form action="/admin/crawl/njdot-profserv" method="post"><button class="button" type="submit">Run NJDOT Professional Services Crawl</button></form>
           <form action="/admin/crawl/njta" method="post"><button class="button" type="submit">Run NJTA Crawl</button></form>
@@ -2415,7 +2545,7 @@ def admin_page(username: str = Depends(check_auth)):
       <h3>Admin links</h3>
       <p><a href="/admin/sources">View source crawl status page</a></p>
       <p><a href="/admin/leads">View admin leads page</a></p>
-      <p><a href="/admin/leads?source_id=state-dos-public-notices&sort_by=quality">Review DOS public notice leads</a></p>
+      <p><a href="/admin/leads?public_notice_only=true&sort_by=quality">Review statewide public notice leads</a></p>
       <p><a href="/admin/duplicates">View duplicate review queue</a></p>
       <p><a href="/admin/export/leads.csv">Export leads CSV</a></p>
       <p><a href="/export/opportunities.csv">Export opportunities CSV</a></p>
@@ -2477,8 +2607,9 @@ def admin_leads_page(
     q: str | None = None,
     sort_by: str | None = None,
     source_id: str | None = None,
+    public_notice_only: bool = False,
 ):
-    leads = fetch_leads(status_filter, q, sort_by, duplicates_only=False, source_filter=source_id)
+    leads = fetch_leads(status_filter, q, sort_by, duplicates_only=False, source_filter=source_id, public_notice_only=public_notice_only)
     summary = fetch_admin_summary()
     sources = fetch_sources()
 
@@ -2486,6 +2617,7 @@ def admin_leads_page(
     current_q = q or ""
     current_sort = sort_by or ""
     current_source_id = source_id or ""
+    current_public_notice_only = public_notice_only
     source_options = "<option value=''>All sources</option>" + "".join(
         f"<option value='{row['source_id']}' {'selected' if current_source_id == row['source_id'] else ''}>{row['source_name']}</option>"
         for row in sources
@@ -2526,6 +2658,7 @@ def admin_leads_page(
                 <input type="hidden" name="return_q" value="{current_q}">
                 <input type="hidden" name="return_sort_by" value="{current_sort}">
                 <input type="hidden" name="return_source_id" value="{current_source_id}">
+                <input type="hidden" name="return_public_notice_only" value="{str(current_public_notice_only).lower()}">
                 <div style="margin-bottom:6px;">
                     <select name="access_type" style="width:210px;padding:6px;">{access_type_options}</select>
                 </div>
@@ -2554,6 +2687,7 @@ def admin_leads_page(
                 <input type="hidden" name="return_q" value="{current_q}">
                 <input type="hidden" name="return_sort_by" value="{current_sort}">
                 <input type="hidden" name="return_source_id" value="{current_source_id}">
+                <input type="hidden" name="return_public_notice_only" value="{str(current_public_notice_only).lower()}">
                 <input type="text" name="admin_notes" value="{row['admin_notes']}" placeholder="admin notes" style="width:220px;padding:6px;">
                 <button type="submit" style="padding:6px 8px;">Save note</button>
             </form>
@@ -2564,6 +2698,7 @@ def admin_leads_page(
             <input type="hidden" name="return_q" value="{current_q}">
             <input type="hidden" name="return_sort_by" value="{current_sort}">
             <input type="hidden" name="return_source_id" value="{current_source_id}">
+            <input type="hidden" name="return_public_notice_only" value="{str(current_public_notice_only).lower()}">
         """
 
         items += f"""
@@ -2597,7 +2732,7 @@ def admin_leads_page(
         </tr>
         """
 
-    export_url = build_redirect_url("/admin/export/leads.csv", status_filter, q, sort_by, source_id)
+    export_url = build_redirect_url("/admin/export/leads.csv", status_filter, q, sort_by, source_id, public_notice_only)
 
     return f"""
     <html><head><title>Admin Leads</title>
@@ -2627,7 +2762,7 @@ def admin_leads_page(
         <a href="/admin/leads?status=New">New ({summary['new_lead_count']})</a>
         <a href="/admin/leads?status=Promoted">Promoted ({summary['promoted_lead_count']})</a>
         <a href="/admin/leads?status=Rejected">Rejected ({summary['rejected_lead_count']})</a>
-        <a href="/admin/leads?source_id=state-dos-public-notices&sort_by=quality">Public Notices Review</a>
+        <a href="/admin/leads?public_notice_only=true&sort_by=quality">Public Notices Review</a>
         <a href="/admin/duplicates">Duplicates ({summary['duplicate_lead_count']})</a>
         <a href="{export_url}">Export filtered leads CSV</a>
       </div>
@@ -2641,6 +2776,10 @@ def admin_leads_page(
           <option value="Rejected" {"selected" if current_status == "Rejected" else ""}>Rejected</option>
         </select>
         <select name="source_id">{source_options}</select>
+        <label style="display:inline-block; margin-right:8px;">
+          <input type="checkbox" name="public_notice_only" value="true" {"checked" if current_public_notice_only else ""}>
+          Public notices only
+        </label>
         <select name="sort_by">
           <option value="" {"selected" if not current_sort else ""}>Default sort</option>
           <option value="due_date" {"selected" if current_sort == "due_date" else ""}>Sort by due date</option>
@@ -2654,6 +2793,7 @@ def admin_leads_page(
         <input type="hidden" name="return_q" value="{current_q}">
         <input type="hidden" name="return_sort_by" value="{current_sort}">
         <input type="hidden" name="return_source_id" value="{current_source_id}">
+        <input type="hidden" name="return_public_notice_only" value="{str(current_public_notice_only).lower()}">
 
         <div class="bulkbar">
           <button type="submit" name="action" value="promote">Bulk Promote</button>
