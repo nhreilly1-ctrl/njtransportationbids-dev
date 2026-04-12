@@ -29,6 +29,22 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
+
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS opportunities (
+                    id SERIAL PRIMARY KEY,
+                    opportunity_id TEXT UNIQUE NOT NULL,
+                    title TEXT NOT NULL,
+                    agency TEXT NOT NULL,
+                    county TEXT,
+                    source_id TEXT,
+                    due_date TEXT,
+                    status TEXT,
+                    opportunity_url TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+
             cur.execute("""
                 INSERT INTO registry_sources (
                     source_id,
@@ -132,6 +148,51 @@ def init_db():
                 )
                 ON CONFLICT (source_id) DO NOTHING;
             """)
+
+            cur.execute("""
+                INSERT INTO opportunities (
+                    opportunity_id,
+                    title,
+                    agency,
+                    county,
+                    source_id,
+                    due_date,
+                    status,
+                    opportunity_url
+                )
+                VALUES
+                (
+                    'opp-njdot-001',
+                    'Sample NJDOT Construction Opportunity',
+                    'NJDOT Construction Services',
+                    'Statewide',
+                    'state-njdot-construction',
+                    '2026-05-15',
+                    'Open',
+                    'https://www.nj.gov/transportation/business/procurement/ConstrServ/curradvproj.shtm'
+                ),
+                (
+                    'opp-njta-001',
+                    'Sample NJTA Professional Services Opportunity',
+                    'NJ Turnpike Authority Current Solicitations',
+                    'Statewide',
+                    'state-njta',
+                    '2026-05-20',
+                    'Open',
+                    'https://www.njta.gov/business-hub/current-solicitations/'
+                ),
+                (
+                    'opp-monmouth-001',
+                    'Sample Monmouth County Intersection Improvement Opportunity',
+                    'Monmouth County Purchasing',
+                    'Monmouth',
+                    'county-monmouth',
+                    '2026-05-10',
+                    'Open',
+                    'https://pol.co.monmouth.nj.us/'
+                )
+                ON CONFLICT (opportunity_id) DO NOTHING;
+            """)
         conn.commit()
 
 
@@ -160,6 +221,32 @@ def fetch_sources():
     return data
 
 
+def fetch_opportunities():
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT opportunity_id, title, agency, county, source_id, due_date, status, opportunity_url
+                FROM opportunities
+                ORDER BY due_date
+                LIMIT 50
+            """)
+            rows = cur.fetchall()
+
+    data = []
+    for row in rows:
+        data.append({
+            "opportunity_id": row[0],
+            "title": row[1],
+            "agency": row[2],
+            "county": row[3],
+            "source_id": row[4],
+            "due_date": row[5],
+            "status": row[6],
+            "opportunity_url": row[7],
+        })
+    return data
+
+
 @app.on_event("startup")
 def startup_event():
     init_db()
@@ -168,7 +255,7 @@ def startup_event():
 @app.get("/", response_class=HTMLResponse)
 def home():
     sources = fetch_sources()
-    source_count = len(sources)
+    opportunities = fetch_opportunities()
 
     return f"""
     <html>
@@ -194,28 +281,29 @@ def home():
           <div class="hero">
             <h1>NJ Transportation Bids</h1>
             <p class="muted">
-              Live New Jersey transportation bid registry. Current version includes the first connected source registry and database-backed source pages.
+              Live New Jersey transportation bid registry with database-backed sources and opportunities.
             </p>
 
             <div class="stats">
               <div class="stat">
-                <strong>{source_count}</strong><br>
+                <strong>{len(sources)}</strong><br>
                 live source records
+              </div>
+              <div class="stat">
+                <strong>{len(opportunities)}</strong><br>
+                live opportunity records
               </div>
               <div class="stat">
                 <strong>Postgres</strong><br>
                 connected and working
               </div>
-              <div class="stat">
-                <strong>Render</strong><br>
-                live deployment
-              </div>
             </div>
 
             <div class="nav">
               <a href="/sources">View Sources</a>
+              <a href="/opportunities">View Opportunities</a>
               <a href="/api/sources" class="secondary">Sources JSON</a>
-              <a href="/opportunities" class="secondary">Opportunities</a>
+              <a href="/api/opportunities" class="secondary">Opportunities JSON</a>
               <a href="/health" class="secondary">Health</a>
               <a href="/ready" class="secondary">Readiness</a>
             </div>
@@ -227,14 +315,14 @@ def home():
               <li>Custom domain connected</li>
               <li>Health and readiness checks passing</li>
               <li>Database-backed source registry working</li>
-              <li>Top transportation sources loaded into the registry</li>
+              <li>Database-backed opportunities page working</li>
             </ul>
 
             <h2>Next build phase</h2>
             <ul>
               <li>Expand source registry beyond top 10</li>
-              <li>Add opportunities table and live opportunities page</li>
-              <li>Add crawler and lead-review workflow</li>
+              <li>Replace sample opportunities with crawler-fed records</li>
+              <li>Add admin review workflow</li>
               <li>Add protected admin functions</li>
             </ul>
           </div>
@@ -257,6 +345,11 @@ def ready():
 @app.get("/api/sources")
 def api_sources():
     return JSONResponse(content=fetch_sources())
+
+
+@app.get("/api/opportunities")
+def api_opportunities():
+    return JSONResponse(content=fetch_opportunities())
 
 
 @app.get("/sources", response_class=HTMLResponse)
@@ -321,22 +414,58 @@ def sources_page():
 
 @app.get("/opportunities", response_class=HTMLResponse)
 def opportunities_page():
-    return """
+    opportunities = fetch_opportunities()
+
+    items = ""
+    for row in opportunities:
+        items += f"""
+        <tr>
+            <td><a href="{row['opportunity_url']}" target="_blank">{row['title']}</a></td>
+            <td>{row['agency'] or ''}</td>
+            <td>{row['county'] or ''}</td>
+            <td>{row['due_date'] or ''}</td>
+            <td>{row['status'] or ''}</td>
+        </tr>
+        """
+
+    return f"""
     <html>
       <head>
         <title>Opportunities</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }
-          .card { max-width: 900px; margin: 0 auto; background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; }
-          a { color: #0b57d0; text-decoration: none; }
+          body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
+          .wrap {{ max-width: 1100px; margin: 0 auto; }}
+          .top {{ margin-bottom: 24px; }}
+          .top a {{ color: #0b57d0; text-decoration: none; }}
+          table {{ border-collapse: collapse; width: 100%; background: white; }}
+          th, td {{ border: 1px solid #e5e7eb; padding: 10px; text-align: left; }}
+          th {{ background: #f3f4f6; }}
+          h1 {{ margin-bottom: 6px; }}
+          .muted {{ color: #4b5563; }}
         </style>
       </head>
       <body>
-        <div class="card">
-          <a href="/">← Back to home</a>
-          <h1>Opportunities</h1>
-          <p>This page is the next build target.</p>
-          <p>The next phase will connect live bid opportunities, crawler output, and promoted transportation opportunities here.</p>
+        <div class="wrap">
+          <div class="top">
+            <a href="/">← Back to home</a>
+            <h1>Opportunities</h1>
+            <p class="muted">{len(opportunities)} opportunities currently loaded</p>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Agency</th>
+                <th>County</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items}
+            </tbody>
+          </table>
         </div>
       </body>
     </html>
