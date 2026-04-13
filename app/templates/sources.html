@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Sources — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Sources</h1>
+  <p>{{ sources | length }} procurement sources configured. Health is based on noise ratio — sources with frequent navigation text or out-of-scope records are flagged.</p>
+</div>
+
+{% set state_sources   = sources | selectattr("tier", "equalto", "state")   | list %}
+{% set county_sources  = sources | selectattr("tier", "equalto", "county")  | list %}
+{% set munic_sources   = sources | selectattr("tier", "equalto", "municipal") | list %}
+
+{% macro source_block(src) %}
+<div class="source-card">
+  <div class="h-dot h-{{ src.health or 'warn' }}"></div>
+  <div style="flex:1; min-width:0;">
+    <div class="source-name">{{ src.name }}</div>
+    <div class="source-meta">
+      Last crawl: {{ src.last_crawl or 'unknown' }} &nbsp;·&nbsp;
+      {{ src.total }} records &nbsp;·&nbsp;
+      {% if src.noise > 0 %}
+        <span style="color:var(--red-text);">{{ src.noise }} noise</span> &nbsp;·&nbsp;
+      {% endif %}
+      {{ src.open }} open
+    </div>
+  </div>
+  {% if src.health == 'bad' %}
+    <span class="badge badge-noise" style="font-size:11px;">Needs review</span>
+  {% elif src.health == 'warn' %}
+    <span class="badge badge-nodate" style="font-size:11px;">Noisy</span>
+  {% else %}
+    <span class="badge badge-open" style="font-size:11px;">Healthy</span>
+  {% endif %}
+  {% if src.url %}
+    <a href="{{ src.url }}" target="_blank" class="btn btn-sm">Visit ↗</a>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% if state_sources %}
+  <div class="section-label">State agencies — high signal</div>
+  {% for s in state_sources %}{{ source_block(s) }}{% endfor %}
+{% endif %}
+
+{% if county_sources %}
+  <div class="section-label">County portals — medium signal</div>
+  {% for s in county_sources %}{{ source_block(s) }}{% endfor %}
+{% endif %}
+
+{% if munic_sources %}
+  <div class="section-label">Municipal portals — lower signal / higher noise</div>
+  {% for s in munic_sources %}{{ source_block(s) }}{% endfor %}
+{% endif %}
+
+{% if not sources %}
+  <div style="padding:3rem 0; text-align:center; color:var(--text2);">No sources configured yet.</div>
+{% endif %}
+
+{% endblock %}

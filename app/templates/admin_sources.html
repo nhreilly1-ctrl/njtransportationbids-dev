@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Sources — Admin — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.25rem; flex-wrap:wrap;">
+  <h1 style="font-size:18px; font-weight:500;">Sources
+    <span style="font-size:13px; font-weight:400; color:var(--text2);">({{ sources|length }} configured)</span>
+  </h1>
+  <div style="margin-left:auto; display:flex; gap:8px;">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm">← Dashboard</a>
+  </div>
+</div>
+
+{% set state   = sources | selectattr("tier","equalto","state")    | list %}
+{% set county  = sources | selectattr("tier","equalto","county")   | list %}
+{% set munic   = sources | selectattr("tier","equalto","municipal") | list %}
+
+{% macro src_row(s) %}
+<div class="source-card">
+  <div class="h-dot h-{{ s.health or 'warn' }}"></div>
+  <div style="flex:1; min-width:0;">
+    <div class="source-name">{{ s.name }}</div>
+    <div class="source-meta">
+      Last crawl: {{ s.last_crawl or 'unknown' }} &nbsp;·&nbsp;
+      {{ s.total }} records
+      {% if s.noise > 0 %} &nbsp;·&nbsp; <span style="color:var(--red-text);">{{ s.noise }} noise</span>{% endif %}
+      {% if s.expired > 0 %} &nbsp;·&nbsp; {{ s.expired }} expired{% endif %}
+      &nbsp;·&nbsp; {{ s.open }} open
+    </div>
+  </div>
+  {% if s.health == 'bad' %}
+    <span class="badge badge-noise" style="font-size:11px;">Needs review</span>
+  {% elif s.health == 'warn' %}
+    <span class="badge badge-nodate" style="font-size:11px;">Noisy</span>
+  {% else %}
+    <span class="badge badge-open" style="font-size:11px;">Healthy</span>
+  {% endif %}
+  <a href="{{ url_for('admin_records') }}?source={{ s.name | urlencode }}" class="btn btn-sm">View records</a>
+  {% if s.url %}
+    <a href="{{ s.url }}" target="_blank" class="btn btn-sm">Visit ↗</a>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% if state %}
+  <div class="section-label">State agencies</div>
+  {% for s in state %}{{ src_row(s) }}{% endfor %}
+{% endif %}
+
+{% if county %}
+  <div class="section-label">County portals</div>
+  {% for s in county %}{{ src_row(s) }}{% endfor %}
+{% endif %}
+
+{% if munic %}
+  <div class="section-label">Municipal portals</div>
+  {% for s in munic %}{{ src_row(s) }}{% endfor %}
+{% endif %}
+
+{% if not sources %}
+  <div style="padding:3rem; text-align:center; color:var(--text2);">No sources in sources.json yet.</div>
+{% endif %}
+
+{% endblock %}

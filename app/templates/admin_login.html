@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div class="login-wrap" style="min-height:calc(100vh - 120px);">
+  <div class="login-card">
+    <h1>Admin sign in</h1>
+    {% if error %}
+      <div class="flash flash-error" style="margin-bottom:1rem;">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" autocomplete="username" autofocus>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:.5rem;">Sign in</button>
+    </form>
+    <div style="margin-top:1rem; text-align:center;">
+      <a href="{{ url_for('index') }}" style="font-size:12px; color:var(--text3);">← Back to site</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block title %}Records — Admin — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
+  <div>
+    <h1 style="font-size:18px; font-weight:500;">Records
+      <span style="font-size:13px; font-weight:400; color:var(--text2);">({{ total }} shown of {{ all_total }})</span>
+    </h1>
+  </div>
+  <div style="margin-left:auto; display:flex; gap:8px;">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm">← Dashboard</a>
+    <a href="{{ url_for('export_csv') }}" class="btn btn-sm">Export CSV</a>
+  </div>
+</div>
+
+<!-- Filter pills -->
+<div class="filter-pills">
+  <a class="pill {{ 'active' if filt == 'all' }}"    href="?filter=all{{ '&source=' + selected_source if selected_source }}">All records</a>
+  <a class="pill {{ 'active' if filt == 'noise' }}"  href="?filter=noise{{ '&source=' + selected_source if selected_source }}">Noise only</a>
+  <a class="pill {{ 'active' if filt == 'expired' }}" href="?filter=expired{{ '&source=' + selected_source if selected_source }}">Expired only</a>
+  <a class="pill {{ 'active' if filt == 'nodate' }}" href="?filter=nodate{{ '&source=' + selected_source if selected_source }}">No due date</a>
+  <a class="pill {{ 'active' if filt == 'ooscope' }}" href="?filter=ooscope{{ '&source=' + selected_source if selected_source }}">Out of scope</a>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar" style="margin-bottom:.75rem;">
+  <form method="get" style="display:contents;">
+    <input type="hidden" name="filter" value="{{ filt }}">
+    <input type="text" name="q" placeholder="Search title or source..." value="{{ q }}" style="flex:1; min-width:180px;">
+    <select name="source" onchange="this.form.submit()">
+      <option value="">All sources</option>
+      {% for s in sources %}
+        <option value="{{ s }}" {{ 'selected' if s == selected_source }}>{{ s }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn">Search</button>
+    {% if q or selected_source %}
+      <a href="?filter={{ filt }}" class="btn">Clear</a>
+    {% endif %}
+  </form>
+  <div id="bulk-btns" style="display:none; contents;">
+    <button class="btn btn-danger" onclick="bulkAction('delete')" id="btn-delete">Delete (<span class="sel-n">0</span>)</button>
+    <button class="btn" onclick="bulkAction('noise')">Flag noise (<span class="sel-n">0</span>)</button>
+    <button class="btn" onclick="bulkAction('approve')">Mark clean (<span class="sel-n">0</span>)</button>
+    <button class="btn" onclick="bulkAction('restore')">Restore (<span class="sel-n">0</span>)</button>
+  </div>
+</div>
+
+<!-- Selection bar -->
+<div class="sel-bar" id="sel-bar">
+  <span class="sel-count"><span id="sel-count-n">0</span> selected</span>
+  <span style="color:var(--blue-text); cursor:pointer; text-decoration:underline; font-size:13px;"
+        onclick="clearSel()">Clear</span>
+  <div class="spacer"></div>
+  <button class="btn btn-danger btn-sm" onclick="bulkAction('delete')">Delete</button>
+  <button class="btn btn-sm" onclick="bulkAction('noise')">Flag noise</button>
+  <button class="btn btn-sm" onclick="bulkAction('approve')">Mark clean</button>
+  <button class="btn btn-sm" onclick="bulkAction('restore')">Restore</button>
+  <button class="btn btn-sm" onclick="exportSelected()">Export CSV</button>
+</div>
+
+<div id="action-msg" style="display:none; margin-bottom:.75rem;" class="flash"></div>
+
+<div class="tbl-wrap">
+  <table class="admin-tbl" id="rec-table">
+    <colgroup>
+      <col class="col-check"><col class="col-dot"><col class="col-title">
+      <col class="col-source"><col class="col-due"><col class="col-status"><col class="col-action">
+    </colgroup>
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
+        <th></th>
+        <th>Title</th>
+        <th>Source</th>
+        <th>Due date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for o in records %}
+      <tr id="row-{{ o.id }}" data-id="{{ o.id }}"
+          class="{{ 'selected' if o.id in selected_ids|default([]) }}">
+        <td class="col-check"><input type="checkbox" class="row-check" value="{{ o.id }}" onchange="onCheck()"></td>
+        <td class="col-dot">
+          <div class="bid-dot
+            {{ 'dot-green' if o.status == 'open' }}
+            {{ 'dot-amber' if o.status == 'unknown_date' }}
+            {{ 'dot-red'   if o.status in ('expired','noise') }}"
+            style="margin:0 auto;"></div>
+        </td>
+        <td class="col-title" title="{{ o.title }}" style="font-size:12px;">{{ o.title }}</td>
+        <td class="col-source" style="font-size:11px; color:var(--text2);">{{ o.source_name }}</td>
+        <td class="col-due" style="font-size:12px;">{{ o.due_date_raw or '—' }}</td>
+        <td class="col-status">
+          {% if o.status == 'open' %}
+            <span class="badge badge-open">Open</span>
+          {% elif o.status == 'expired' %}
+            <span class="badge badge-expired">Expired</span>
+          {% elif o.status == 'noise' %}
+            <span class="badge badge-noise">Noise</span>
+          {% elif o.status == 'unknown_date' %}
+            <span class="badge badge-nodate">No date</span>
+          {% elif o.status_override == 'approved' %}
+            <span class="badge badge-approved">Approved</span>
+          {% endif %}
+          {% if o.noise_reason %}
+            <div style="font-size:10px; color:var(--text3); margin-top:2px;">{{ o.noise_reason }}</div>
+          {% endif %}
+        </td>
+        <td class="col-action" style="display:flex; gap:4px;">
+          <button class="btn btn-sm btn-danger" onclick="quickDel('{{ o.id }}')" title="Delete">Del</button>
+          <button class="btn btn-sm" onclick="quickFlag('{{ o.id }}')" title="Flag noise">Flag</button>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" style="padding:2rem; text-align:center; color:var(--text2);">No records match this filter.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+let selected = new Set();
+
+function onCheck() {
+  selected.clear();
+  document.querySelectorAll('.row-check:checked').forEach(cb => selected.add(cb.value));
+  document.querySelectorAll('.admin-tbl tbody tr').forEach(tr => {
+    const cb = tr.querySelector('.row-check');
+    if (cb) tr.classList.toggle('selected', cb.checked);
+  });
+  updateSelBar();
+}
+
+function toggleAll(master) {
+  document.querySelectorAll('.row-check').forEach(cb => {
+    cb.checked = master.checked;
+    if (master.checked) selected.add(cb.value); else selected.delete(cb.value);
+  });
+  document.querySelectorAll('.admin-tbl tbody tr').forEach(tr => {
+    tr.classList.toggle('selected', master.checked);
+  });
+  updateSelBar();
+}
+
+function clearSel() {
+  selected.clear();
+  document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
+  document.getElementById('check-all').checked = false;
+  document.querySelectorAll('.admin-tbl tbody tr').forEach(tr => tr.classList.remove('selected'));
+  updateSelBar();
+}
+
+function updateSelBar() {
+  const n = selected.size;
+  document.getElementById('sel-count-n').textContent = n;
+  document.querySelectorAll('.sel-n').forEach(el => el.textContent = n);
+  const bar = document.getElementById('sel-bar');
+  bar.classList.toggle('visible', n > 0);
+  document.getElementById('bulk-btns').style.display = n > 0 ? 'contents' : 'none';
+}
+
+function showMsg(text, isError) {
+  const el = document.getElementById('action-msg');
+  el.textContent = text;
+  el.className = 'flash' + (isError ? ' flash-error' : '');
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+function bulkAction(action) {
+  if (!selected.size) return;
+  const confirmMsg = action === 'delete'
+    ? `Permanently delete ${selected.size} record(s)? This cannot be undone from the UI.`
+    : null;
+  if (confirmMsg && !confirm(confirmMsg)) return;
+
+  fetch('/admin/api/bulk', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ action, ids: [...selected] })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.ok) {
+      showMsg(`${d.changed} record(s) updated (${action}). Reload to refresh.`);
+      if (action === 'delete') {
+        selected.forEach(id => {
+          const row = document.getElementById('row-' + id);
+          if (row) row.style.opacity = '0.3';
+        });
+      }
+      clearSel();
+    } else {
+      showMsg(d.msg || 'Error', true);
+    }
+  });
+}
+
+function quickDel(id) {
+  if (!confirm('Delete this record?')) return;
+  fetch('/admin/api/record/' + id, { method: 'DELETE' })
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) {
+        const row = document.getElementById('row-' + id);
+        if (row) row.style.opacity = '0.25';
+        showMsg('Record deleted.');
+      }
+    });
+}
+
+function quickFlag(id) {
+  fetch('/admin/api/record/' + id, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ noise_flagged: true, status_override: 'noise' })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.ok) {
+      const row = document.getElementById('row-' + id);
+      if (row) row.style.opacity = '0.4';
+      showMsg('Flagged as noise.');
+    }
+  });
+}
+
+function exportSelected() {
+  if (!selected.size) return;
+  const ids = [...selected].join(',');
+  window.location = '/export/opportunities.csv?ids=' + ids;
+}
+</script>
+{% endblock %}

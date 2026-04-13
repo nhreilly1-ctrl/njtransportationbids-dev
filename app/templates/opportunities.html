@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Opportunities — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Opportunities <span style="font-size:14px; font-weight:400; color:var(--text2);">({{ total }} shown)</span></h1>
+</div>
+
+<form method="get" class="toolbar">
+  <input name="q" type="text" placeholder="Search title, agency, county..." value="{{ q }}">
+  <select name="county" onchange="this.form.submit()">
+    <option value="">All counties</option>
+    {% for c in counties %}
+      <option value="{{ c }}" {{ 'selected' if c == selected_county }}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <select name="agency" onchange="this.form.submit()">
+    <option value="">All agencies</option>
+    {% for a in agencies %}
+      <option value="{{ a }}" {{ 'selected' if a == selected_agency }}>{{ a }}</option>
+    {% endfor %}
+  </select>
+  <select name="status" onchange="this.form.submit()">
+    <option value="active"   {{ 'selected' if selected_status == 'active' }}>Open only (default)</option>
+    <option value="all"      {{ 'selected' if selected_status == 'all' }}>Open + no date</option>
+    <option value="expired"  {{ 'selected' if selected_status == 'expired' }}>Expired only</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Search</button>
+  {% if q or selected_county or selected_agency or selected_status != 'active' %}
+    <a href="{{ url_for('opportunities') }}" class="btn">Clear</a>
+  {% endif %}
+  <a href="{{ url_for('export_csv') }}" class="btn" style="margin-left:auto;">Export CSV</a>
+</form>
+
+{% macro render_card(o) %}
+  {% set is_soon = o.due_date_parsed and (o.due_date_parsed[:10] <= (now_plus14 | string)) %}
+  <div class="bid-card {{ 'soon' if is_soon }}">
+    <div class="bid-dot
+      {{ 'dot-green' if o.status == 'open' }}
+      {{ 'dot-amber' if o.status == 'unknown_date' }}
+      {{ 'dot-red'   if o.status == 'expired' }}"></div>
+    <div class="bid-main">
+      <a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" class="bid-title" title="{{ o.title }}">{{ o.title }}</a>
+      <div class="bid-meta">{{ o.source_name }} &nbsp;·&nbsp; {{ o.county or 'Statewide' }}</div>
+      <div class="bid-tags">
+        {% if o.status == 'open' %}
+          <span class="badge badge-open">Open</span>
+        {% elif o.status == 'unknown_date' %}
+          <span class="badge badge-nodate">No due date</span>
+        {% elif o.status == 'expired' %}
+          <span class="badge badge-expired">Expired</span>
+        {% endif %}
+        {% if o.access_type and o.access_type not in ('Unknown','') %}
+          <span class="badge badge-access">{{ o.access_type }}</span>
+        {% endif %}
+        {% if o.platform and o.platform not in ('Unknown','') %}
+          <span class="badge badge-access">{{ o.platform }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="bid-due {{ 'soon-due' if is_soon }}">
+      {% if o.due_date_raw and o.due_date_raw not in ('Not listed','') %}
+        <span class="due-label">Due</span>
+        <span class="due-date">{{ o.due_date_raw }}</span>
+      {% else %}
+        <span class="due-date" style="color:var(--text3); font-weight:400;">—</span>
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
+
+{% if soon %}
+  <div class="section-label">Due within 14 days</div>
+  {% for o in soon %}{{ render_card(o) }}{% endfor %}
+{% endif %}
+
+{% if later %}
+  <div class="section-label">{{ 'Upcoming' if soon else 'Open bids' }}</div>
+  {% for o in later %}{{ render_card(o) }}{% endfor %}
+{% endif %}
+
+{% if nodate %}
+  <div class="section-label">No due date listed</div>
+  {% for o in nodate %}{{ render_card(o) }}{% endfor %}
+{% endif %}
+
+{% if not soon and not later and not nodate %}
+  <div style="padding: 3rem 0; text-align:center; color:var(--text2); font-size:14px;">
+    No opportunities found matching your filters.
+    <a href="{{ url_for('opportunities') }}" style="color:var(--blue-text);">Clear filters</a>
+  </div>
+{% endif %}
+
+{% endblock %}

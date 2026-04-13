@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ opp.title[:60] }} — NJ Transportation Bids{% endblock %}
+{% block content %}
+
+<div style="margin-bottom:1rem;">
+  <a href="{{ url_for('opportunities') }}" style="font-size:13px; color:var(--text2); text-decoration:none;">← Back to opportunities</a>
+</div>
+
+<div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1rem;">
+  <div style="display:flex; align-items:flex-start; gap:1rem; flex-wrap:wrap;">
+    <div style="flex:1; min-width:0;">
+      <h1 style="font-size:17px; font-weight:500; margin-bottom:.5rem; line-height:1.4;">{{ opp.title }}</h1>
+      <div style="font-size:13px; color:var(--text2); margin-bottom:1rem;">
+        {{ opp.source_name }} &nbsp;·&nbsp; {{ opp.county or 'Statewide' }}
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        {% if opp.status == 'open' %}
+          <span class="badge badge-open">Open</span>
+        {% elif opp.status == 'expired' %}
+          <span class="badge badge-expired">Expired</span>
+        {% elif opp.status == 'unknown_date' %}
+          <span class="badge badge-nodate">No due date</span>
+        {% endif %}
+        {% if opp.access_type and opp.access_type != 'Unknown' %}
+          <span class="badge badge-access">{{ opp.access_type }}</span>
+        {% endif %}
+        {% if opp.platform and opp.platform != 'Unknown' %}
+          <span class="badge badge-access">{{ opp.platform }}</span>
+        {% endif %}
+      </div>
+    </div>
+    {% if opp.due_date_raw and opp.due_date_raw != 'Not listed' %}
+    <div style="text-align:right; flex-shrink:0;">
+      <div style="font-size:11px; color:var(--text3);">Due date</div>
+      <div style="font-size:18px; font-weight:500; {{ 'color:var(--red-text)' if opp.status == 'expired' else '' }}">{{ opp.due_date_raw }}</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+  <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem;">
+    <div class="section-label" style="margin-top:0;">Next steps</div>
+    {% if opp.next_step %}
+      <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">{{ opp.next_step }}</p>
+    {% else %}
+      <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Open the official source and follow the solicitation instructions. Confirm due dates and submission method before committing estimating time.</p>
+    {% endif %}
+    {% if opp.official_url %}
+      <a href="{{ opp.official_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem;">Open official source ↗</a>
+    {% endif %}
+    <a href="{{ url_for('sources') }}" class="btn btn-sm" style="margin-top:.5rem; font-size:12px;">View source details</a>
+  </div>
+
+  <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem;">
+    <div class="section-label" style="margin-top:0;">Record details</div>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr><td style="color:var(--text2); padding:4px 0; width:45%;">Source</td>
+          <td style="padding:4px 0;">{{ opp.source_name or '—' }}</td></tr>
+      <tr><td style="color:var(--text2); padding:4px 0;">County</td>
+          <td style="padding:4px 0;">{{ opp.county or 'Statewide' }}</td></tr>
+      <tr><td style="color:var(--text2); padding:4px 0;">Access type</td>
+          <td style="padding:4px 0;">{{ opp.access_type or '—' }}</td></tr>
+      <tr><td style="color:var(--text2); padding:4px 0;">Platform</td>
+          <td style="padding:4px 0;">{{ opp.platform or '—' }}</td></tr>
+      <tr><td style="color:var(--text2); padding:4px 0;">Record ID</td>
+          <td style="padding:4px 0; font-size:11px; color:var(--text3);">{{ opp.id }}</td></tr>
+    </table>
+  </div>
+</div>
+
+{% if session.get('admin') %}
+<div style="background:var(--blue-bg); border:0.5px solid #b5d4f4; border-radius:var(--radius); padding:.75rem 1rem; font-size:12px; color:var(--blue-text);">
+  Admin: <a href="{{ url_for('admin_records') }}?q={{ opp.id }}" style="color:var(--blue-text);">Edit in admin panel</a>
+  &nbsp;|&nbsp; Status: {{ opp.status }} &nbsp;|&nbsp; Override: {{ opp.status_override or 'none' }}
+</div>
+{% endif %}
+
+{% endblock %}
