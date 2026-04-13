@@ -134,6 +134,71 @@ PUBLIC_NOTICE_NEGATIVE_TERMS = [
     "marriage",
 ]
 
+GENERIC_LINK_TEXT = {
+    "click here",
+    "here",
+    "learn more",
+    "more info",
+    "details",
+    "view",
+    "open",
+    "download",
+    "pdf",
+    "notice",
+}
+
+GENERIC_BAD_TITLE_PATTERNS = [
+    r"\bbid reception\b",
+    r"\bonline services home\b",
+    r"\bbid postings\b",
+    r"\bprint sign up\b",
+    r"\bnew bids are added\b",
+    r"\bbids and proposals\b$",
+    r"\bbids and rfps\b$",
+    r"\bopen bids\b$",
+    r"\bcurrent bids\b$",
+    r"\bbid openings\b$",
+    r"\bpurchasing\b$",
+    r"\blegal ads\b$",
+]
+
+GENERIC_BAD_TITLE_PHRASES = [
+    "sign up to receive",
+    "text message or email",
+    "new bids are added",
+    "bid openings",
+    "current bids",
+    "open bids",
+    "bid results",
+    "current solicitations",
+    "vendor opportunities",
+    "solicitations and awards",
+    "public notices",
+    "legal notices",
+    "purchasing opportunities",
+    "procurement opportunities",
+]
+
+TITLE_SIGNAL_TERMS = [
+    "contract",
+    "rfp",
+    "rfq",
+    "ifb",
+    "bid",
+    "proposal",
+    "project",
+    "services",
+    "improvements",
+    "construction",
+    "engineering",
+    "rehabilitation",
+    "resurfacing",
+    "bridge",
+    "roadway",
+    "transportation",
+    "solicitation",
+]
+
 PUBLIC_NOTICE_SOURCES = [
     {
         "source_key": "dos-public-notices",
@@ -637,6 +702,10 @@ def fetch_recent_opportunities(limit=8):
     return fetch_opportunities()[:limit]
 
 
+def is_public_opportunity_record(title: str, opportunity_url: str | None, agency: str | None = None) -> bool:
+    return is_descriptive_opportunity_title(title, title, agency or "") and sanitize_external_url(opportunity_url) != "#"
+
+
 def fetch_source_detail(source_id: str):
     source_map = fetch_source_map()
     source = source_map.get(source_id)
@@ -744,8 +813,11 @@ def fetch_opportunities(county_filter=None, agency_filter=None, source_filter=No
             rows = cur.fetchall()
 
     source_map = fetch_source_map()
-    return [
-        {
+    opportunities = []
+    for row in rows:
+        if not is_public_opportunity_record(row[1], row[7], row[2]):
+            continue
+        opportunities.append({
             "opportunity_id": row[0],
             "title": row[1],
             "agency": row[2],
@@ -754,16 +826,15 @@ def fetch_opportunities(county_filter=None, agency_filter=None, source_filter=No
             "source_name": source_map.get(row[4], {}).get("source_name", row[4]),
             "due_date": row[5],
             "status": row[6],
-            "opportunity_url": sanitize_external_url(row[7], source_map.get(row[4], {}).get("source_url")),
+            "opportunity_url": sanitize_external_url(row[7]),
             "access_type": row[8],
             "platform_name": row[9],
             "next_step": row[10],
             "docs_path_note": row[11],
             "addenda_note": row[12],
             "created_at": str(row[13]),
-        }
-        for row in rows
-    ]
+        })
+    return opportunities
 
 
 def fetch_opportunity_by_id(opportunity_id):
@@ -781,6 +852,9 @@ def fetch_opportunity_by_id(opportunity_id):
         return None
 
     source_map = fetch_source_map()
+    if not is_public_opportunity_record(row[1], row[7], row[2]):
+        return None
+
     return {
         "opportunity_id": row[0],
         "title": row[1],
@@ -790,7 +864,7 @@ def fetch_opportunity_by_id(opportunity_id):
         "source_name": source_map.get(row[4], {}).get("source_name", row[4]),
         "due_date": row[5],
         "status": row[6],
-        "opportunity_url": sanitize_external_url(row[7], source_map.get(row[4], {}).get("source_url")),
+        "opportunity_url": sanitize_external_url(row[7]),
         "access_type": row[8],
         "platform_name": row[9],
         "next_step": row[10],
@@ -874,7 +948,7 @@ def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False,
             "posted_date": row[5],
             "due_date": row[6],
             "status": row[7],
-            "source_url": sanitize_external_url(row[8], source_map.get(row[1], {}).get("source_url")),
+            "source_url": sanitize_external_url(row[8]),
             "duplicate_key": row[9],
             "possible_duplicate": row[10],
             "quality_score": row[11],
@@ -1012,6 +1086,7 @@ def cleanup_title(title):
     title = re.sub(r"^(ADVERTISEMENT|NOTICE|SOLICITATION)\s*[:\-]\s*", "", title, flags=re.I)
     title = re.sub(r"\bCLICK HERE\b", "", title, flags=re.I)
     title = re.sub(r"\bMORE INFO\b", "", title, flags=re.I)
+    title = re.sub(r"\bOPEN OFFICIAL SOURCE\b", "", title, flags=re.I)
     title = re.sub(r"\bOPENING DATE\b", "Opening Date", title, flags=re.I)
     title = re.sub(r"\bCLOSING DATE\b", "Closing Date", title, flags=re.I)
     title = re.sub(r"\s{2,}", " ", title).strip(" -")
@@ -1020,6 +1095,131 @@ def cleanup_title(title):
 
 def normalize_title(title):
     return cleanup_title(title)
+
+
+def is_generic_link_text(text: str) -> bool:
+    normalized = normalize_for_rules(text)
+    return normalized in GENERIC_LINK_TEXT or len(normalized) < 10
+
+
+def title_has_bid_signal(text: str) -> bool:
+    normalized = normalize_for_rules(text)
+    if not normalized:
+        return False
+    return any(term in normalized for term in TITLE_SIGNAL_TERMS)
+
+
+def is_descriptive_opportunity_title(title: str, raw_text: str | None = None, source_name: str | None = None) -> bool:
+    cleaned = normalize_title(title)
+    normalized = normalize_for_rules(cleaned)
+    if not normalized or len(cleaned) < 18:
+        return False
+    if is_generic_link_text(cleaned):
+        return False
+
+    if any(re.search(pattern, normalized, flags=re.I) for pattern in GENERIC_BAD_TITLE_PATTERNS):
+        return False
+    if any(phrase in normalized for phrase in GENERIC_BAD_TITLE_PHRASES):
+        return False
+
+    source_normalized = normalize_for_rules(source_name or "")
+    if source_normalized and normalized == source_normalized:
+        return False
+
+    tokens = [token for token in re.findall(r"[a-z0-9]+", normalized) if len(token) > 2]
+    if len(set(tokens)) < 3:
+        return False
+
+    if not title_has_bid_signal(cleaned):
+        raw_normalized = normalize_for_rules(raw_text or "")
+        if not title_has_bid_signal(raw_normalized):
+            return False
+
+    return True
+
+
+def split_title_candidates(text: str) -> list[str]:
+    if not text:
+        return []
+    normalized = normalize_title(text)
+    if not normalized:
+        return []
+
+    raw_parts = re.split(
+        r"[\|\u2022;\n\r]+|\b(?:opening date|closing date|due date|posted date|pre-bid|bid opening)\b",
+        normalized,
+        flags=re.I,
+    )
+    candidates = []
+    seen = set()
+    for part in raw_parts:
+        cleaned = normalize_title(part)
+        cleaned = re.sub(r"\bclick here\b", "", cleaned, flags=re.I)
+        cleaned = re.sub(r"\bdetails\b", "", cleaned, flags=re.I)
+        cleaned = re.sub(r"\bopen\b", "", cleaned, flags=re.I)
+        cleaned = re.sub(r"\s{2,}", " ", cleaned).strip(" -:")
+        if cleaned and cleaned.lower() not in seen:
+            seen.add(cleaned.lower())
+            candidates.append(cleaned)
+    return candidates
+
+
+def score_title_candidate(title: str, raw_text: str, source_name: str = "") -> int:
+    candidate = normalize_title(title)
+    if not candidate:
+        return -999
+
+    score = compute_quality_score(candidate, extract_due_date(raw_text), source_name, "")
+    normalized = normalize_for_rules(candidate)
+
+    if is_descriptive_opportunity_title(candidate, raw_text, source_name):
+        score += 80
+    else:
+        score -= 120
+
+    if title_has_bid_signal(candidate):
+        score += 25
+    if any(phrase in normalized for phrase in ["contract no", "request for", "invitation for", "improvements", "engineering", "construction"]):
+        score += 20
+    if len(candidate) > 180:
+        score -= 20
+    if any(phrase in normalized for phrase in GENERIC_BAD_TITLE_PHRASES):
+        score -= 50
+    return score
+
+
+def extract_structured_title(link, container_text: str, source_name: str = "") -> str:
+    candidates = []
+
+    link_text = normalize_title(link.get_text(" ", strip=True))
+    if link_text:
+        candidates.append(link_text)
+
+    for attr in ["title", "aria-label"]:
+        attr_text = normalize_title(link.get(attr, ""))
+        if attr_text:
+            candidates.append(attr_text)
+
+    parent = link.find_parent(["li", "tr", "p", "div"]) or link
+    row = link.find_parent("tr")
+    if row:
+        for cell in row.find_all(["td", "th"]):
+            cell_text = normalize_title(cell.get_text(" ", strip=True))
+            if cell_text:
+                candidates.extend(split_title_candidates(cell_text))
+
+    candidates.extend(split_title_candidates(container_text))
+    candidates.extend(split_title_candidates(parent.get_text(" ", strip=True)))
+
+    best_title = ""
+    best_score = -999
+    for candidate in candidates:
+        score = score_title_candidate(candidate, container_text, source_name)
+        if score > best_score:
+            best_score = score
+            best_title = candidate
+
+    return normalize_title(best_title) if best_score > -50 else ""
 
 
 def extract_due_date(text):
@@ -1194,6 +1394,8 @@ def upsert_leads(source_key, source_id, agency, county, source_url, titles):
                     lead_id = f"lead-{source_key}-{idx}"
 
                 if not title:
+                    continue
+                if not is_descriptive_opportunity_title(title, raw_text, agency):
                     continue
 
                 duplicate_key = make_duplicate_key(source_id, title, due_date)
@@ -1443,15 +1645,18 @@ def parse_public_notice_entries(html: str, page_url: str, source_key: str, sourc
     seen = set()
 
     for link in soup.find_all("a", href=True):
-        title = normalize_title(link.get_text(" ", strip=True))
-        if len(title) < 12:
-            continue
-
         href = link.get("href", "").strip()
-        full_url = sanitize_external_url(urljoin(page_url, href) if href else page_url, page_url)
+        full_url = sanitize_external_url(urljoin(page_url, href) if href else None)
+        if full_url == "#":
+            continue
         parent = link.find_parent(["li", "tr", "p", "div"]) or link
         context = normalize_title(parent.get_text(" ", strip=True))
+        title = extract_structured_title(link, context, source_name)
+        if len(title) < 18:
+            continue
         raw_text = f"{title} {context}".strip()
+        if not is_descriptive_opportunity_title(title, raw_text, source_name):
+            continue
         score, matched_labels, category = score_public_notice_relevance(title, raw_text)
 
         if score < 45:
@@ -1483,6 +1688,8 @@ def parse_public_notice_entries(html: str, page_url: str, source_key: str, sourc
         title = normalize_title(sentence)
         if len(title) < 25:
             continue
+        if not is_descriptive_opportunity_title(title, sentence, source_name):
+            continue
         score, matched_labels, category = score_public_notice_relevance(title, sentence)
         if score < 55:
             continue
@@ -1501,13 +1708,64 @@ def parse_public_notice_entries(html: str, page_url: str, source_key: str, sourc
     return fallback_entries[:40]
 
 
+def parse_structured_listing_entries(html: str, page_url: str, source_key: str, agency: str, county: str) -> list[dict]:
+    soup = BeautifulSoup(html, "html.parser")
+    entries = []
+    seen = set()
+
+    for link in soup.find_all("a", href=True):
+        href = link.get("href", "").strip()
+        full_url = sanitize_external_url(urljoin(page_url, href) if href else None)
+        if full_url == "#":
+            continue
+
+        parent = link.find_parent(["li", "tr", "p", "div"]) or link
+        context = normalize_title(parent.get_text(" ", strip=True))
+        title = extract_structured_title(link, context, agency)
+
+        if len(title) < 18:
+            continue
+        if not is_descriptive_opportunity_title(title, context, agency):
+            continue
+
+        key = (title.lower(), full_url.lower())
+        if key in seen:
+            continue
+        seen.add(key)
+
+        due_date = extract_due_date(context) or extract_due_date(title)
+        quality_score = compute_quality_score(title, due_date, agency, county)
+
+        # Prefer records that look like actual solicitation entries, not page chrome.
+        if quality_score < 35 and not re.search(r"\b(contract|rfp|rfq|ifb|bid|proposal|notice|project|services)\b", context, flags=re.I):
+            continue
+
+        entries.append({
+            "lead_id": build_stable_lead_id(source_key, title, full_url),
+            "title": title,
+            "posted_date": extract_due_date(context),
+            "due_date": due_date,
+            "source_url": full_url,
+            "raw_text": context[:4000],
+            "quality_score": quality_score,
+            "admin_notes": "",
+            "access_notes": "",
+        })
+
+    return entries[:80]
+
+
 def crawl_generic(url, parser, source_key, source_id, agency, county, source_name):
     headers = {"User-Agent": "Mozilla/5.0 NJTransportationBids/1.0"}
     try:
         resp = requests.get(url, headers=headers, timeout=30)
         resp.raise_for_status()
-        cleaned = strip_html(resp.text)
-        deduped = parser(cleaned) if cleaned else []
+        structured_entries = parse_structured_listing_entries(resp.text, resp.url, source_key, agency, county)
+        if structured_entries:
+            deduped = structured_entries
+        else:
+            cleaned = strip_html(resp.text)
+            deduped = parser(cleaned) if cleaned else []
         inserted = upsert_leads(
             source_key=source_key,
             source_id=source_id,
@@ -1718,12 +1976,22 @@ def bulk_update_leads(lead_ids, action):
                 if action == "promote":
                     cur.execute("""
                         SELECT lead_id, source_id, title, agency, county, due_date, source_url,
-                               access_type, platform_name, next_step, docs_path_note, addenda_note
+                               access_type, platform_name, next_step, docs_path_note, addenda_note, raw_text, admin_notes
                         FROM opportunity_leads
                         WHERE lead_id = %s
                     """, (lead_id,))
                     row = cur.fetchone()
                     if not row:
+                        continue
+
+                    if not is_descriptive_opportunity_title(row[2], row[12], row[3]):
+                        note = (row[13] or "").strip()
+                        blocked_note = "Blocked promotion: title is not descriptive enough to represent a real bid opportunity."
+                        updated_note = f"{note} | {blocked_note}" if note and blocked_note not in note else (note or blocked_note)
+                        cur.execute(
+                            "UPDATE opportunity_leads SET admin_notes = %s, status = 'New' WHERE lead_id = %s",
+                            (updated_note, lead_id),
+                        )
                         continue
 
                     cur.execute("""
@@ -2425,7 +2693,7 @@ def source_detail_page(source_id: str):
     for row in detail["recent_leads"]:
         lead_rows += f"""
         <tr>
-            <td>{row['title']}</td>
+            <td><a href="{row['source_url']}" target="_blank" rel="noopener noreferrer" style="font-weight:bold;">{row['title']}</a></td>
             <td>{row['due_date'] or ''}</td>
             <td>{row['status'] or ''}</td>
             <td>{row['access_type'] or ''}</td>
@@ -3051,7 +3319,7 @@ def admin_duplicates_page(
     for row in leads:
         items += f"""
         <tr>
-            <td>{row['title']}</td>
+            <td><a href="{row['source_url']}" target="_blank" rel="noopener noreferrer" style="font-weight:bold;">{row['title']}</a></td>
             <td>{row['source_name']}</td>
             <td>{row['lead_id']}</td>
             <td>{row['due_date'] or ''}</td>
