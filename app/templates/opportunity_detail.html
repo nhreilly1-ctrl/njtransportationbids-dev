@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}{{ opp.title[:60] }} — NJ Transportation Bids{% endblock %}
+{% block title %}{{ opp.title[:60] }} - NJ Transportation Bids{% endblock %}
 {% block content %}
 
 <div style="margin-bottom:1rem;">
-  <a href="{{ url_for('opportunities') }}" style="font-size:13px; color:var(--text2); text-decoration:none;">← Back to opportunities</a>
+  <a href="{{ url_for('opportunities') }}" style="font-size:13px; color:var(--text2); text-decoration:none;"><- Back to opportunities</a>
 </div>
 
 <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1rem;">
@@ -11,7 +11,7 @@
     <div style="flex:1; min-width:0;">
       <h1 style="font-size:17px; font-weight:500; margin-bottom:.5rem; line-height:1.4;">{{ opp.title }}</h1>
       <div style="font-size:13px; color:var(--text2); margin-bottom:1rem;">
-        {{ opp.source_name }} &nbsp;·&nbsp; {{ opp.county or 'Statewide' }}
+        {{ opp.source_name }} &nbsp;&middot;&nbsp; {{ opp.county or 'Statewide' }}
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         {% if opp.status == 'open' %}
@@ -47,7 +47,7 @@
       <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Open the official source and follow the solicitation instructions. Confirm due dates and submission method before committing estimating time.</p>
     {% endif %}
     {% if opp.official_url %}
-      <a href="{{ opp.official_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem;">Open official source ↗</a>
+      <a href="{{ opp.official_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem;">Open official source -></a>
     {% endif %}
     <a href="{{ url_for('sources') }}" class="btn btn-sm" style="margin-top:.5rem; font-size:12px;">View source details</a>
   </div>
@@ -56,13 +56,13 @@
     <div class="section-label" style="margin-top:0;">Record details</div>
     <table style="width:100%; font-size:13px; border-collapse:collapse;">
       <tr><td style="color:var(--text2); padding:4px 0; width:45%;">Source</td>
-          <td style="padding:4px 0;">{{ opp.source_name or '—' }}</td></tr>
+          <td style="padding:4px 0;">{{ opp.source_name or '-' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">County</td>
           <td style="padding:4px 0;">{{ opp.county or 'Statewide' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">Access type</td>
-          <td style="padding:4px 0;">{{ opp.access_type or '—' }}</td></tr>
+          <td style="padding:4px 0;">{{ opp.access_type or '-' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">Platform</td>
-          <td style="padding:4px 0;">{{ opp.platform or '—' }}</td></tr>
+          <td style="padding:4px 0;">{{ opp.platform or '-' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">Record ID</td>
           <td style="padding:4px 0; font-size:11px; color:var(--text3);">{{ opp.id }}</td></tr>
     </table>
@@ -77,3 +77,4 @@
 {% endif %}
 
 {% endblock %}
+

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}NJ Transportation Bids — Heavy Highway & Transportation{% endblock %}
+{% block title %}NJ Transportation Bids - Heavy Highway & Transportation{% endblock %}
 {% block content %}
 
 <div class="page-header" style="margin-bottom:1.25rem;">
   <h1>NJ Transportation Bids</h1>
-  <p>Aggregated heavy highway, bridge, and transportation procurement opportunities across New Jersey — state, county, and municipal.</p>
+  <p>Aggregated heavy highway, bridge, and transportation procurement opportunities across New Jersey - state, county, and municipal.</p>
 </div>
 
 <div class="stats-row">
@@ -32,31 +32,31 @@
   <div>
     <div class="section-label">How to use this site</div>
     <div style="font-size:13px; color:var(--text2); line-height:1.8;">
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">1. Find the bid</strong> — browse or search active opportunities filtered by county, agency, or type.</p>
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">2. Verify the source</strong> — every record links directly to the official agency posting. Always confirm the live notice before committing estimating time.</p>
-      <p><strong style="color:var(--text);">3. Focus on the gold documents</strong> — bid ranges, work item lists, addenda, and submission instructions are what determine whether a job is worth chasing.</p>
+      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">1. Find the bid</strong> - browse or search active opportunities filtered by county, agency, or type.</p>
+      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">2. Verify the source</strong> - every record links directly to the official agency posting. Always confirm the live notice before committing estimating time.</p>
+      <p><strong style="color:var(--text);">3. Focus on the gold documents</strong> - bid ranges, work item lists, addenda, and submission instructions are what determine whether a job is worth chasing.</p>
     </div>
   </div>
   <div>
     <div class="section-label">Documents worth your time</div>
     <div style="font-size:13px; color:var(--text2); line-height:1.8;">
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Official bid notice</strong> — confirms due dates, submission method, and contacts.</p>
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Bid ranges &amp; estimates</strong> — tells you if the job is in your lane before you spend time pricing.</p>
-      <p><strong style="color:var(--text);">Work item lists</strong> — reveals scope, subs needed, equipment, and teaming opportunities.</p>
+      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Official bid notice</strong> - confirms due dates, submission method, and contacts.</p>
+      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Bid ranges &amp; estimates</strong> - tells you if the job is in your lane before you spend time pricing.</p>
+      <p><strong style="color:var(--text);">Work item lists</strong> - reveals scope, subs needed, equipment, and teaming opportunities.</p>
     </div>
   </div>
 </div>
 
 {% if expiring %}
 <div class="divider"></div>
-<div class="section-label">Closing soon — next 14 days</div>
+<div class="section-label">Closing soon - next 14 days</div>
 {% for o in expiring %}
   {% set days = ((o.due_date_parsed | string)[:10] | string) %}
   <div class="bid-card soon">
     <div class="bid-dot dot-red"></div>
     <div class="bid-main">
       <a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" class="bid-title">{{ o.title }}</a>
-      <div class="bid-meta">{{ o.source_name }} &nbsp;·&nbsp; {{ o.county or 'Statewide' }}</div>
+      <div class="bid-meta">{{ o.source_name }} &nbsp;&middot;&nbsp; {{ o.county or 'Statewide' }}</div>
       <div class="bid-tags">
         <span class="badge badge-open">Open</span>
         {% if o.access_type and o.access_type != 'Unknown' %}
@@ -79,3 +79,4 @@
 </div>
 
 {% endblock %}
+

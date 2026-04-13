@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Admin Dashboard — NJ Transportation Bids{% endblock %}
+{% block title %}Admin Dashboard - NJ Transportation Bids{% endblock %}
 {% block content %}
 
 <div class="page-header">
   <h1>Admin dashboard</h1>
-  <p>Signed in as <strong>{{ session.get('admin') and 'admin' }}</strong> &nbsp;·&nbsp;
+  <p>Signed in as <strong>{{ session.get('admin') and 'admin' }}</strong> &nbsp;&middot;&nbsp;
      <a href="{{ url_for('admin_logout') }}" style="color:var(--red-text); font-size:13px;">Sign out</a></p>
 </div>
 
@@ -60,8 +60,9 @@ function rescore() {
       btn.textContent = 'Re-run noise scoring';
       btn.disabled = false;
       msg.style.display = 'block';
-      msg.textContent = `Done — rescored ${d.rescored} records. Reload to see updated stats.`;
+      msg.textContent = `Done - rescored ${d.rescored} records. Reload to see updated stats.`;
     });
 }
 </script>
 {% endblock %}
+

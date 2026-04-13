@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Sources — Admin — NJ Transportation Bids{% endblock %}
+{% block title %}Sources - Admin - NJ Transportation Bids{% endblock %}
 {% block content %}
 
 <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.25rem; flex-wrap:wrap;">
@@ -7,7 +7,7 @@
     <span style="font-size:13px; font-weight:400; color:var(--text2);">({{ sources|length }} configured)</span>
   </h1>
   <div style="margin-left:auto; display:flex; gap:8px;">
-    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm">← Dashboard</a>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm"><- Dashboard</a>
   </div>
 </div>
 
@@ -21,11 +21,11 @@
   <div style="flex:1; min-width:0;">
     <div class="source-name">{{ s.name }}</div>
     <div class="source-meta">
-      Last crawl: {{ s.last_crawl or 'unknown' }} &nbsp;·&nbsp;
+      Last crawl: {{ s.last_crawl or 'unknown' }} &nbsp;&middot;&nbsp;
       {{ s.total }} records
-      {% if s.noise > 0 %} &nbsp;·&nbsp; <span style="color:var(--red-text);">{{ s.noise }} noise</span>{% endif %}
-      {% if s.expired > 0 %} &nbsp;·&nbsp; {{ s.expired }} expired{% endif %}
-      &nbsp;·&nbsp; {{ s.open }} open
+      {% if s.noise > 0 %} &nbsp;&middot;&nbsp; <span style="color:var(--red-text);">{{ s.noise }} noise</span>{% endif %}
+      {% if s.expired > 0 %} &nbsp;&middot;&nbsp; {{ s.expired }} expired{% endif %}
+      &nbsp;&middot;&nbsp; {{ s.open }} open
     </div>
   </div>
   {% if s.health == 'bad' %}
@@ -37,7 +37,7 @@
   {% endif %}
   <a href="{{ url_for('admin_records') }}?source={{ s.name | urlencode }}" class="btn btn-sm">View records</a>
   {% if s.url %}
-    <a href="{{ s.url }}" target="_blank" class="btn btn-sm">Visit ↗</a>
+    <a href="{{ s.url }}" target="_blank" class="btn btn-sm">Visit -></a>
   {% endif %}
 </div>
 {% endmacro %}
@@ -62,3 +62,4 @@
 {% endif %}
 
 {% endblock %}
+

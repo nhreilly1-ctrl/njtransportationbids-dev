@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Records — Admin — NJ Transportation Bids{% endblock %}
+{% block title %}Records - Admin - NJ Transportation Bids{% endblock %}
 {% block content %}
 
 <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
@@ -9,7 +9,7 @@
     </h1>
   </div>
   <div style="margin-left:auto; display:flex; gap:8px;">
-    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm">← Dashboard</a>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm"><- Dashboard</a>
     <a href="{{ url_for('export_csv') }}" class="btn btn-sm">Export CSV</a>
   </div>
 </div>
@@ -93,7 +93,7 @@
         </td>
         <td class="col-title" title="{{ o.title }}" style="font-size:12px;">{{ o.title }}</td>
         <td class="col-source" style="font-size:11px; color:var(--text2);">{{ o.source_name }}</td>
-        <td class="col-due" style="font-size:12px;">{{ o.due_date_raw or '—' }}</td>
+        <td class="col-due" style="font-size:12px;">{{ o.due_date_raw or '-' }}</td>
         <td class="col-status">
           {% if o.status == 'open' %}
             <span class="badge badge-open">Open</span>
@@ -236,3 +236,4 @@ function exportSelected() {
 }
 </script>
 {% endblock %}
+

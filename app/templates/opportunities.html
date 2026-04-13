@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Opportunities — NJ Transportation Bids{% endblock %}
+{% block title %}Opportunities - NJ Transportation Bids{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -41,7 +41,7 @@
       {{ 'dot-red'   if o.status == 'expired' }}"></div>
     <div class="bid-main">
       <a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" class="bid-title" title="{{ o.title }}">{{ o.title }}</a>
-      <div class="bid-meta">{{ o.source_name }} &nbsp;·&nbsp; {{ o.county or 'Statewide' }}</div>
+      <div class="bid-meta">{{ o.source_name }} &nbsp;&middot;&nbsp; {{ o.county or 'Statewide' }}</div>
       <div class="bid-tags">
         {% if o.status == 'open' %}
           <span class="badge badge-open">Open</span>
@@ -63,7 +63,7 @@
         <span class="due-label">Due</span>
         <span class="due-date">{{ o.due_date_raw }}</span>
       {% else %}
-        <span class="due-date" style="color:var(--text3); font-weight:400;">—</span>
+        <span class="due-date" style="color:var(--text3); font-weight:400;">-</span>
       {% endif %}
     </div>
   </div>
@@ -92,3 +92,4 @@
 {% endif %}
 
 {% endblock %}
+
