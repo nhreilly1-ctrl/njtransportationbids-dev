@@ -230,7 +230,19 @@ def csv_response(filename: str, headers: list[str], rows: list[list[str]]):
 
 
 def get_public_notice_source_ids() -> list[str]:
-    return [source["source_id"] for source in PUBLIC_NOTICE_SOURCES]
+    source_ids = [source["source_id"] for source in PUBLIC_NOTICE_SOURCES]
+    try:
+        for source in fetch_sources():
+            if is_registry_public_notice_candidate(source):
+                source_ids.append(source["source_id"])
+    except Exception:
+        pass
+    return sorted(set(source_ids))
+
+
+def is_registry_public_notice_candidate(source: dict) -> bool:
+    source_id = source.get("source_id", "")
+    return source_id.startswith("county-") or source_id.startswith("municipal-")
 
 
 def normalize_for_rules(text: str | None) -> str:
@@ -540,7 +552,10 @@ def init_db():
                 ('county-middlesex','Middlesex County Improvement Authority Opportunities','County','Middlesex','https://www.middlesexcountynj.gov/government/departments/department-of-economic-development/middlesex-county-improvement-authority/current-bidding-opportunities','Tier 1','Yes',FALSE,'manual_html'),
                 ('county-morris','Morris County Bids and Quotes','County','Morris','https://www.morriscountynj.gov/Departments/Purchasing/Bids-and-Quotes','Tier 1','Yes',FALSE,'manual_html'),
                 ('county-ocean','Ocean County Purchasing','County','Ocean','https://www.co.ocean.nj.us/oc/purchasing/frmhomepdept.aspx','Tier 1','Yes',FALSE,'manual_html'),
-                ('county-union','Union County Invitations to Bid','County','Union','https://ucnj.org/vendor-opportunities/invitations-to-bid/current/','Tier 1','Yes',FALSE,'manual_html')
+                ('county-union','Union County Invitations to Bid','County','Union','https://ucnj.org/vendor-opportunities/invitations-to-bid/current/','Tier 1','Yes',FALSE,'manual_html'),
+                ('municipal-newark','City of Newark Bid Postings','Municipality','Essex','https://www.newarknj.gov/Bids.aspx','Tier 1','Yes',TRUE,'manual_html'),
+                ('municipal-jersey-city','City of Jersey City Bid Openings','Municipality','Hudson','https://www.jerseycitynj.gov/cityhall/finance/purchasing/publiccontracts/bid_openings','Tier 1','Yes',TRUE,'manual_html'),
+                ('municipal-hoboken','City of Hoboken Bids and RFPs','Municipality','Hudson','https://www.hobokennj.gov/bids-rfps','Tier 1','Yes',TRUE,'manual_html')
                 ON CONFLICT (source_id) DO UPDATE SET
                     source_name = EXCLUDED.source_name,
                     entity_type = EXCLUDED.entity_type,
@@ -861,6 +876,43 @@ def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False,
         }
         for row in rows
     ]
+
+
+def fetch_filtered_lead_ids(status_filter=None, q=None, source_filter=None, public_notice_only=False):
+    sql = """
+        SELECT lead_id
+        FROM opportunity_leads
+        WHERE 1=1
+    """
+    params = []
+
+    if status_filter and status_filter in {"New", "Promoted", "Rejected"}:
+        sql += " AND status = %s"
+        params.append(status_filter)
+
+    if public_notice_only:
+        notice_source_ids = get_public_notice_source_ids()
+        placeholders = ", ".join(["%s"] * len(notice_source_ids))
+        sql += f" AND source_id IN ({placeholders})"
+        params.extend(notice_source_ids)
+
+    if source_filter:
+        sql += " AND source_id = %s"
+        params.append(source_filter)
+
+    if q:
+        like_val = f"%{q.lower()}%"
+        sql += " AND (LOWER(title) LIKE %s OR LOWER(COALESCE(agency,'')) LIKE %s OR LOWER(COALESCE(county,'')) LIKE %s OR LOWER(source_id) LIKE %s OR LOWER(COALESCE(admin_notes,'')) LIKE %s)"
+        params.extend([like_val, like_val, like_val, like_val, like_val])
+
+    sql += " ORDER BY created_at DESC LIMIT 5000"
+
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, tuple(params))
+            rows = cur.fetchall()
+
+    return [row[0] for row in rows]
 
 
 def fetch_crawl_runs(limit=150):
@@ -1523,6 +1575,34 @@ def manual_crawl_statewide_public_notices():
             "source_name": source["source_name"],
             "inserted": result["inserted"],
         })
+    for source in fetch_sources():
+        if not is_registry_public_notice_candidate(source):
+            continue
+        if not source.get("source_url"):
+            continue
+        generic_source = {
+            "source_key": source["source_id"],
+            "source_id": source["source_id"],
+            "source_name": source["source_name"],
+            "agency": source["source_name"],
+            "county": source.get("county") or "",
+            "url": source["source_url"],
+        }
+        try:
+            result = manual_crawl_public_notice_source(generic_source)
+            total_inserted += result["inserted"]
+            results.append({
+                "source_id": source["source_id"],
+                "source_name": source["source_name"],
+                "inserted": result["inserted"],
+            })
+        except Exception as e:
+            results.append({
+                "source_id": source["source_id"],
+                "source_name": source["source_name"],
+                "inserted": 0,
+                "error": str(e),
+            })
     return {"inserted": total_inserted, "results": results}
 
 
@@ -1574,6 +1654,15 @@ def run_enabled_crawlers():
                 if not source:
                     continue
                 result = manual_crawl_public_notice_source(source)
+            elif is_registry_public_notice_candidate(source):
+                result = manual_crawl_public_notice_source({
+                    "source_key": source["source_id"],
+                    "source_id": source["source_id"],
+                    "source_name": source["source_name"],
+                    "agency": source["source_name"],
+                    "county": source.get("county") or "",
+                    "url": source["source_url"],
+                })
             elif sid == "county-monmouth":
                 result = manual_crawl_monmouth()
             elif sid == "state-njtransit":
@@ -2116,6 +2205,20 @@ def admin_bulk_leads_action(
 ):
     if action in {"promote", "reject", "reset"} and selected_lead_ids:
         bulk_update_leads(selected_lead_ids, action)
+    elif action in {"promote_all_filtered", "reject_all_filtered", "reset_all_filtered"}:
+        filtered_lead_ids = fetch_filtered_lead_ids(
+            status_filter=return_status,
+            q=return_q,
+            source_filter=return_source_id,
+            public_notice_only=return_public_notice_only,
+        )
+        mapped_action = {
+            "promote_all_filtered": "promote",
+            "reject_all_filtered": "reject",
+            "reset_all_filtered": "reset",
+        }[action]
+        if filtered_lead_ids:
+            bulk_update_leads(filtered_lead_ids, mapped_action)
     return RedirectResponse(url=build_redirect_url("/admin/leads", return_status, return_q, return_sort_by, return_source_id, return_public_notice_only), status_code=303)
 
 
@@ -2796,9 +2899,12 @@ def admin_leads_page(
         <input type="hidden" name="return_public_notice_only" value="{str(current_public_notice_only).lower()}">
 
         <div class="bulkbar">
-          <button type="submit" name="action" value="promote">Bulk Promote</button>
-          <button type="submit" name="action" value="reject">Bulk Reject</button>
-          <button type="submit" name="action" value="reset">Bulk Reset to New</button>
+          <button type="submit" name="action" value="promote">Bulk Promote Selected</button>
+          <button type="submit" name="action" value="reject">Bulk Reject Selected</button>
+          <button type="submit" name="action" value="reset">Bulk Reset Selected</button>
+          <button type="submit" name="action" value="promote_all_filtered">Promote All Filtered</button>
+          <button type="submit" name="action" value="reject_all_filtered">Reject All Filtered</button>
+          <button type="submit" name="action" value="reset_all_filtered">Reset All Filtered</button>
         </div>
 
         <table>
