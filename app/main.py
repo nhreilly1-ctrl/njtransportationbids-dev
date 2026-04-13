@@ -1933,16 +1933,21 @@ def home():
     return f"""
     <html><head><title>NJ Transportation Bids</title>
     <style>
-      body {{ font-family: Arial, sans-serif; margin: 40px; line-height: 1.5; background: #f8fafc; color: #111827; }}
-      .wrap {{ max-width: 1150px; margin: 0 auto; }}
-      .hero {{ background: white; border: 1px solid #e5e7eb; border-radius: 18px; padding: 32px; margin-bottom: 24px; }}
-      .hero h1 {{ margin-top: 0; }}
+      body {{ font-family: Arial, sans-serif; margin: 40px; line-height: 1.5; background: linear-gradient(180deg, #eef6ff 0%, #f8fafc 220px); color: #111827; }}
+      .wrap {{ max-width: 1180px; margin: 0 auto; }}
+      .hero {{ background: white; border: 1px solid #dbeafe; border-radius: 22px; padding: 34px; margin-bottom: 24px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06); }}
+      .hero h1 {{ margin-top: 0; margin-bottom: 10px; font-size: 42px; line-height: 1.05; }}
+      .hero p.lead {{ font-size: 18px; max-width: 780px; color: #334155; margin-bottom: 18px; }}
       .stats {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 18px 0; }}
-      .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
+      .stat {{ background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; min-width: 180px; }}
+      .hero-grid {{ display:grid; grid-template-columns: 1.4fr 0.9fr; gap: 20px; align-items:start; }}
       .nav {{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }}
       .nav a {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border-radius: 10px; text-decoration: none; }}
       .nav a.secondary {{ background: #374151; }}
-      .section {{ background: white; border: 1px solid #e5e7eb; border-radius: 18px; padding: 24px; margin-bottom: 20px; }}
+      .focusbox {{ background:#eff6ff; border:1px solid #bfdbfe; border-radius:18px; padding:20px; }}
+      .focusbox h3 {{ margin-top:0; margin-bottom:10px; }}
+      .focuslist div {{ margin-bottom:10px; color:#1e3a8a; }}
+      .section {{ background: white; border: 1px solid #e5e7eb; border-radius: 18px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04); }}
       .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
       .opp-card {{ border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; background: #fafafa; }}
       .opp-linkhint {{ font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }}
@@ -1952,43 +1957,82 @@ def home():
       .opp-badges {{ margin-bottom: 10px; }}
       .badge {{ display: inline-block; background: #e0e7ff; border-radius: 999px; padding: 4px 10px; margin-right: 8px; font-size: 12px; }}
       .opp-next {{ color: #1f2937; }}
+      .how-grid {{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+      .how-card {{ background:#f8fafc; border:1px solid #e5e7eb; border-radius:14px; padding:18px; }}
+      .priority-grid {{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }}
+      .priority-card {{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:18px; }}
+      @media (max-width: 900px) {{
+        body {{ margin: 18px; }}
+        .hero-grid, .grid, .how-grid, .priority-grid {{ grid-template-columns: 1fr; }}
+        .hero h1 {{ font-size: 34px; }}
+      }}
     </style></head>
     <body><div class="wrap">
       <div class="hero">
-        <h1>NJ Transportation Bids</h1>
-        <p>Public transportation bid aggregation with official-path guidance for contractors.</p>
-        <div class="stats">
-          <div class="stat"><strong>{len(sources)}</strong><br>live source records</div>
-          <div class="stat"><strong>{summary['opportunity_count']}</strong><br>published opportunities</div>
-          <div class="stat"><strong>{summary['lead_count']}</strong><br>total leads</div>
-          <div class="stat"><strong>{summary['access_populated_count']}</strong><br>leads with access info</div>
-        </div>
-        <div class="nav">
-          <a href="/opportunities">Browse Opportunities</a>
-          <a href="/sources">Browse Sources</a>
-          <a href="/export/opportunities.csv" class="secondary">Export Opportunities CSV</a>
-          <a href="/admin" class="secondary">Admin</a>
+        <div class="hero-grid">
+          <div>
+            <h1>NJ Transportation Bids</h1>
+            <p class="lead">A contractor-first bid aggregator that helps you find transportation work, identify the real official source, and know exactly what documents matter next.</p>
+            <div class="stats">
+              <div class="stat"><strong>{len(sources)}</strong><br>live source records</div>
+              <div class="stat"><strong>{summary['opportunity_count']}</strong><br>published opportunities</div>
+              <div class="stat"><strong>{summary['lead_count']}</strong><br>total leads</div>
+              <div class="stat"><strong>{summary['access_populated_count']}</strong><br>leads with access info</div>
+            </div>
+            <div class="nav">
+              <a href="/opportunities">Browse Opportunities</a>
+              <a href="/sources">Browse Sources</a>
+              <a href="/export/opportunities.csv" class="secondary">Export Opportunities CSV</a>
+              <a href="/admin" class="secondary">Admin</a>
+            </div>
+          </div>
+          <div class="focusbox">
+            <h3>Start Here</h3>
+            <div class="focuslist">
+              <div><strong>1. Open the opportunity</strong><br>Use the linked title to get the full detail page.</div>
+              <div><strong>2. Open the official bid notice</strong><br>Always confirm the live posting before pricing or teaming.</div>
+              <div><strong>3. Prioritize the gold documents</strong><br>Bid ranges, work item lists, notice language, addenda, and submission instructions.</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="section">
         <h2>How this site helps</h2>
-        <div class="grid">
-          <div>
+        <div class="how-grid">
+          <div class="how-card">
             <strong>Find the job</strong><br>
             Search public transportation opportunities across major NJ agencies and authorities.
           </div>
-          <div>
+          <div class="how-card">
             <strong>Understand access</strong><br>
             See whether the job is public access, registration-based, or platform-driven.
           </div>
-          <div>
+          <div class="how-card">
             <strong>Get the official path</strong><br>
             Every opportunity points you to the official source and the next best step.
           </div>
-          <div>
-            <strong>Prepare for growth</strong><br>
-            The structure is ready for alerts, networking, teaming, and contractor accounts later.
+          <div class="how-card">
+            <strong>Decide faster</strong><br>
+            Surface the documents that usually matter most: official notice, work items, bid ranges, and addenda.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Documents Worth Your Time</h2>
+        <div class="priority-grid">
+          <div class="priority-card">
+            <strong>Official Bid Notice</strong><br>
+            Use it to confirm due dates, submission method, contact info, and whether you are looking at the correct live solicitation.
+          </div>
+          <div class="priority-card">
+            <strong>Bid Ranges And Estimates</strong><br>
+            These help you decide whether the job is in your lane before you spend time on pricing and outreach.
+          </div>
+          <div class="priority-card">
+            <strong>Work Item Lists</strong><br>
+            These reveal scope, likely subs, equipment needs, and whether the job is worth chasing or teaming on.
           </div>
         </div>
       </div>
@@ -2510,6 +2554,10 @@ def opportunities_page(
                 <span>Due: {row['due_date'] or 'Not listed'}</span>
                 {official_source_html}
             </div>
+            <div class="opp-actions">
+                <a class="primary" href="/opportunities/{row['opportunity_id']}">Review full opportunity</a>
+                <a class="secondary" href="/sources/{row['source_id']}">Open source details</a>
+            </div>
         </div>
         """
 
@@ -2521,23 +2569,31 @@ def opportunities_page(
       .filters {{ background: white; border: 1px solid #e5e7eb; padding: 16px; border-radius: 12px; margin-bottom: 20px; }}
       .filters input, .filters select {{ margin-right: 10px; margin-bottom:10px; padding: 8px; }}
       .filters button {{ padding: 8px 12px; }}
-      .tools a {{ display:inline-block; margin-bottom:16px; color:#0b57d0; text-decoration:none; }}
+      .tools a {{ display:inline-block; margin-bottom:16px; color:#0b57d0; text-decoration:underline; text-decoration-thickness:2px; }}
+      .intro {{ background:white; border:1px solid #e5e7eb; border-radius:16px; padding:20px; margin-bottom:18px; }}
       .grid {{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
-      .opp-card {{ background:white; border:1px solid #e5e7eb; border-radius:16px; padding:18px; }}
+      .opp-card {{ background:white; border:1px solid #e5e7eb; border-radius:16px; padding:18px; box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04); }}
       .opp-linkhint {{ font-size:12px; color:#2563eb; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }}
       .opp-title {{ font-weight:bold; font-size:18px; margin-bottom:8px; }}
       .opp-title a {{ color:#0b57d0; text-decoration:underline; text-decoration-thickness:2px; }}
       .opp-meta {{ color:#4b5563; margin-bottom:10px; }}
       .opp-badges {{ margin-bottom:10px; }}
       .badge {{ display:inline-block; background:#e0e7ff; border-radius:999px; padding:4px 10px; margin-right:8px; font-size:12px; }}
-      .opp-next {{ margin-bottom:12px; }}
-      .opp-footer {{ display:flex; justify-content:space-between; gap:12px; font-size:14px; color:#374151; }}
-      a {{ color:#0b57d0; text-decoration:none; }}
+      .opp-next {{ margin-bottom:12px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }}
+      .opp-footer {{ display:flex; justify-content:space-between; gap:12px; font-size:14px; color:#374151; margin-top:12px; }}
+      .opp-actions {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }}
+      .opp-actions a {{ display:inline-block; padding:10px 12px; border-radius:10px; text-decoration:none; }}
+      .opp-actions a.primary {{ background:#0b57d0; color:white; }}
+      .opp-actions a.secondary {{ background:#eff6ff; color:#1d4ed8; }}
+      a {{ color:#0b57d0; text-decoration:underline; text-decoration-thickness:2px; }}
     </style></head>
     <body><div class="wrap">
       <a href="/">← Back to home</a>
       <h1>Opportunities</h1>
       <p>{len(opportunities)} published opportunities currently shown</p>
+      <div class="intro">
+        <strong>Best workflow:</strong> open the title first, then verify the live official notice and focus on scope clues like work items, bid ranges, and addenda before you commit estimating time.
+      </div>
 
       <div class="tools">
         <a href="/export/opportunities.csv">Export opportunities CSV</a>
@@ -2576,13 +2632,15 @@ def opportunity_detail_page(opportunity_id: str):
     <style>
       body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
       .wrap {{ max-width: 950px; margin: 0 auto; }}
-      .card {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 18px; }}
+      .card {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 18px; box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04); }}
       a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
       .row {{ margin-bottom: 12px; }}
       .label {{ font-weight: bold; display: inline-block; min-width: 160px; }}
       .box {{ background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-top:18px; }}
       .cta a {{ display:inline-block; background:#0b57d0; color:white; padding:10px 14px; border-radius:10px; margin-right:10px; text-decoration:none; }}
       .badge {{ display:inline-block; background:#e0e7ff; border-radius:999px; padding:4px 10px; margin-right:8px; font-size:12px; }}
+      .workflow {{ background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:18px; margin-bottom:18px; }}
+      .workflow-step {{ margin-bottom:10px; }}
     </style></head>
     <body><div class="wrap">
       <div class="card">
@@ -2594,6 +2652,13 @@ def opportunity_detail_page(opportunity_id: str):
         <div class="row"><span class="label">Due Date:</span> {opp['due_date'] or ''}</div>
         <div class="row"><span class="label">Status:</span> {opp['status'] or ''}</div>
         <div class="row"><span class="label">Published:</span> {opp['created_at']}</div>
+      </div>
+
+      <div class="workflow">
+        <h2 style="margin-top:0;">What To Do Next</h2>
+        <div class="workflow-step"><strong>1. Confirm the live official notice</strong><br>Use the official source button below so you are working from the actual active posting.</div>
+        <div class="workflow-step"><strong>2. Prioritize the gold documents</strong><br>Look for the official bid notice, bid ranges or estimate, work item lists, proposal forms, and addenda.</div>
+        <div class="workflow-step"><strong>3. Decide how to act</strong><br>Use those documents to decide whether to estimate, team, subcontract, or pass.</div>
       </div>
 
       <div class="card box">
@@ -2634,7 +2699,8 @@ def admin_page(username: str = Depends(check_auth)):
       .stat {{ background: #f3f4f6; border-radius: 12px; padding: 16px; min-width: 180px; }}
       .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }}
       .panel {{ background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; }}
-      a {{ color: #0b57d0; text-decoration: none; }}
+      .guide {{ background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:18px; margin-bottom:18px; }}
+      a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
       .button {{ display: inline-block; background: #0b57d0; color: white; padding: 10px 14px; border: none; border-radius: 10px; cursor: pointer; margin-right:8px; margin-bottom:8px; }}
       form {{ margin: 0; display:inline-block; }}
       ul {{ padding-left: 18px; }}
@@ -2643,6 +2709,10 @@ def admin_page(username: str = Depends(check_auth)):
       <a href="/">← Back to home</a>
       <h1>Admin Dashboard</h1>
       <p>Signed in as <strong>{username}</strong></p>
+
+      <div class="guide">
+        <strong>Recommended review flow:</strong> run the crawl, open the public notice review queue, sort by quality, inspect the highest-value leads first, then use bulk filtered actions only after the queue looks clean.
+      </div>
 
       <div class="stats">
         <div class="stat"><strong>{summary['source_count']}</strong><br>source records</div>
@@ -2834,8 +2904,8 @@ def admin_leads_page(
         items += f"""
         <tr>
             <td><input type="checkbox" name="selected_lead_ids" value="{row['lead_id']}"></td>
-            <td>{row['title']}</td>
-            <td>{row['source_name']}</td>
+            <td><strong style="color:#0b57d0;">{row['title']}</strong><div style="font-size:12px;color:#2563eb;margin-top:4px;">Review title, due date, and source before bulk actions</div></td>
+            <td><strong>{row['source_name']}</strong><div style="font-size:12px;color:#6b7280;">{row['source_id']}</div></td>
             <td>{row['lead_id']}</td>
             <td>{row['agency'] or ''}</td>
             <td>{row['county'] or ''}</td>
@@ -2850,7 +2920,7 @@ def admin_leads_page(
             <td>{row['addenda_note'] or ''}</td>
             <td>{row['access_notes'] or ''}</td>
             <td>{row['duplicate_key'] or ''}</td>
-            <td><a href="{row['source_url']}" target="_blank">source</a></td>
+            <td>{('<a href="' + row['source_url'] + '" target="_blank" rel="noopener noreferrer">open source</a>') if row['source_url'] != '#' else '<span style="color:#6b7280;">no link</span>'}</td>
             <td>
                 <form method="post" style="display:block;">
                     {hidden_inputs}
@@ -2881,7 +2951,7 @@ def admin_leads_page(
       .bulkbar {{ background:white; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin-bottom:16px; }}
       .bulkbar button {{ margin-right:8px; padding:8px 12px; }}
       .noticebar {{ background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:16px; margin-bottom:16px; }}
-      a {{ color: #0b57d0; text-decoration: none; }}
+      a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
     </style></head>
     <body><div class="wrap">
       <a href="/admin">← Back to admin</a>
