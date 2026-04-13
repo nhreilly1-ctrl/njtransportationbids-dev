@@ -234,6 +234,11 @@ PUBLIC_NOTICE_SOURCES = [
     },
 ]
 
+# Generic county/municipal scraping caused the biggest quality drop.
+# Keep this opt-in and empty until a source has a source-specific parser or
+# proves it produces direct, descriptive bid/public notice records.
+CURATED_LOCAL_NOTICE_SOURCE_IDS: set[str] = set()
+
 
 def get_conn():
     database_url = os.environ.get("DATABASE_URL")
@@ -307,7 +312,7 @@ def get_public_notice_source_ids() -> list[str]:
 
 def is_registry_public_notice_candidate(source: dict) -> bool:
     source_id = source.get("source_id", "")
-    return source_id.startswith("county-") or source_id.startswith("municipal-")
+    return source_id in CURATED_LOCAL_NOTICE_SOURCE_IDS
 
 
 def sanitize_external_url(url: str | None, fallback: str | None = None) -> str:
@@ -474,6 +479,13 @@ def get_source_defaults(source_id: str) -> dict:
             "next_step": "Open the official county posting and follow the procurement instructions",
             "docs_path_note": "Document access may depend on the county procurement system",
             "addenda_note": "Check the official source for updates and addenda",
+        },
+        "county-camden": {
+            "access_type": "Limited public details",
+            "platform_name": "County procurement portal",
+            "next_step": "Treat this as a county procurement portal, not a direct bid notice. Look for the specific solicitation or contact the county purchasing office.",
+            "docs_path_note": "This source may route through a vendor portal or registration workflow instead of a direct bid package.",
+            "addenda_note": "Use the specific solicitation page, if available, for active documents and updates.",
         },
     }
 
@@ -726,7 +738,7 @@ def fetch_source_detail(source_id: str):
             opportunity_count = cur.fetchone()[0]
 
             cur.execute("""
-                SELECT lead_id, title, due_date, status, access_type, platform_name, created_at
+                SELECT lead_id, title, due_date, status, access_type, platform_name, source_url, created_at
                 FROM opportunity_leads
                 WHERE source_id = %s
                 ORDER BY created_at DESC
@@ -757,7 +769,8 @@ def fetch_source_detail(source_id: str):
                 "status": row[3],
                 "access_type": row[4],
                 "platform_name": row[5],
-                "created_at": str(row[6]),
+                "source_url": sanitize_external_url(row[6]),
+                "created_at": str(row[7]),
             }
             for row in recent_leads
         ],
