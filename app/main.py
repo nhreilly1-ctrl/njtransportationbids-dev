@@ -677,7 +677,7 @@ def _opp_list_view(record_type: str, notice_subtype: str | None = None) -> dict:
     q = request.args.get("q", "").lower()
 
     def keep(opp: dict) -> bool:
-        if status == "active" and opp["status"] != "open":
+        if status == "active" and opp["status"] not in ("open", "unknown_date"):
             return False
         if status == "all" and opp["status"] not in ("open", "unknown_date"):
             return False
@@ -873,6 +873,8 @@ def admin_records():
     selected_type = request.args.get("type", "")
 
     def keep(opp: dict) -> bool:
+        if filt == "review" and opp["status"] not in ("open", "unknown_date"):
+            return False
         if filt == "noise" and opp["status"] != "noise":
             return False
         if filt == "expired" and opp["status"] != "expired":

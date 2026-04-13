@@ -25,7 +25,7 @@
     {% for a in agencies %}<option value="{{ a }}" {{ 'selected' if a == selected_agency }}>{{ a }}</option>{% endfor %}
   </select>
   <select name="status" onchange="this.form.submit()">
-    <option value="active"  {{ 'selected' if selected_status == 'active' }}>Open only</option>
+    <option value="active"  {{ 'selected' if selected_status == 'active' }}>Open + no date</option>
     <option value="all"     {{ 'selected' if selected_status == 'all' }}>Open + no date</option>
     <option value="expired" {{ 'selected' if selected_status == 'expired' }}>Expired only</option>
   </select>
@@ -59,10 +59,10 @@
       </div>
     </div>
     <div class="bid-due {{ 'soon-due' if is_soon }}">
-      {% if o.due_date_raw and o.due_date_raw not in ('Not listed','—','') %}
+      {% if o.due_date_raw and o.due_date_raw not in ('Not listed','-', '') %}
         <span class="due-label">Due</span><span class="due-date">{{ o.due_date_raw }}</span>
       {% else %}
-        <span class="due-date" style="color:var(--text3); font-weight:400;">—</span>
+        <span class="due-date" style="color:var(--text3); font-weight:400;">No date</span>
       {% endif %}
     </div>
   </div>

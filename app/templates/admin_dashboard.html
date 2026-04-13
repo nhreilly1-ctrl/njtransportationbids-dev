@@ -7,17 +7,17 @@
 </div>
 
 <div class="stats-row">
-  <div class="stat-card"><div class="num c-green">{{ stats.open }}</div><div class="lbl">Open / active</div></div>
-  <div class="stat-card"><div class="num">{{ stats.total }}</div><div class="lbl">Total records</div></div>
-  <div class="stat-card"><div class="num c-red">{{ stats.noise }}</div><div class="lbl">Flagged noise</div></div>
-  <div class="stat-card"><div class="num c-amber">{{ stats.expired }}</div><div class="lbl">Expired</div></div>
+  <a href="{{ url_for('admin_records') }}?filter=review" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-green">{{ stats.open }}</div><div class="lbl">Open / active</div></div></a>
+  <a href="{{ url_for('admin_records') }}" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num">{{ stats.total }}</div><div class="lbl">Total records</div></div></a>
+  <a href="{{ url_for('admin_records') }}?filter=noise" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-red">{{ stats.noise }}</div><div class="lbl">Flagged noise</div></div></a>
+  <a href="{{ url_for('admin_records') }}?filter=expired" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-amber">{{ stats.expired }}</div><div class="lbl">Expired</div></div></a>
 </div>
 
 <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:1.5rem;">
-  <div class="stat-card"><div class="num c-blue">{{ stats.construction }}</div><div class="lbl">Construction bids</div></div>
-  <div class="stat-card"><div class="num c-teal">{{ stats.profserv }}</div><div class="lbl">Professional services</div></div>
-  <div class="stat-card"><div class="num c-amber">{{ stats.notices }}</div><div class="lbl">Public notices</div></div>
-  <div class="stat-card"><div class="num" style="color:var(--text3);">{{ stats.uncat }}</div><div class="lbl">Uncategorized</div></div>
+  <a href="{{ url_for('admin_records') }}?type=construction" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-blue">{{ stats.construction }}</div><div class="lbl">Construction bids</div></div></a>
+  <a href="{{ url_for('admin_records') }}?type=professional_services" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-teal">{{ stats.profserv }}</div><div class="lbl">Professional services</div></div></a>
+  <a href="{{ url_for('admin_records') }}?type=public_notice" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num c-amber">{{ stats.notices }}</div><div class="lbl">Public notices</div></div></a>
+  <a href="{{ url_for('admin_records') }}?filter=uncat" style="text-decoration:none; color:inherit;"><div class="stat-card"><div class="num" style="color:var(--text3);">{{ stats.uncat }}</div><div class="lbl">Uncategorized</div></div></a>
 </div>
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
@@ -25,6 +25,7 @@
     <div class="section-label" style="margin-top:0;">Quick actions</div>
     <div style="display:flex; flex-direction:column; gap:8px;">
       <a href="{{ url_for('admin_records') }}" class="btn">All records</a>
+      <a href="{{ url_for('admin_records') }}?filter=review" class="btn">Review publishable &nbsp;<span class="badge badge-open">{{ stats.open }}</span></a>
       <a href="{{ url_for('admin_records') }}?filter=noise" class="btn">Review noise &nbsp;<span class="badge badge-noise">{{ stats.noise }}</span></a>
       <a href="{{ url_for('admin_records') }}?filter=expired" class="btn">Review expired &nbsp;<span class="badge badge-expired">{{ stats.expired }}</span></a>
       <a href="{{ url_for('admin_records') }}?filter=uncat" class="btn">Uncategorized &nbsp;<span class="badge badge-nodate">{{ stats.uncat }}</span></a>
@@ -33,7 +34,7 @@
   </div>
   <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.25rem;">
     <div class="section-label" style="margin-top:0;">Tools</div>
-    <div style="font-size:13px; color:var(--text2); line-height:1.8; margin-bottom:1rem;">Re-run noise scoring on all records that don't have a manual override. Useful after adding new noise keywords.</div>
+    <div style="font-size:13px; color:var(--text2); line-height:1.8; margin-bottom:1rem;">Re-run noise scoring on all records that do not have a manual override. Use the publishable review list to make final keep/delete/edit decisions before records go public.</div>
     <button class="btn" onclick="rescore()" id="rescore-btn">Re-run noise scoring</button>
     <div id="rescore-msg" style="display:none; margin-top:8px; font-size:12px; color:var(--text2);"></div>
     <div class="divider" style="margin:.75rem 0;"></div>

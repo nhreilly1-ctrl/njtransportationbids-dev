@@ -4,13 +4,14 @@
 <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem; flex-wrap:wrap;">
   <h1 style="font-size:18px; font-weight:500;">Records <span style="font-size:13px; font-weight:400; color:var(--text2);">({{ total }} of {{ all_total }})</span></h1>
   <div style="margin-left:auto; display:flex; gap:8px;">
-    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm">← Dashboard</a>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm"><- Dashboard</a>
     <a href="{{ url_for('export_csv') }}" class="btn btn-sm">Export CSV</a>
   </div>
 </div>
 
 <div class="filter-pills">
   <a class="pill {{ 'active' if filt == 'all' }}" href="?filter=all">All records</a>
+  <a class="pill {{ 'active' if filt == 'review' }}" href="?filter=review">Review publishable</a>
   <a class="pill {{ 'active' if filt == 'noise' }}" href="?filter=noise">Noise only</a>
   <a class="pill {{ 'active' if filt == 'expired' }}" href="?filter=expired">Expired only</a>
   <a class="pill {{ 'active' if filt == 'nodate' }}" href="?filter=nodate">No due date</a>
@@ -50,7 +51,7 @@
   <button class="btn btn-sm" onclick="bulkAction('restore')">Restore</button>
   <div style="width:0.5px; background:var(--border2); height:20px;"></div>
   <div style="position:relative;" id="type-menu-wrap">
-    <button class="btn btn-sm" onclick="toggleTypeMenu(event)">Set type ▾</button>
+    <button class="btn btn-sm" onclick="toggleTypeMenu(event)">Set type ▼</button>
     <div id="type-menu" style="display:none; position:absolute; right:0; top:calc(100% + 4px); background:var(--bg); border:0.5px solid var(--border2); border-radius:var(--r); min-width:190px; z-index:50; padding:4px 0;">
       <div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; padding:6px 14px 3px;">Set record type</div>
       <a style="display:block; padding:6px 14px; font-size:13px; cursor:pointer; color:var(--text2);" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''" onclick="bulkSetType('construction')">Construction bid</a>
@@ -68,16 +69,16 @@
 
 <div class="tbl-wrap">
   <table class="admin-tbl">
-    <colgroup><col style="width:36px"><col style="width:28px"><col><col style="width:125px"><col style="width:65px"><col style="width:85px"><col style="width:80px"><col style="width:95px"></colgroup>
+    <colgroup><col style="width:36px"><col style="width:28px"><col><col style="width:125px"><col style="width:85px"><col style="width:85px"><col style="width:80px"><col style="width:170px"></colgroup>
     <thead><tr><th><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th><th></th><th>Title</th><th>Source</th><th>Due</th><th>Status</th><th>Type</th><th>Actions</th></tr></thead>
     <tbody>
     {% for o in records %}
       <tr id="row-{{ o.id }}" data-id="{{ o.id }}">
         <td><input type="checkbox" class="row-check" value="{{ o.id }}" onchange="onCheck()"></td>
         <td><div class="bid-dot {{ 'dot-green' if o.status == 'open' }} {{ 'dot-amber' if o.status == 'unknown_date' }} {{ 'dot-red' if o.status in ('noise','expired') }}" style="margin:0 auto;"></div></td>
-        <td style="font-size:12px; max-width:0;" title="{{ o.title }}">{{ o.title }}</td>
+        <td style="font-size:12px; max-width:0;" title="{{ o.title }}"><a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" style="color:var(--blue); text-decoration:none;">{{ o.title }}</a></td>
         <td style="font-size:11px; color:var(--text2);">{{ o.source_name }}</td>
-        <td style="font-size:11px;">{{ o.due_date_raw or '—' }}</td>
+        <td style="font-size:11px;">{{ o.due_date_raw or 'No date' }}</td>
         <td>
           {% if o.status == 'open' %}<span class="badge badge-open">Open</span>
           {% elif o.status == 'expired' %}<span class="badge badge-expired">Expired</span>
@@ -89,9 +90,14 @@
           {% if o.record_type == 'construction' %}<span class="badge badge-type-c">Const.</span>
           {% elif o.record_type == 'professional_services' %}<span class="badge badge-type-p">Prof.</span>
           {% elif o.record_type == 'public_notice' %}<span class="badge badge-type-n">Notice{% if o.notice_subtype %}/{{ o.notice_subtype[:1].upper() }}{% endif %}</span>
-          {% else %}<span class="badge badge-access">—</span>{% endif %}
+          {% else %}<span class="badge badge-access">-</span>{% endif %}
         </td>
-        <td style="display:flex; gap:4px;"><button class="btn btn-sm btn-danger" onclick="quickDel('{{ o.id }}')">Del</button><button class="btn btn-sm" onclick="quickFlag('{{ o.id }}')">Flag</button></td>
+        <td style="display:flex; gap:4px; flex-wrap:wrap;">
+          <a class="btn btn-sm" href="{{ url_for('opportunity_detail', opp_id=o.id) }}">View</a>
+          <button class="btn btn-sm" onclick="quickEdit('{{ o.id }}', {{ o.title|tojson }}, {{ (o.due_date_raw or '')|tojson }}, {{ (o.official_url or '')|tojson }})">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="quickDel('{{ o.id }}')">Del</button>
+          <button class="btn btn-sm" onclick="quickFlag('{{ o.id }}')">Flag</button>
+        </td>
       </tr>
     {% else %}
       <tr><td colspan="8" style="padding:2rem; text-align:center; color:var(--text2);">No records match this filter.</td></tr>
@@ -113,5 +119,21 @@ function toggleTypeMenu(e){e.stopPropagation();const m=document.getElementById('
 document.addEventListener('click',()=>{const m=document.getElementById('type-menu');if(m)m.style.display='none';});
 function quickDel(id){if(!confirm('Delete this record?'))return;fetch('/admin/api/record/'+id,{method:'DELETE'}).then(r=>r.json()).then(d=>{if(d.ok){const r=document.getElementById('row-'+id);if(r)r.style.opacity='.25';showMsg('Deleted.');}});}
 function quickFlag(id){fetch('/admin/api/record/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({noise_flagged:true,status_override:'noise'})}).then(r=>r.json()).then(d=>{if(d.ok){const r=document.getElementById('row-'+id);if(r)r.style.opacity='.4';showMsg('Flagged as noise.');}});}
+function quickEdit(id,title,dueDate,officialUrl){
+  const nextTitle = prompt('Edit title', title || '');
+  if(nextTitle === null) return;
+  const nextDue = prompt('Edit due date (MM/DD/YY or leave blank)', dueDate || '');
+  if(nextDue === null) return;
+  const nextUrl = prompt('Edit official source URL', officialUrl || '');
+  if(nextUrl === null) return;
+  fetch('/admin/api/record/'+id,{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({title:nextTitle,due_date_raw:nextDue,official_url:nextUrl,status_override:''})
+  }).then(r=>r.json()).then(d=>{
+    if(d.ok){showMsg('Record updated. Reload to review changes.');}
+    else {showMsg('Update failed.', true);}
+  });
+}
 </script>
 {% endblock %}
