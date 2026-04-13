@@ -23,7 +23,10 @@
         <span style="color:var(--red-text);">{{ src.noise }} noise</span> &nbsp;&middot;&nbsp;
       {% endif %}
       {{ src.open }} open
+      {% if src.review_required is defined %} &nbsp;&middot;&nbsp; {{ src.review_required }} review{% endif %}
+      {% if src.ai_review is defined %} &nbsp;&middot;&nbsp; {{ src.ai_review }} ai review{% endif %}
     </div>
+    <div class="source-meta">Crawlability {{ '%.1f'|format(src.crawlability_score or 0) }} / 5.0 &nbsp;&middot;&nbsp; {{ src.rule_label }}</div>
   </div>
   {% if src.health == 'bad' %}
     <span class="badge badge-noise" style="font-size:11px;">Needs review</span>

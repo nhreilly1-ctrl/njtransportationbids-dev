@@ -21,6 +21,35 @@ HEADERS = {
 
 PRIORITY_TIERS = ("Tier 1", "Tier 2")
 
+SOURCE_RULES = {
+    "state-njdot-construction": "trusted",
+    "state-njdot-profserv": "trusted",
+    "state-drjtbc-construction": "trusted",
+    "state-drjtbc-profserv": "trusted",
+    "state-njta": "trusted",
+    "state-njtransit": "trusted",
+    "state-panynj-construction": "trusted",
+    "state-panynj-profserv": "trusted",
+    "county-camden": "ai_review",
+    "county-burlington": "ai_review",
+    "municipal-jersey-city": "ai_review",
+    "municipal-hoboken": "ai_review",
+    "county-bergen": "ai_review",
+    "county-essex": "manual_review",
+    "municipal-paterson": "manual_review",
+    "municipal-elizabeth": "manual_review",
+    "county-cape-may": "manual_review",
+    "county-hudson": "manual_review",
+    "municipal-camden": "manual_review",
+    "county-cumberland": "manual_review",
+    "county-gloucester": "manual_review",
+    "county-hunterdon": "manual_review",
+    "municipal-newark": "metadata_only",
+    "county-atlantic": "disabled",
+    "county-mercer": "disabled",
+    "municipal-trenton": "disabled",
+}
+
 
 @dataclass
 class CrawlResult:
@@ -151,7 +180,14 @@ def load_sources(conn, source_cols: set[str]) -> list[dict[str, Any]]:
 
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(query, params)
-        return [dict(row) for row in cur.fetchall()]
+        rows = [dict(row) for row in cur.fetchall()]
+        filtered: list[dict[str, Any]] = []
+        for row in rows:
+            mode = SOURCE_RULES.get((row.get("source_id") or "").lower(), "manual_review")
+            if mode in {"disabled", "metadata_only"}:
+                continue
+            filtered.append(row)
+        return filtered
 
 
 def get_existing_keys(conn, lead_cols: set[str], source_id: str) -> tuple[set[str], set[str]]:

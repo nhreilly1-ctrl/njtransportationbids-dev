@@ -218,6 +218,37 @@ OUT_OF_SCOPE = [
     "rfq #cc120",
 ]
 
+SOURCE_RULES = {
+    "state-njdot-construction": {"score": 5.0, "mode": "trusted", "label": "Trusted"},
+    "state-njdot-profserv": {"score": 5.0, "mode": "trusted", "label": "Trusted"},
+    "state-drjtbc-construction": {"score": 5.0, "mode": "trusted", "label": "Trusted"},
+    "state-drjtbc-profserv": {"score": 5.0, "mode": "trusted", "label": "Trusted"},
+    "state-njta": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
+    "state-njtransit": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
+    "state-panynj-construction": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
+    "state-panynj-profserv": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
+    "county-camden": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
+    "county-burlington": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
+    "municipal-jersey-city": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
+    "municipal-hoboken": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
+    "county-bergen": {"score": 3.5, "mode": "ai_review", "label": "AI review"},
+    "county-essex": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "municipal-paterson": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "municipal-elizabeth": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "county-cape-may": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "county-hudson": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "municipal-camden": {"score": 3.5, "mode": "manual_review", "label": "Manual review"},
+    "county-cumberland": {"score": 3.0, "mode": "manual_review", "label": "Manual review"},
+    "county-gloucester": {"score": 3.0, "mode": "manual_review", "label": "Manual review"},
+    "county-hunterdon": {"score": 3.0, "mode": "manual_review", "label": "Manual review"},
+    "municipal-newark": {"score": 2.0, "mode": "metadata_only", "label": "Metadata only"},
+    "county-atlantic": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
+    "county-mercer": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
+    "municipal-trenton": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
+}
+
+DEFAULT_SOURCE_RULE = {"score": 2.5, "mode": "manual_review", "label": "Manual review"}
+
 
 def _check_pw(password: str) -> bool:
     return hashlib.sha256(password.encode()).hexdigest() == ADMIN_HASH
@@ -281,6 +312,10 @@ def source_tier(source_id: str | None, entity_type: str | None) -> str:
     if source_id.startswith("county-") or "county" in entity:
         return "county"
     return "municipal"
+
+
+def source_rule_for(source_id: str | None) -> dict:
+    return dict(SOURCE_RULES.get((source_id or "").lower(), DEFAULT_SOURCE_RULE))
 
 
 def load_opps_from_db() -> list[dict]:
@@ -348,6 +383,9 @@ def load_sources_from_db() -> list[dict]:
                 "id": item["source_id"],
                 "name": item["source_name"],
                 "tier": source_tier(item["source_id"], item.get("entity_type")),
+                "source_rule": source_rule_for(item["source_id"])["mode"],
+                "rule_label": source_rule_for(item["source_id"])["label"],
+                "crawlability_score": source_rule_for(item["source_id"])["score"],
                 "county": item.get("county"),
                 "url": item.get("source_url"),
                 "last_crawl": item["last_crawl_at"].isoformat(sep=" ", timespec="minutes") if item.get("last_crawl_at") else None,
@@ -588,6 +626,10 @@ def enrich(opp: dict) -> dict:
     record = dict(opp)
     due = parse_due(record.get("due_date_raw") or record.get("due_date"))
     record["due_date_parsed"] = due.isoformat() if due else None
+    rule = source_rule_for(record.get("source_id"))
+    record["source_rule"] = rule["mode"]
+    record["source_rule_label"] = rule["label"]
+    record["crawlability_score"] = rule["score"]
 
     manual = record.get("status_override")
     today = date.today()
@@ -595,6 +637,8 @@ def enrich(opp: dict) -> dict:
         record["status"] = "deleted"
     elif manual == "noise":
         record["status"] = "noise"
+    elif record["source_rule"] == "disabled":
+        record["status"] = "disabled"
     else:
         is_noise, reason = noise_score(record)
         if record.get("noise_flagged"):
@@ -605,10 +649,17 @@ def enrich(opp: dict) -> dict:
             record["noise_reason"] = reason
         elif due and due < today:
             record["status"] = "expired"
-        elif due:
+        elif manual == "approved":
             record["status"] = "open"
+        elif due:
+            if record["source_rule"] == "trusted":
+                record["status"] = "open"
+            elif record["source_rule"] == "ai_review":
+                record["status"] = "ai_review"
+            else:
+                record["status"] = "review_required"
         else:
-            record["status"] = "unknown_date"
+            record["status"] = "review_required"
 
     record_type, notice_subtype = classify_record(record)
     record["record_type"] = record_type
@@ -651,8 +702,8 @@ def health():
 @app.route("/")
 def index():
     opps = [enrich(opp) for opp in load_opps()]
-    opps = [opp for opp in opps if opp["status"] not in ("noise", "deleted")]
-    active = [opp for opp in opps if opp["status"] in ("open", "unknown_date")]
+    opps = [opp for opp in opps if opp["status"] not in ("noise", "deleted", "disabled")]
+    active = [opp for opp in opps if opp["status"] == "open"]
     expiring = [
         opp
         for opp in sort_opps(active)
@@ -677,13 +728,15 @@ def _opp_list_view(record_type: str, notice_subtype: str | None = None) -> dict:
     q = request.args.get("q", "").lower()
 
     def keep(opp: dict) -> bool:
-        if status == "active" and opp["status"] not in ("open", "unknown_date"):
+        if status == "active" and opp["status"] != "open":
             return False
-        if status == "all" and opp["status"] not in ("open", "unknown_date"):
+        if status == "all" and opp["status"] not in ("open", "review_required", "ai_review"):
+            return False
+        if status == "review" and opp["status"] not in ("review_required", "ai_review"):
             return False
         if status == "expired" and opp["status"] != "expired":
             return False
-        if opp["status"] in ("noise", "deleted"):
+        if opp["status"] in ("noise", "deleted", "disabled"):
             return False
         if opp["record_type"] != record_type:
             return False
@@ -786,8 +839,11 @@ def sources():
         source["noise"] = len([opp for opp in related if opp["status"] == "noise"])
         source["expired"] = len([opp for opp in related if opp["status"] == "expired"])
         source["open"] = len([opp for opp in related if opp["status"] == "open"])
+        source["review_required"] = len([opp for opp in related if opp["status"] == "review_required"])
+        source["ai_review"] = len([opp for opp in related if opp["status"] == "ai_review"])
         ratio = source["noise"] / max(source["total"], 1)
         source["health"] = "bad" if ratio > 0.4 else "warn" if ratio > 0.15 else "good"
+    sources = sorted(sources, key=lambda s: (-s.get("crawlability_score", 0), s.get("name", "").lower()))
     return render_template("sources.html", sources=sources)
 
 
@@ -796,7 +852,7 @@ def export_csv():
     ids = request.args.get("ids", "")
     selected = {item for item in ids.split(",") if item}
     opps = [enrich(opp) for opp in load_opps()]
-    opps = [opp for opp in opps if opp["status"] not in ("noise", "deleted")]
+    opps = [opp for opp in opps if opp["status"] == "open"]
     if selected:
         opps = [opp for opp in opps if str(opp.get("id")) in selected]
 
@@ -847,10 +903,12 @@ def admin_logout():
 @admin_required
 def admin_dashboard():
     opps = [enrich(opp) for opp in load_opps()]
-    opps = [opp for opp in opps if opp["status"] != "deleted"]
-    active = [opp for opp in opps if opp["status"] in ("open", "unknown_date")]
+    opps = [opp for opp in opps if opp["status"] not in ("deleted", "disabled")]
+    active = [opp for opp in opps if opp["status"] == "open"]
     stats = {
         "open": len([opp for opp in opps if opp["status"] == "open"]),
+        "review_required": len([opp for opp in opps if opp["status"] == "review_required"]),
+        "ai_review": len([opp for opp in opps if opp["status"] == "ai_review"]),
         "total": len(opps),
         "noise": len([opp for opp in opps if opp["status"] == "noise"]),
         "expired": len([opp for opp in opps if opp["status"] == "expired"]),
@@ -873,13 +931,15 @@ def admin_records():
     selected_type = request.args.get("type", "")
 
     def keep(opp: dict) -> bool:
-        if filt == "review" and opp["status"] not in ("open", "unknown_date"):
+        if filt == "review" and opp["status"] not in ("review_required", "ai_review"):
             return False
         if filt == "noise" and opp["status"] != "noise":
             return False
         if filt == "expired" and opp["status"] != "expired":
             return False
-        if filt == "nodate" and opp["status"] != "unknown_date":
+        if filt == "nodate" and opp["status"] != "review_required":
+            return False
+        if filt == "ai" and opp["status"] != "ai_review":
             return False
         if filt == "uncat" and opp["record_type"] != "uncategorized":
             return False
@@ -956,8 +1016,11 @@ def admin_sources():
         source["noise"] = len([opp for opp in related if opp["status"] == "noise"])
         source["expired"] = len([opp for opp in related if opp["status"] == "expired"])
         source["open"] = len([opp for opp in related if opp["status"] == "open"])
+        source["review_required"] = len([opp for opp in related if opp["status"] == "review_required"])
+        source["ai_review"] = len([opp for opp in related if opp["status"] == "ai_review"])
         ratio = source["noise"] / max(source["total"], 1)
         source["health"] = "bad" if ratio > 0.4 else "warn" if ratio > 0.15 else "good"
+    sources = sorted(sources, key=lambda s: (-s.get("crawlability_score", 0), s.get("name", "").lower()))
     return render_template("admin_sources.html", sources=sources)
 
 

@@ -26,9 +26,16 @@
       {% if s.noise > 0 %} &nbsp;&middot;&nbsp; <span style="color:var(--red-text);">{{ s.noise }} noise</span>{% endif %}
       {% if s.expired > 0 %} &nbsp;&middot;&nbsp; {{ s.expired }} expired{% endif %}
       &nbsp;&middot;&nbsp; {{ s.open }} open
+      {% if s.review_required is defined %} &nbsp;&middot;&nbsp; {{ s.review_required }} review{% endif %}
+      {% if s.ai_review is defined %} &nbsp;&middot;&nbsp; {{ s.ai_review }} ai review{% endif %}
     </div>
+    <div class="source-meta">Crawlability {{ '%.1f'|format(s.crawlability_score or 0) }} / 5.0 &nbsp;&middot;&nbsp; {{ s.rule_label }}</div>
   </div>
-  {% if s.health == 'bad' %}
+  {% if s.rule_label == 'Disabled' %}
+    <span class="badge badge-noise" style="font-size:11px;">Disabled</span>
+  {% elif s.rule_label == 'Metadata only' %}
+    <span class="badge badge-nodate" style="font-size:11px;">Metadata only</span>
+  {% elif s.health == 'bad' %}
     <span class="badge badge-noise" style="font-size:11px;">Needs review</span>
   {% elif s.health == 'warn' %}
     <span class="badge badge-nodate" style="font-size:11px;">Noisy</span>

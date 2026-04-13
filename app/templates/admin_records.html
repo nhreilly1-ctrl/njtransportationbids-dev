@@ -12,9 +12,10 @@
 <div class="filter-pills">
   <a class="pill {{ 'active' if filt == 'all' }}" href="?filter=all">All records</a>
   <a class="pill {{ 'active' if filt == 'review' }}" href="?filter=review">Review publishable</a>
+  <a class="pill {{ 'active' if filt == 'ai' }}" href="?filter=ai">AI review</a>
   <a class="pill {{ 'active' if filt == 'noise' }}" href="?filter=noise">Noise only</a>
   <a class="pill {{ 'active' if filt == 'expired' }}" href="?filter=expired">Expired only</a>
-  <a class="pill {{ 'active' if filt == 'nodate' }}" href="?filter=nodate">No due date</a>
+  <a class="pill {{ 'active' if filt == 'nodate' }}" href="?filter=nodate">No due date / review</a>
   <a class="pill {{ 'active' if filt == 'uncat' }}" href="?filter=uncat">Uncategorized</a>
 </div>
 
@@ -77,13 +78,17 @@
         <td><input type="checkbox" class="row-check" value="{{ o.id }}" onchange="onCheck()"></td>
         <td><div class="bid-dot {{ 'dot-green' if o.status == 'open' }} {{ 'dot-amber' if o.status == 'unknown_date' }} {{ 'dot-red' if o.status in ('noise','expired') }}" style="margin:0 auto;"></div></td>
         <td style="font-size:12px; max-width:0;" title="{{ o.title }}"><a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" style="color:var(--blue); text-decoration:none;">{{ o.title }}</a></td>
-        <td style="font-size:11px; color:var(--text2);">{{ o.source_name }}</td>
+        <td style="font-size:11px; color:var(--text2);">
+          {{ o.source_name }}
+          <div style="font-size:10px; color:var(--text3); margin-top:2px;">{{ o.source_rule_label }} · score {{ '%.1f'|format(o.crawlability_score or 0) }}</div>
+        </td>
         <td style="font-size:11px;">{{ o.due_date_raw or 'No date' }}</td>
         <td>
           {% if o.status == 'open' %}<span class="badge badge-open">Open</span>
           {% elif o.status == 'expired' %}<span class="badge badge-expired">Expired</span>
           {% elif o.status == 'noise' %}<span class="badge badge-noise">Noise</span>
-          {% elif o.status == 'unknown_date' %}<span class="badge badge-nodate">No date</span>{% endif %}
+          {% elif o.status == 'review_required' %}<span class="badge badge-nodate">Review required</span>
+          {% elif o.status == 'ai_review' %}<span class="badge badge-type-p">AI review</span>{% endif %}
           {% if o.noise_reason %}<div style="font-size:10px; color:var(--text3); margin-top:1px;">{{ o.noise_reason }}</div>{% endif %}
         </td>
         <td>
