@@ -245,6 +245,15 @@ def is_registry_public_notice_candidate(source: dict) -> bool:
     return source_id.startswith("county-") or source_id.startswith("municipal-")
 
 
+def sanitize_external_url(url: str | None, fallback: str | None = None) -> str:
+    candidate = (url or "").strip()
+    if candidate.lower().startswith(("http://", "https://")):
+        return candidate
+    if fallback and fallback.lower().startswith(("http://", "https://")):
+        return fallback
+    return "#"
+
+
 def normalize_for_rules(text: str | None) -> str:
     if not text:
         return ""
@@ -558,7 +567,8 @@ def init_db():
                 ('municipal-hoboken','City of Hoboken Bids and RFPs','Municipality','Hudson','https://www.hobokennj.gov/bids-rfps','Tier 1','Yes',TRUE,'manual_html'),
                 ('municipal-paterson','City of Paterson Purchasing','Municipality','Passaic','https://www.patersonnj.gov/purchasing/','Tier 1','Yes',TRUE,'manual_html'),
                 ('municipal-trenton','City of Trenton Legal Ads - Procurement','Municipality','Mercer','https://www.trentonnj.org/830/City-of-Trenton-Legal-Ads-Procurement','Tier 1','Yes',TRUE,'manual_html'),
-                ('municipal-camden','City of Camden Purchasing','Municipality','Camden','https://www.camdennj.gov/purchasing/','Tier 1','Yes',TRUE,'manual_html')
+                ('municipal-camden','City of Camden Purchasing','Municipality','Camden','https://www.camdennj.gov/purchasing/','Tier 1','Yes',TRUE,'manual_html'),
+                ('municipal-elizabeth','City of Elizabeth Bid Postings','Municipality','Union','https://www.elizabethnj.org/Bids.aspx','Tier 1','Yes',TRUE,'manual_html')
                 ON CONFLICT (source_id) DO UPDATE SET
                     source_name = EXCLUDED.source_name,
                     entity_type = EXCLUDED.entity_type,
@@ -602,7 +612,7 @@ def fetch_sources():
             "source_name": row[1],
             "entity_type": row[2],
             "county": row[3],
-            "source_url": row[4],
+            "source_url": sanitize_external_url(row[4]),
             "priority_tier": row[5],
             "website_ready": row[6],
             "crawl_enabled": row[7],
@@ -744,7 +754,7 @@ def fetch_opportunities(county_filter=None, agency_filter=None, source_filter=No
             "source_name": source_map.get(row[4], {}).get("source_name", row[4]),
             "due_date": row[5],
             "status": row[6],
-            "opportunity_url": row[7],
+            "opportunity_url": sanitize_external_url(row[7], source_map.get(row[4], {}).get("source_url")),
             "access_type": row[8],
             "platform_name": row[9],
             "next_step": row[10],
@@ -780,7 +790,7 @@ def fetch_opportunity_by_id(opportunity_id):
         "source_name": source_map.get(row[4], {}).get("source_name", row[4]),
         "due_date": row[5],
         "status": row[6],
-        "opportunity_url": row[7],
+        "opportunity_url": sanitize_external_url(row[7], source_map.get(row[4], {}).get("source_url")),
         "access_type": row[8],
         "platform_name": row[9],
         "next_step": row[10],
@@ -864,7 +874,7 @@ def fetch_leads(status_filter=None, q=None, sort_by=None, duplicates_only=False,
             "posted_date": row[5],
             "due_date": row[6],
             "status": row[7],
-            "source_url": row[8],
+            "source_url": sanitize_external_url(row[8], source_map.get(row[1], {}).get("source_url")),
             "duplicate_key": row[9],
             "possible_duplicate": row[10],
             "quality_score": row[11],
@@ -1438,7 +1448,7 @@ def parse_public_notice_entries(html: str, page_url: str, source_key: str, sourc
             continue
 
         href = link.get("href", "").strip()
-        full_url = urljoin(page_url, href) if href else page_url
+        full_url = sanitize_external_url(urljoin(page_url, href) if href else page_url, page_url)
         parent = link.find_parent(["li", "tr", "p", "div"]) or link
         context = normalize_title(parent.get_text(" ", strip=True))
         raw_text = f"{title} {context}".strip()
@@ -1909,6 +1919,7 @@ def home():
     for opp in recent:
         cards += f"""
         <div class="opp-card">
+            <div class="opp-linkhint">Click title for full bid details</div>
             <div class="opp-title"><a href="/opportunities/{opp['opportunity_id']}">{opp['title']}</a></div>
             <div class="opp-meta">{opp['agency'] or ''} • {opp['county'] or ''}</div>
             <div class="opp-badges">
@@ -1934,8 +1945,9 @@ def home():
       .section {{ background: white; border: 1px solid #e5e7eb; border-radius: 18px; padding: 24px; margin-bottom: 20px; }}
       .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
       .opp-card {{ border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; background: #fafafa; }}
+      .opp-linkhint {{ font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }}
       .opp-title {{ font-weight: bold; margin-bottom: 8px; }}
-      .opp-title a {{ color: #111827; text-decoration: none; }}
+      .opp-title a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
       .opp-meta {{ color: #4b5563; margin-bottom: 10px; }}
       .opp-badges {{ margin-bottom: 10px; }}
       .badge {{ display: inline-block; background: #e0e7ff; border-radius: 999px; padding: 4px 10px; margin-right: 8px; font-size: 12px; }}
@@ -2325,7 +2337,7 @@ def sources_page():
         defaults = get_source_defaults(row["source_id"])
         items += f"""
         <tr>
-            <td><a href="/sources/{row['source_id']}">{row['source_name']}</a></td>
+            <td><a href="/sources/{row['source_id']}" style="font-weight:bold; text-decoration:underline;">{row['source_name']}</a><div style="font-size:12px;color:#2563eb;margin-top:4px;">Open source details</div></td>
             <td>{row['entity_type'] or ''}</td>
             <td>{row['county'] or ''}</td>
             <td>{row['priority_tier'] or ''}</td>
@@ -2342,7 +2354,7 @@ def sources_page():
       table {{ border-collapse: collapse; width: 100%; background: white; }}
       th, td {{ border: 1px solid #e5e7eb; padding: 10px; text-align: left; vertical-align: top; }}
       th {{ background: #f3f4f6; }}
-      a {{ color: #0b57d0; text-decoration: none; }}
+      a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
     </style></head>
     <body><div class="wrap">
       <a href="/">← Back to home</a>
@@ -2408,7 +2420,7 @@ def source_detail_page(source_id: str):
         <h1>{source['source_name']}</h1>
         <p><strong>Entity type:</strong> {source['entity_type'] or ''}</p>
         <p><strong>County:</strong> {source['county'] or ''}</p>
-        <p><strong>Official source:</strong> <a href="{source['source_url']}" target="_blank">{source['source_url']}</a></p>
+        <p><strong>Official source:</strong> <a href="{source['source_url']}" target="_blank" rel="noopener noreferrer">{source['source_url']}</a></p>
 
         <div class="stats">
           <div class="stat"><strong>{detail['lead_count']}</strong><br>total leads</div>
@@ -2479,8 +2491,14 @@ def opportunities_page(
 
     cards = ""
     for row in opportunities:
+        official_source_html = (
+            f'<span><a href="{row["opportunity_url"]}" target="_blank" rel="noopener noreferrer">Open official source</a></span>'
+            if row["opportunity_url"] != "#"
+            else '<span style="color:#6b7280;">Official source link unavailable</span>'
+        )
         cards += f"""
         <div class="opp-card">
+            <div class="opp-linkhint">Click title for full bid details</div>
             <div class="opp-title"><a href="/opportunities/{row['opportunity_id']}">{row['title']}</a></div>
             <div class="opp-meta">{row['agency'] or ''} • {row['county'] or ''}</div>
             <div class="opp-badges">
@@ -2490,7 +2508,7 @@ def opportunities_page(
             <div class="opp-next"><strong>Next step:</strong> {row['next_step'] or ''}</div>
             <div class="opp-footer">
                 <span>Due: {row['due_date'] or 'Not listed'}</span>
-                <span><a href="{row['opportunity_url']}" target="_blank">Official source</a></span>
+                {official_source_html}
             </div>
         </div>
         """
@@ -2506,8 +2524,9 @@ def opportunities_page(
       .tools a {{ display:inline-block; margin-bottom:16px; color:#0b57d0; text-decoration:none; }}
       .grid {{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
       .opp-card {{ background:white; border:1px solid #e5e7eb; border-radius:16px; padding:18px; }}
+      .opp-linkhint {{ font-size:12px; color:#2563eb; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }}
       .opp-title {{ font-weight:bold; font-size:18px; margin-bottom:8px; }}
-      .opp-title a {{ color:#111827; text-decoration:none; }}
+      .opp-title a {{ color:#0b57d0; text-decoration:underline; text-decoration-thickness:2px; }}
       .opp-meta {{ color:#4b5563; margin-bottom:10px; }}
       .opp-badges {{ margin-bottom:10px; }}
       .badge {{ display:inline-block; background:#e0e7ff; border-radius:999px; padding:4px 10px; margin-right:8px; font-size:12px; }}
@@ -2546,6 +2565,11 @@ def opportunity_detail_page(opportunity_id: str):
         raise HTTPException(status_code=404, detail="Opportunity not found")
 
     source_link = f"/sources/{opp['source_id']}" if opp["source_id"] else "/sources"
+    official_source_button = (
+        f'<a href="{opp["opportunity_url"]}" target="_blank" rel="noopener noreferrer">Open Official Source</a>'
+        if opp["opportunity_url"] != "#"
+        else '<span style="display:inline-block;background:#9ca3af;color:white;padding:10px 14px;border-radius:10px;margin-right:10px;">Official source unavailable</span>'
+    )
 
     return f"""
     <html><head><title>{opp['title']}</title>
@@ -2553,7 +2577,7 @@ def opportunity_detail_page(opportunity_id: str):
       body {{ font-family: Arial, sans-serif; margin: 40px; background: #f8fafc; color: #111827; }}
       .wrap {{ max-width: 950px; margin: 0 auto; }}
       .card {{ background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 18px; }}
-      a {{ color: #0b57d0; text-decoration: none; }}
+      a {{ color: #0b57d0; text-decoration: underline; text-decoration-thickness: 2px; }}
       .row {{ margin-bottom: 12px; }}
       .label {{ font-weight: bold; display: inline-block; min-width: 160px; }}
       .box {{ background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-top:18px; }}
@@ -2582,7 +2606,7 @@ def opportunity_detail_page(opportunity_id: str):
         <div class="row"><span class="label">Bid docs:</span> {opp['docs_path_note'] or ''}</div>
         <div class="row"><span class="label">Addenda:</span> {opp['addenda_note'] or ''}</div>
         <div class="cta" style="margin-top:18px;">
-          <a href="{opp['opportunity_url']}" target="_blank">Open Official Source</a>
+          {official_source_button}
           <a href="/sources/{opp['source_id']}">View Source Details</a>
         </div>
       </div>
