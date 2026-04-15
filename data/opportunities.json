@@ -1,0 +1,62 @@
+[
+  {
+    "id": "opp-350e07fb8993",
+    "title": "Maintenance Job Order Contracting (JOC) Infrastructure Repairs, South \u2014 2026, Various Locations Atlantic, Burlington, Camden, Cape May, Cumberland, Gloucester and Salem Counties 100% State Funded, PE No: 2622776, CE No: 2623044, DP No: 26453",
+    "source_id": "state-njdot-construction",
+    "source_name": "NJDOT Construction Services",
+    "county": "Statewide",
+    "due_date_raw": "4/16/26",
+    "due_date": "4/16/26",
+    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NoticetoContractors_DP26453.pdf",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "status": "open",
+    "crawled_at": "2026-04-15T23:30:22.287387+00:00"
+  },
+  {
+    "id": "opp-b1446619442c",
+    "title": "Installation of Rotating Beacon, Wind Cone and Segmented Circle at GWL; Greenwood Lake Airport, West Milford Township, Passaic County, New Jersey; Federal Project No: FAA Funded, UPC No: N/A, PE No: N/A, CE No: 7000337, DP No: 26801",
+    "source_id": "state-njdot-construction",
+    "source_name": "NJDOT Construction Services",
+    "county": "Statewide",
+    "due_date_raw": "4/23/26",
+    "due_date": "4/23/26",
+    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NoticetoContractors_DP26801.pdf",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "status": "open",
+    "crawled_at": "2026-04-15T23:30:22.288803+00:00"
+  },
+  {
+    "id": "opp-ffac2929d377",
+    "title": "Route 23 and Route 94 Rockfall Mitigation, Hardyston Township, Contract No. 036163250, Miscellaneous, Hardyston Township and Borough of Hamburg, Sussex County; Federal Project No: 0023(346), UPC No: 163250, PE No: 1904529, CE No: 1904532, DP No: 26102",
+    "source_id": "state-njdot-construction",
+    "source_name": "NJDOT Construction Services",
+    "county": "Statewide",
+    "due_date_raw": "4/28/26",
+    "due_date": "4/28/26",
+    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NOTICETOCONTRACTORS_DP26102.pdf",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "status": "open",
+    "crawled_at": "2026-04-15T23:30:22.289891+00:00"
+  },
+  {
+    "id": "opp-a7f6962f2fe2",
+    "title": "Maintenance Dredging and Channel Improvements for the Beach Haven West Complex, Channel Nos 133, 135, 143 \u2014 146, 157 with placement in Dredged Hole 61, Contract No. 133202505 Boroughs of Harvey Cedars, Townships of Stafford, Eagleswood and Long Beach, County of Ocean, New Jersey; 100% State Funded, UPC No: N/A, PE No: 6110108, CE No: 2207622, DP No: 25705",
+    "source_id": "state-njdot-construction",
+    "source_name": "NJDOT Construction Services",
+    "county": "Statewide",
+    "due_date_raw": "5/5/26",
+    "due_date": "5/5/26",
+    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NOTICETOCONTRCTORS_DP25705.pdf",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "status": "open",
+    "crawled_at": "2026-04-15T23:30:22.290882+00:00"
+  }
+]
