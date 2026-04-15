@@ -1,6 +1,42 @@
 {% extends "base.html" %}
 {% block title %}NJ Transportation Bids - Heavy Highway & Transportation Procurement{% endblock %}
 {% block content %}
+
+<style>
+  .home-outer { display:grid; grid-template-columns:1fr 260px; gap:1.5rem; align-items:start; }
+  .sb-card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); overflow:hidden; margin-bottom:12px; }
+  .sb-head { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
+             padding:9px 14px 8px; border-bottom:0.5px solid var(--border);
+             display:flex; align-items:center; gap:6px; }
+  .sb-head .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .sb-link { display:flex; align-items:center; justify-content:space-between;
+             padding:7px 14px; font-size:12.5px; color:var(--text);
+             text-decoration:none; border-bottom:0.5px solid var(--border); gap:8px; }
+  .sb-link:last-child { border-bottom:none; }
+  .sb-link:hover { background:var(--bg2); }
+  .sb-link-label { flex:1; min-width:0; }
+  .sb-link-sub { font-size:11px; color:var(--text3); display:block; margin-top:1px; }
+  .sb-ext { font-size:10px; background:var(--bg3); color:var(--text3); padding:2px 7px; border-radius:12px; flex-shrink:0; }
+  .sb-guide { font-size:10px; background:var(--blue-bg); color:var(--blue); padding:2px 7px; border-radius:12px; flex-shrink:0; font-weight:500; }
+  .sb-section { font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase;
+                letter-spacing:.07em; padding:7px 14px 3px; border-top:0.5px solid var(--border);
+                background:var(--bg2); }
+  .sb-section.first { border-top:none; }
+  .wage-row { display:flex; justify-content:space-between; align-items:center;
+              padding:5px 14px; font-size:12px; border-bottom:0.5px solid var(--border); }
+  .wage-row:last-of-type { border-bottom:none; }
+  .wage-rate { font-weight:500; font-family:monospace; }
+  .wage-note { font-size:10px; color:var(--text3); padding:5px 14px 7px; border-top:0.5px solid var(--border); }
+  .board-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1rem; }
+  .board-card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl);
+                padding:.85rem 1rem; cursor:pointer; text-decoration:none; display:block; }
+  .board-card:hover { border-color:var(--border2); }
+  .board-icon { font-size:17px; margin-bottom:.3rem; }
+  .board-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:2px; }
+  .board-meta { font-size:11px; color:var(--text3); }
+  @media(max-width:780px){ .home-outer { grid-template-columns:1fr; } .home-sidebar { display:none; } }
+</style>
+
 <div class="page-header">
   <h1>NJ Transportation Bids</h1>
   <p>Aggregated construction bids, professional services solicitations, and public notices across New Jersey state agencies, authorities, counties, and municipalities.</p>
@@ -33,80 +69,265 @@
   </a>
 </div>
 
-<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.5rem;">
-  <a href="{{ url_for('bids_construction') }}" style="text-decoration:none;">
-    <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem; transition:border-color .15s; cursor:pointer;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-size:11px; font-weight:500; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Construction Bids</div>
-      <div style="font-size:13px; color:var(--text2); line-height:1.5;">Roadway, bridge, drainage, pavement, and heavy highway construction contracts.</div>
-      <div style="margin-top:.75rem; font-size:13px; color:var(--blue); font-weight:500;">{{ stats.construction }} open -></div>
-    </div>
-  </a>
-  <a href="{{ url_for('bids_profserv') }}" style="text-decoration:none;">
-    <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem; transition:border-color .15s; cursor:pointer;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-size:11px; font-weight:500; color:var(--teal); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Professional Services</div>
-      <div style="font-size:13px; color:var(--text2); line-height:1.5;">RFPs and RFQs for engineering, design, inspection, planning, and consulting.</div>
-      <div style="margin-top:.75rem; font-size:13px; color:var(--teal); font-weight:500;">{{ stats.professional_services }} open -></div>
-    </div>
-  </a>
-  <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem;">
-    <div style="font-size:11px; font-weight:500; color:var(--amber); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Public Notices</div>
-    <div style="font-size:13px; color:var(--text2); line-height:1.5; margin-bottom:.75rem;">Legal advertisements and notices to contractors.</div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <a href="{{ url_for('notices2.notices_construction') }}" style="font-size:12px; color:var(--blue); text-decoration:none; background:var(--blue-bg); padding:3px 10px; border-radius:20px;">Construction</a>
-      <a href="{{ url_for('notices2.notices_profserv') }}" style="font-size:12px; color:var(--teal); text-decoration:none; background:var(--teal-bg); padding:3px 10px; border-radius:20px;">Prof. Services</a>
-      <a href="{{ url_for('notices2.notices_all') }}" style="font-size:12px; color:var(--amber); text-decoration:none; background:var(--amber-bg); padding:3px 10px; border-radius:20px;">All notices</a>
-    </div>
-  </div>
-</div>
+<div class="home-outer">
 
-<div class="divider"></div>
+  <!-- ── MAIN COLUMN ── -->
+  <div>
 
-{% if expiring %}
-<div class="section-label">Closing soon - next 14 days</div>
-{% for o in expiring %}
-  {% set is_construction = o.record_type == 'construction' %}
-  {% set is_profserv = o.record_type == 'professional_services' %}
-  <div class="bid-card soon">
-    <div class="bid-dot dot-red"></div>
-    <div class="bid-main">
-      <a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" class="bid-title" title="{{ o.title }}">{{ o.title }}</a>
-      <div class="bid-meta">{{ o.source_name }} &middot; {{ o.county or 'Statewide' }}</div>
-      <div class="bid-tags">
-        <span class="badge badge-open">Open</span>
-        {% if is_construction %}<span class="badge badge-type-c">Construction</span>
-        {% elif is_profserv %}<span class="badge badge-type-p">Prof. Services</span>
-        {% elif o.record_type == 'public_notice' %}<span class="badge badge-type-n">Notice</span>{% endif %}
-        {% if o.access_type and o.access_type not in ('Unknown','') %}<span class="badge badge-access">{{ o.access_type }}</span>{% endif %}
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.5rem;">
+      <a href="{{ url_for('bids_construction') }}" style="text-decoration:none;">
+        <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem; transition:border-color .15s; cursor:pointer;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:11px; font-weight:500; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Construction Bids</div>
+          <div style="font-size:13px; color:var(--text2); line-height:1.5;">Roadway, bridge, drainage, pavement, and heavy highway construction contracts.</div>
+          <div style="margin-top:.75rem; font-size:13px; color:var(--blue); font-weight:500;">{{ stats.construction }} open -></div>
+        </div>
+      </a>
+      <a href="{{ url_for('bids_profserv') }}" style="text-decoration:none;">
+        <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem; transition:border-color .15s; cursor:pointer;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:11px; font-weight:500; color:var(--teal); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Professional Services</div>
+          <div style="font-size:13px; color:var(--text2); line-height:1.5;">RFPs and RFQs for engineering, design, inspection, planning, and consulting.</div>
+          <div style="margin-top:.75rem; font-size:13px; color:var(--teal); font-weight:500;">{{ stats.professional_services }} open -></div>
+        </div>
+      </a>
+      <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.1rem 1.25rem;">
+        <div style="font-size:11px; font-weight:500; color:var(--amber); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Public Notices</div>
+        <div style="font-size:13px; color:var(--text2); line-height:1.5; margin-bottom:.75rem;">Legal advertisements and notices to contractors.</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="{{ url_for('notices2.notices_construction') }}" style="font-size:12px; color:var(--blue); text-decoration:none; background:var(--blue-bg); padding:3px 10px; border-radius:20px;">Construction</a>
+          <a href="{{ url_for('notices2.notices_profserv') }}" style="font-size:12px; color:var(--teal); text-decoration:none; background:var(--teal-bg); padding:3px 10px; border-radius:20px;">Prof. Services</a>
+          <a href="{{ url_for('notices2.notices_all') }}" style="font-size:12px; color:var(--amber); text-decoration:none; background:var(--amber-bg); padding:3px 10px; border-radius:20px;">All notices</a>
+        </div>
       </div>
     </div>
-    <div class="bid-due soon-due"><span class="due-label">Due</span><span class="due-date">{{ o.due_date_raw }}</span></div>
-  </div>
-{% endfor %}
-<div class="divider"></div>
-{% endif %}
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
-  <div>
-    <div class="section-label" style="margin-top:0;">How to use this site</div>
-    <div style="font-size:13px; color:var(--text2); line-height:1.85;">
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">1. Find the bid</strong> - pick a category from the nav, then filter by county, agency, or keyword.</p>
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">2. Verify the source</strong> - every record links to the official agency posting. Always confirm before committing estimating time.</p>
-      <p><strong style="color:var(--text);">3. Focus on the gold documents</strong> - bid ranges, work item lists, addenda, and submission instructions determine whether a job is worth chasing.</p>
+    <div class="divider"></div>
+
+    {% if expiring %}
+    <div class="section-label">Closing soon - next 14 days</div>
+    {% for o in expiring %}
+      {% set is_construction = o.record_type == 'construction' %}
+      {% set is_profserv = o.record_type == 'professional_services' %}
+      <div class="bid-card soon">
+        <div class="bid-dot dot-red"></div>
+        <div class="bid-main">
+          <a href="{{ url_for('opportunity_detail', opp_id=o.id) }}" class="bid-title" title="{{ o.title }}">{{ o.title }}</a>
+          <div class="bid-meta">{{ o.source_name }} &middot; {{ o.county or 'Statewide' }}</div>
+          <div class="bid-tags">
+            <span class="badge badge-open">Open</span>
+            {% if is_construction %}<span class="badge badge-type-c">Construction</span>
+            {% elif is_profserv %}<span class="badge badge-type-p">Prof. Services</span>
+            {% elif o.record_type == 'public_notice' %}<span class="badge badge-type-n">Notice</span>{% endif %}
+            {% if o.access_type and o.access_type not in ('Unknown','') %}<span class="badge badge-access">{{ o.access_type }}</span>{% endif %}
+          </div>
+        </div>
+        <div class="bid-due soon-due"><span class="due-label">Due</span><span class="due-date">{{ o.due_date_raw }}</span></div>
+      </div>
+    {% endfor %}
+    <div class="divider"></div>
+    {% endif %}
+
+    <!-- Networking boards -->
+    <div class="section-label" style="margin-top:0;">Networking</div>
+    <div class="board-grid">
+      <a href="{{ url_for('network.board') }}" class="board-card">
+        <div class="board-icon">📋</div>
+        <div class="board-name">Bid Board</div>
+        <div class="board-meta">Sub requests · Teaming · Available</div>
+      </a>
+      <a href="{{ url_for('network.equipment') }}" class="board-card">
+        <div class="board-icon">🏗️</div>
+        <div class="board-name">Equipment</div>
+        <div class="board-meta">For sale · For lease · Wanted</div>
+      </a>
+      <a href="{{ url_for('network.results') }}" class="board-card">
+        <div class="board-icon">📊</div>
+        <div class="board-name">Bid Results</div>
+        <div class="board-meta">Community-submitted award data</div>
+      </a>
+      <a href="{{ url_for('network.wages') }}" class="board-card">
+        <div class="board-icon">💰</div>
+        <div class="board-name">Prevailing Wages</div>
+        <div class="board-meta">Discussion · Questions · Tips</div>
+      </a>
+      <a href="{{ url_for('network.resources') }}" class="board-card">
+        <div class="board-icon">🛡️</div>
+        <div class="board-name">Insurance & Bonding</div>
+        <div class="board-meta">Discussion · Questions · Tips</div>
+      </a>
+      <a href="{{ url_for('network.board') }}?type=event" class="board-card">
+        <div class="board-icon">📅</div>
+        <div class="board-name">Events</div>
+        <div class="board-meta">Industry events · Pre-bids · Shows</div>
+      </a>
+      <a href="{{ url_for('network.board') }}?type=training" class="board-card">
+        <div class="board-icon">🎓</div>
+        <div class="board-name">Training</div>
+        <div class="board-meta">Courses · OSHA · Certifications</div>
+      </a>
+      <a href="{{ url_for('network.board') }}?type=certification" class="board-card">
+        <div class="board-icon">✅</div>
+        <div class="board-name">Certification</div>
+        <div class="board-meta">SBE · MWBE · DBE · MBE</div>
+      </a>
+      <a href="{{ url_for('network.board') }}?type=prequal" class="board-card">
+        <div class="board-icon">🏛️</div>
+        <div class="board-name">Prequalification</div>
+        <div class="board-meta">NJDOT · NJTA · County prequal</div>
+      </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="display:flex; gap:10px;">
+      <a href="{{ url_for('bids_construction') }}" class="btn btn-primary">Browse construction bids</a>
+      <a href="{{ url_for('bids_profserv') }}" class="btn">Professional services</a>
+      <a href="{{ url_for('export_csv') }}" class="btn" style="margin-left:auto;">Export CSV</a>
     </div>
   </div>
-  <div>
-    <div class="section-label" style="margin-top:0;">Documents worth your time</div>
-    <div style="font-size:13px; color:var(--text2); line-height:1.85;">
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Official bid notice</strong> - confirms due dates, submission method, and contact information.</p>
-      <p style="margin-bottom:.5rem;"><strong style="color:var(--text);">Bid ranges & estimates</strong> - tells you if the job is in your lane before you spend time pricing.</p>
-      <p><strong style="color:var(--text);">Work item lists</strong> - reveals scope, subs needed, equipment, and teaming opportunities.</p>
-    </div>
-  </div>
-</div>
 
-<div style="display:flex; gap:10px;">
-  <a href="{{ url_for('bids_construction') }}" class="btn btn-primary">Browse construction bids</a>
-  <a href="{{ url_for('bids_profserv') }}" class="btn">Professional services</a>
-  <a href="{{ url_for('export_csv') }}" class="btn" style="margin-left:auto;">Export CSV</a>
+  <!-- ── SIDEBAR ── -->
+  <aside class="home-sidebar">
+
+    <!-- Bidding Platforms -->
+    <div class="sb-card">
+      <div class="sb-head" style="color:var(--blue);">
+        <div class="dot" style="background:var(--blue);"></div>Bidding Platforms
+      </div>
+      <a class="sb-link" href="https://www.bidexpress.com" target="_blank">
+        <div class="sb-link-label">Bid Express<span class="sb-link-sub">NJDOT · NJTA · DRJTBC · NJ Transit</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.bidnetdirect.com/new-jersey" target="_blank">
+        <div class="sb-link-label">BidNet Direct<span class="sb-link-sub">NJ counties & municipalities</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.questcdn.com" target="_blank">
+        <div class="sb-link-label">QuestCDN<span class="sb-link-sub">Municipal & county projects</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.planetbids.com" target="_blank">
+        <div class="sb-link-label">PlanetBids<span class="sb-link-sub">Selected NJ municipalities</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.njstart.gov" target="_blank">
+        <div class="sb-link-label">NJSTART<span class="sb-link-sub">State procurement system</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+    </div>
+
+    <!-- Agency Procurement -->
+    <div class="sb-card">
+      <div class="sb-head" style="color:var(--teal);">
+        <div class="dot" style="background:var(--teal);"></div>Agency Procurement
+      </div>
+      <div class="sb-section first">State Agencies</div>
+      <a class="sb-link" href="https://www.nj.gov/transportation/business/procurement/" target="_blank">
+        <div class="sb-link-label">NJDOT<span class="sb-link-sub">Construction & professional services</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.njta.gov/business-hub/current-solicitations/" target="_blank">
+        <div class="sb-link-label">NJ Turnpike Authority<span class="sb-link-sub">Turnpike & Garden State Parkway</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.njtransit.com/procurement" target="_blank">
+        <div class="sb-link-label">NJ Transit<span class="sb-link-sub">Via Bid Express</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.sjta.com/doing-business/" target="_blank">
+        <div class="sb-link-label">South Jersey Transportation Auth.<span class="sb-link-sub">Atlantic City Expressway</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <div class="sb-section">Bi-State Authorities</div>
+      <a class="sb-link" href="https://www.drjtbc.org/construction-services/notice-to-contractors/" target="_blank">
+        <div class="sb-link-label">DRJTBC<span class="sb-link-sub">Delaware River crossings</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.panynj.gov/doing-business/en/solicitations.html" target="_blank">
+        <div class="sb-link-label">Port Authority NY/NJ<span class="sb-link-sub">Bridges, tunnels, airports, ports</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+    </div>
+
+    <!-- Specifications & Standards -->
+    <div class="sb-card">
+      <div class="sb-head" style="color:#5b3fa6;">
+        <div class="dot" style="background:#5b3fa6;"></div>Specifications & Standards
+      </div>
+      <div class="sb-section first">Statewide Baseline</div>
+      <a class="sb-link" href="https://www.nj.gov/transportation/eng/specs/" target="_blank">
+        <div class="sb-link-label">NJDOT Standard Specifications<span class="sb-link-sub">2007 ed. — used by most NJ agencies</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.nj.gov/transportation/eng/drawings/" target="_blank">
+        <div class="sb-link-label">Standard Construction Details<span class="sb-link-sub">NJDOT standard drawings</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <div class="sb-section">Agency Supplements</div>
+      <a class="sb-link" href="https://www.njta.gov" target="_blank">
+        <div class="sb-link-label">NJTA Supplemental Specs<span class="sb-link-sub">Turnpike / Parkway additions</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.drjtbc.org" target="_blank">
+        <div class="sb-link-label">DRJTBC Requirements<span class="sb-link-sub">Delaware River crossings</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.transit.dot.gov/regulations-and-guidance" target="_blank">
+        <div class="sb-link-label">FTA / AASHTO Standards<span class="sb-link-sub">Federal-aid & transit projects</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+    </div>
+
+    <!-- Prevailing Wage -->
+    <div class="sb-card">
+      <div class="sb-head" style="color:var(--amber);">
+        <div class="dot" style="background:var(--amber);"></div>Prevailing Wage — ST Rate
+      </div>
+      <div class="wage-row"><span style="color:var(--text2);">Laborer (Gen.)</span><span class="wage-rate">$48.20</span></div>
+      <div class="wage-row"><span style="color:var(--text2);">Operating Eng.</span><span class="wage-rate">$71.40</span></div>
+      <div class="wage-row"><span style="color:var(--text2);">Ironworker</span><span class="wage-rate">$76.15</span></div>
+      <div class="wage-row"><span style="color:var(--text2);">Teamster</span><span class="wage-rate">$52.80</span></div>
+      <div class="wage-row"><span style="color:var(--text2);">Electrician</span><span class="wage-rate">$82.30</span></div>
+      <div class="wage-note">Bergen Co. · 2024 rates · <a href="{{ url_for('network.wages') }}" style="color:var(--blue); text-decoration:none;">Full table →</a></div>
+    </div>
+
+    <!-- Contractor Resources -->
+    <div class="sb-card">
+      <div class="sb-head" style="color:#a0450a;">
+        <div class="dot" style="background:#a0450a;"></div>Contractor Resources
+      </div>
+      <div class="sb-section first">Prequalification</div>
+      <a class="sb-link" href="https://www.state.nj.us/transportation/business/procurement/contrprequal/" target="_blank">
+        <div class="sb-link-label">NJDOT Prequalification<span class="sb-link-sub">Work classes A–H</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.njta.gov/business-hub/" target="_blank">
+        <div class="sb-link-label">NJTA Prequalification<span class="sb-link-sub">Turnpike vendor registration</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <div class="sb-section">Compliance</div>
+      <a class="sb-link" href="https://www.nj.gov/labor/wageandhour/index.shtml" target="_blank">
+        <div class="sb-link-label">NJ Prevailing Wage Act<span class="sb-link-sub">NJDOL — P.L. 1963, c.150</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://sam.gov/content/wage-determinations" target="_blank">
+        <div class="sb-link-label">Davis-Bacon Wage Decisions<span class="sb-link-sub">Federal-aid projects — SAM.gov</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <a class="sb-link" href="https://www.nj.gov/ethics/" target="_blank">
+        <div class="sb-link-label">NJ Ethics Commission<span class="sb-link-sub">Contractor filing requirements</span></div>
+        <span class="sb-ext">↗</span>
+      </a>
+      <div class="sb-section">Guides</div>
+      <a class="sb-link" href="{{ url_for('network.resources') }}">
+        <div class="sb-link-label">NJDOT Insurance Minimums</div>
+        <span class="sb-guide">Guide</span>
+      </a>
+      <a class="sb-link" href="{{ url_for('network.resources') }}">
+        <div class="sb-link-label">Bonding Mechanics & SBA Program</div>
+        <span class="sb-guide">Guide</span>
+      </a>
+    </div>
+
+  </aside>
 </div>
 {% endblock %}
