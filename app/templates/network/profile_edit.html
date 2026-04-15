@@ -1,0 +1,103 @@
+{% extends "network/base.html" %}
+{% block title %}Edit Profile — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+<div style="max-width:680px;">
+  <h1 style="font-size:18px;font-weight:500;margin-bottom:1.25rem;">Edit profile</h1>
+  {% with msgs = get_flashed_messages(with_categories=True) %}
+    {% for cat, msg in msgs %}<div class="flash {{ 'flash-error' if cat == 'error' }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  <form method="post">
+    <div class="section-label" style="margin-top:0;">Firm basics</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group"><label>Company name</label><input type="text" name="company" value="{{ user.company }}" required></div>
+      <div class="form-group"><label>Phone</label><input type="tel" name="phone" value="{{ user.phone }}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group">
+        <label>Primary trade</label>
+        <select name="trade" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          {% for t in trades %}<option value="{{ t }}" {{ 'selected' if t == user.trade }}>{{ t }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Home county</label>
+        <select name="county" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          {% for c in counties %}<option value="{{ c }}" {{ 'selected' if c == user.county }}>{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group"><label>Website</label><input type="url" name="website" value="{{ user.website }}" placeholder="https://"></div>
+      <div class="form-group">
+        <label>Union status</label>
+        <select name="union_status" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          <option value="">—</option>
+          <option value="Union" {{ 'selected' if user.union_status == 'Union' }}>Union</option>
+          <option value="Open shop" {{ 'selected' if user.union_status == 'Open shop' }}>Open shop</option>
+          <option value="Merit shop" {{ 'selected' if user.union_status == 'Merit shop' }}>Merit shop</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>About your firm</label>
+      <textarea name="bio" rows="3" style="width:100%;font-size:14px;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);resize:vertical;">{{ user.bio }}</textarea>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Bonding & insurance</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group"><label>Single job bonding limit</label><input type="text" name="bonding_single" value="{{ user.bonding_single }}" placeholder="e.g. $10M"></div>
+      <div class="form-group"><label>Aggregate bonding limit</label><input type="text" name="bonding_agg" value="{{ user.bonding_agg }}" placeholder="e.g. $25M"></div>
+      <div class="form-group"><label>General liability limit</label><input type="text" name="insurance_gl" value="{{ user.insurance_gl }}" placeholder="e.g. $5M/$10M"></div>
+      <div class="form-group"><label>Workers comp</label><input type="text" name="insurance_workers" value="{{ user.insurance_workers }}" placeholder="Statutory"></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">NJDOT prequalification codes</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:10px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg2);margin-bottom:1rem;">
+      {% for code in prequal_codes %}
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;">
+          <input type="checkbox" name="prequal_codes" value="{{ code }}" {{ 'checked' if code in user.prequal_codes }}> {{ code }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="section-label">Certifications</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:10px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg2);margin-bottom:1rem;">
+      {% for cert in certifications %}
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;">
+          <input type="checkbox" name="certifications" value="{{ cert }}" {{ 'checked' if cert in user.certifications }}> {{ cert }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Notable projects <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;color:var(--text3);">(up to 10)</span></div>
+    {% for i in range(10) %}
+      {% set p = user.notable_projects[i] if i < user.notable_projects|length else {} %}
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+        <input type="text" name="proj_name_{{ i }}" value="{{ p.name or '' }}" placeholder="Project name">
+        <input type="text" name="proj_owner_{{ i }}" value="{{ p.owner or '' }}" placeholder="Owner">
+        <input type="text" name="proj_value_{{ i }}" value="{{ p.value or '' }}" placeholder="Value">
+        <input type="text" name="proj_year_{{ i }}" value="{{ p.year or '' }}" placeholder="Year">
+      </div>
+    {% endfor %}
+
+    <div class="divider"></div>
+    <div style="display:flex;gap:10px;margin-top:.5rem;">
+      <button type="submit" class="btn btn-primary">Save profile</button>
+      <a href="{{ url_for('network.profile_view') }}" class="btn">Cancel</a>
+    </div>
+  </form>
+
+  <div class="divider"></div>
+  <div class="section-label">Change password</div>
+  <form method="post" action="{{ url_for('network.profile_password') }}" style="max-width:400px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="form-group"><label>Current</label><input type="password" name="old_password" required></div>
+      <div class="form-group"><label>New</label><input type="password" name="new_password" required></div>
+      <div class="form-group"><label style="visibility:hidden;">x</label><button type="submit" class="btn" style="width:100%;justify-content:center;">Update</button></div>
+    </div>
+  </form>
+</div>
+{% endblock %}

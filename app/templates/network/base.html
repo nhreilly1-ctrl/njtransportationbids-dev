@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.net-nav { display:flex; gap:0; border-bottom:0.5px solid var(--border);
+           margin-bottom:1.5rem; overflow-x:auto; }
+.net-nav a { font-size:13px; color:var(--text2); text-decoration:none;
+             padding:0 16px; height:40px; display:flex; align-items:center;
+             border-bottom:2px solid transparent; white-space:nowrap; flex-shrink:0; }
+.net-nav a:hover  { color:var(--text); }
+.net-nav a.active { color:var(--text); border-bottom-color:var(--text); font-weight:500; }
+.net-nav .spacer  { flex:1; }
+.net-nav .user-pill { font-size:12px; color:var(--text2); display:flex; align-items:center;
+                       gap:6px; padding:0 8px; }
+.net-nav .user-pill .dot { width:7px; height:7px; border-radius:50%; background:#639922; }
+</style>
+
+<div class="net-nav">
+  <a href="{{ url_for('network.board') }}"
+     class="{{ 'active' if request.endpoint == 'network.board' or request.endpoint == 'network.board_detail' or request.endpoint == 'network.board_post' }}">
+    Bid board</a>
+  <a href="{{ url_for('network.equipment') }}"
+     class="{{ 'active' if 'equipment' in request.endpoint }}">
+    Equipment</a>
+  <a href="{{ url_for('network.bid_results') }}"
+     class="{{ 'active' if 'bid_results' in request.endpoint }}">
+    Bid results</a>
+  <a href="{{ url_for('network.wages') }}"
+     class="{{ 'active' if request.endpoint == 'network.wages' }}">
+    Prevailing wages</a>
+  <a href="{{ url_for('network.resources') }}"
+     class="{{ 'active' if 'resource' in request.endpoint }}">
+    Insurance &amp; bonding</a>
+  <div class="spacer"></div>
+  {% if user %}
+    <div class="net-user-pill" style="display:flex;align-items:center;gap:6px;padding:0 8px;font-size:12px;color:var(--text2);">
+      <div style="width:7px;height:7px;border-radius:50%;background:#639922;"></div>
+      <a href="{{ url_for('network.profile_view') }}" style="color:var(--text2);text-decoration:none;">{{ user.company }}</a>
+    </div>
+  {% else %}
+    <a href="{{ url_for('network.login') }}" style="font-size:12px;color:var(--blue);text-decoration:none;padding:0 12px;display:flex;align-items:center;">Sign in</a>
+    <a href="{{ url_for('network.register') }}" style="font-size:12px;color:var(--text);text-decoration:none;padding:0 12px;display:flex;align-items:center;border:0.5px solid var(--border2);border-radius:var(--r);margin:6px 8px;background:var(--bg2);">Join</a>
+  {% endif %}
+</div>
+
+{% block net_content %}{% endblock %}
+{% endblock %}

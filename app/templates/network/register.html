@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Join the Network — NJ Transportation Bids{% endblock %}
+{% block content %}
+<div style="max-width:480px;margin:2rem auto;">
+  <h1 style="font-size:20px;font-weight:500;margin-bottom:.5rem;">Join the NJ Transportation Bids network</h1>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:1.5rem;">Free for NJ heavy highway contractors, engineers, and consultants. Post sub requests, list equipment, share bid results.</p>
+  {% with msgs = get_flashed_messages(with_categories=True) %}
+    {% for cat, msg in msgs %}<div class="flash {{ 'flash-error' if cat == 'error' }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;">
+    <form method="post">
+      <div class="form-group"><label>Company name</label><input type="text" name="company" required placeholder="Reilly General Contracting"></div>
+      <div class="form-group"><label>Work email</label><input type="email" name="email" required autocomplete="email"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label>Password</label><input type="password" name="password" required autocomplete="new-password"></div>
+        <div class="form-group"><label>Confirm password</label><input type="password" name="password2" required></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group">
+          <label>Primary trade</label>
+          <select name="trade" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+            <option value="">Select...</option>
+            {% for t in trades %}<option>{{ t }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Home county</label>
+          <select name="county" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+            <option value="">Select...</option>
+            {% for c in counties %}<option>{{ c }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Create account</button>
+    </form>
+  </div>
+  <div style="margin-top:1rem;text-align:center;font-size:13px;color:var(--text2);">
+    Already have an account? <a href="{{ url_for('network.login') }}" style="color:var(--blue);">Sign in</a>
+  </div>
+</div>
+{% endblock %}

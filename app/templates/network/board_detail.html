@@ -1,0 +1,99 @@
+{% extends "network/base.html" %}
+{% block title %}{{ post.title[:60] }} — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+{% set poster = users_cache.get(post.user_id, {}) %}
+
+<div style="margin-bottom:.75rem;">
+  <a href="{{ url_for('network.board') }}" style="font-size:13px;color:var(--text2);text-decoration:none;">← Board</a>
+</div>
+
+<div class="card" style="margin-bottom:1rem;">
+  <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+    <div style="width:44px;height:44px;border-radius:50%;background:var(--blue-bg);color:#0c447c;
+                display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex-shrink:0;">
+      {{ (poster.company or 'XX')[:2].upper() }}</div>
+    <div style="flex:1;min-width:0;">
+      <h1 style="font-size:17px;font-weight:500;margin-bottom:.4rem;line-height:1.4;">{{ post.title }}</h1>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;">
+        {{ poster.company or 'Anonymous' }} &nbsp;·&nbsp; {{ post.county or 'Statewide' }} &nbsp;·&nbsp; {{ post._ago }}
+      </div>
+      <div class="bid-tags" style="margin-bottom:.75rem;">
+        {% if post.type == 'sub_request' %}<span class="badge badge-coral">Seeking subs</span>
+        {% elif post.type == 'available_sub' %}<span class="badge badge-teal">Available as sub</span>
+        {% elif post.type == 'teaming' %}<span class="badge badge-purple">Teaming</span>{% endif %}
+        {% for t in (post.trades or []) %}<span class="badge badge-access">{{ t }}</span>{% endfor %}
+        {% if post.dbe_required %}<span class="badge badge-green">DBE required</span>{% endif %}
+        {% if post.bond_required %}<span class="badge badge-access">Bond required</span>{% endif %}
+      </div>
+      <div style="font-size:14px;color:var(--text);line-height:1.7;white-space:pre-line;">{{ post.body }}</div>
+    </div>
+    <div style="flex-shrink:0;text-align:right;min-width:90px;">
+      {% if post.sub_due %}
+        <div style="font-size:11px;color:var(--text3);">Sub bids due</div>
+        <div style="font-size:16px;font-weight:500;color:var(--red);">{{ post.sub_due }}</div>
+      {% endif %}
+      {% if post.owner_due %}
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Owner bid</div>
+        <div style="font-size:14px;font-weight:500;">{{ post.owner_due }}</div>
+      {% endif %}
+      {% if post.est_value %}
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Est. value</div>
+        <div style="font-size:14px;font-weight:500;">{{ post.est_value }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="font-size:13px;color:var(--text2);">Contact: <a href="mailto:{{ post.contact_email }}" style="color:var(--blue);">{{ post.contact_email }}</a></div>
+  {% if user and user.id == post.user_id %}
+    <form method="post" action="{{ url_for('network.board_delete', post_id=post.id) }}" style="margin-top:.5rem;" onsubmit="return confirm('Remove this post?')">
+      <button class="btn btn-danger btn-sm">Remove post</button>
+    </form>
+  {% endif %}
+</div>
+
+<div style="font-size:15px;font-weight:500;margin-bottom:.75rem;">
+  {{ post.responses|length }} response{{ 's' if post.responses|length != 1 }}
+</div>
+
+{% for r in post.responses %}
+  {% set ruser = users_cache.get(r.user_id, {}) %}
+  <div class="card" style="margin-bottom:8px;">
+    <div style="display:flex;gap:10px;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--bg2);color:var(--text2);
+                  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;">
+        {{ (ruser.company or 'XX')[:2].upper() }}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;">{{ ruser.company or 'Member' }}</div>
+        <div style="font-size:13px;color:var(--text);margin:.3rem 0;white-space:pre-line;">{{ r.message }}</div>
+        <div style="font-size:12px;color:var(--text2);">
+          Contact: <a href="mailto:{{ r.contact }}" style="color:var(--blue);">{{ r.contact }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+{% if user %}
+  <div style="margin-top:1.25rem;">
+    <div style="font-size:14px;font-weight:500;margin-bottom:.75rem;">Submit a response</div>
+    <form method="post" action="{{ url_for('network.board_respond', post_id=post.id) }}">
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" rows="4" required style="width:100%;font-size:14px;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);resize:vertical;"
+                  placeholder="Describe your firm's relevant experience, capacity, and how to reach you..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Best contact email</label>
+        <input type="email" name="contact_email" value="{{ user.email }}">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit response</button>
+    </form>
+  </div>
+{% else %}
+  <div style="padding:1.25rem;background:var(--bg2);border-radius:var(--r);text-align:center;font-size:13px;color:var(--text2);">
+    <a href="{{ url_for('network.login', next=request.path) }}" style="color:var(--blue);">Sign in</a> or
+    <a href="{{ url_for('network.register') }}" style="color:var(--blue);">create an account</a> to respond.
+  </div>
+{% endif %}
+
+{% endblock %}

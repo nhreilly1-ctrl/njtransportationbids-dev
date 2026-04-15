@@ -1,0 +1,71 @@
+{% extends "network/base.html" %}
+{% block title %}Prevailing Wages — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+
+<div style="margin-bottom:1.25rem;">
+  <h1 style="font-size:20px;font-weight:500;margin-bottom:3px;">Prevailing wages</h1>
+  <p style="font-size:13px;color:var(--text2);">Reference rates by trade and county. Based on NJ DOL published schedules. Always verify against the current official NJ DOL prevailing wage determination for your specific contract.</p>
+</div>
+
+<div style="background:var(--amber-bg);border:0.5px solid #fac775;border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:#633806;margin-bottom:1.25rem;">
+  These are reference rates for estimation purposes. The official prevailing wage rate for any contract is the rate published in the contract documents by the awarding agency. Federal Davis-Bacon rates may also apply on federally-funded projects and are separate from NJ rates.
+  <a href="https://www.nj.gov/labor/wagehour/content/prevailing_wage.html" target="_blank" style="color:#412402;font-weight:500;">NJ DOL prevailing wage portal →</a>
+</div>
+
+<form method="get" class="toolbar" style="margin-bottom:1.25rem;">
+  <select name="county" onchange="this.form.submit()">
+    {% for c in counties %}<option value="{{ c }}" {{ 'selected' if c == selected_county }}>{{ c }} County</option>{% endfor %}
+  </select>
+  <select name="trade" onchange="this.form.submit()">
+    <option value="">All trades</option>
+    {% for t in trades_list %}<option value="{{ t }}" {{ 'selected' if t == selected_trade }}>{{ t }}</option>{% endfor %}
+  </select>
+</form>
+
+{% if rates %}
+<div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:13px;">
+    <thead>
+      <tr style="background:var(--bg2);">
+        <th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Trade</th>
+        <th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Craft / union</th>
+        <th style="text-align:right;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">ST rate</th>
+        <th style="text-align:right;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">OT rate</th>
+        <th style="text-align:right;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Fringe</th>
+        <th style="text-align:right;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Total ST</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in rates | sort(attribute='trade') %}
+      <tr>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);font-size:13px;">{{ r.trade }}</td>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--text2);">{{ r.craft }}</td>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);text-align:right;font-size:13px;font-weight:500;">${{ "%.2f"|format(r.straight_time) }}</td>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);text-align:right;font-size:13px;color:var(--amber);">${{ "%.2f"|format(r.overtime) }}</td>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);text-align:right;font-size:12px;color:var(--text2);">${{ "%.2f"|format(r.fringe) }}</td>
+        <td style="padding:8px 12px;border-bottom:0.5px solid var(--border);text-align:right;font-size:13px;font-weight:500;color:var(--teal);">${{ "%.2f"|format(r.straight_time + r.fringe) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div style="font-size:11px;color:var(--text3);margin-top:.75rem;">
+  ST = straight time base wage. Total ST = base + fringe. Last updated: {{ rates[0].updated[:10] if rates else '—' }}.
+  Rates shown for {{ selected_county }} County.
+</div>
+{% endif %}
+
+<div class="divider"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;">
+  <div class="card">
+    <div class="section-label" style="margin-top:0;">Resources</div>
+    <a href="{{ url_for('network.resources') }}?category=prevailing_wage" style="font-size:13px;color:var(--blue);text-decoration:none;display:block;margin-bottom:.5rem;">NJ Prevailing Wage Act — overview →</a>
+    <a href="{{ url_for('network.resources') }}?category=prevailing_wage" style="font-size:13px;color:var(--blue);text-decoration:none;display:block;">Federal Davis-Bacon on NJDOT/NJTA projects →</a>
+  </div>
+  <div class="card">
+    <div class="section-label" style="margin-top:0;">Official sources</div>
+    <a href="https://www.nj.gov/labor/wagehour/content/prevailing_wage.html" target="_blank" style="font-size:13px;color:var(--blue);text-decoration:none;display:block;margin-bottom:.5rem;">NJ DOL Prevailing Wage portal →</a>
+    <a href="https://sam.gov/content/wage-determinations" target="_blank" style="font-size:13px;color:var(--blue);text-decoration:none;display:block;">Federal wage determinations (SAM.gov) →</a>
+  </div>
+</div>
+{% endblock %}

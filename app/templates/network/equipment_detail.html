@@ -1,0 +1,69 @@
+{% extends "network/base.html" %}
+{% block title %}{{ item.title }} — Equipment — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+<div style="margin-bottom:.75rem;"><a href="{{ url_for('network.equipment') }}" style="font-size:13px;color:var(--text2);text-decoration:none;">← Equipment</a></div>
+<div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;flex-wrap:wrap;">
+  <div>
+    <div style="background:var(--bg2);border-radius:var(--rl);height:200px;display:flex;align-items:center;
+                justify-content:center;font-size:13px;color:var(--text3);margin-bottom:1rem;">
+      Photo — {{ item.category }}
+    </div>
+    <h1 style="font-size:18px;font-weight:500;margin-bottom:.5rem;">{{ item.title }}</h1>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;">
+      {{ item.year or '—' }}{% if item.hours %} · {{ item.hours }}{% endif %} · {{ item.county or 'NJ' }} · posted {{ item._ago }}
+    </div>
+    <div class="bid-tags" style="margin-bottom:1rem;">
+      {% if item.listing_type == 'sale' %}<span class="badge badge-green">For sale</span>
+      {% elif item.listing_type == 'lease' %}<span class="badge badge-blue">For lease / rent</span>
+      {% else %}<span class="badge badge-amber">Looking for</span>{% endif %}
+      {% if item.njdot_certified %}<span class="badge badge-teal">NJDOT certified</span>{% endif %}
+      {% if item.condition %}<span class="badge badge-access">{{ item.condition }}</span>{% endif %}
+      <span class="badge badge-access">{{ item.category }}</span>
+    </div>
+    {% if item.description %}
+      <div style="font-size:14px;color:var(--text);line-height:1.7;white-space:pre-line;">{{ item.description }}</div>
+    {% endif %}
+  </div>
+  <div>
+    <div class="card">
+      {% if item.price %}
+        <div style="font-size:26px;font-weight:500;margin-bottom:.5rem;
+          {{ 'color:var(--green)' if item.listing_type=='sale' else 'color:var(--blue)' }}">
+          {{ fmt_currency(item.price) }}{% if item.price_period %}<span style="font-size:14px;font-weight:400;color:var(--text2);">/{{ item.price_period }}</span>{% endif %}
+        </div>
+      {% else %}
+        <div style="font-size:18px;font-weight:500;color:var(--text2);margin-bottom:.5rem;">Price on inquiry</div>
+      {% endif %}
+      <div class="divider"></div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:1rem;">
+        <tr><td style="color:var(--text2);padding:4px 0;width:45%;">Seller / poster</td>
+            <td style="padding:4px 0;">{{ poster.company if poster else '—' }}</td></tr>
+        <tr><td style="color:var(--text2);padding:4px 0;">Location</td>
+            <td style="padding:4px 0;">{{ item.county or 'NJ' }}</td></tr>
+        <tr><td style="color:var(--text2);padding:4px 0;">Year</td>
+            <td style="padding:4px 0;">{{ item.year or '—' }}</td></tr>
+        <tr><td style="color:var(--text2);padding:4px 0;">Hours</td>
+            <td style="padding:4px 0;">{{ item.hours or '—' }}</td></tr>
+        <tr><td style="color:var(--text2);padding:4px 0;">Condition</td>
+            <td style="padding:4px 0;">{{ item.condition or '—' }}</td></tr>
+        {% if item.njdot_certified %}
+        <tr><td style="color:var(--text2);padding:4px 0;">NJDOT cert.</td>
+            <td style="padding:4px 0;color:var(--teal);">Yes</td></tr>
+        {% endif %}
+        <tr><td style="color:var(--text2);padding:4px 0;">Inquiries</td>
+            <td style="padding:4px 0;">{{ item.inquiries or 0 }}</td></tr>
+      </table>
+      {% if user %}
+        <div style="font-size:13px;color:var(--text2);margin-bottom:.5rem;">
+          Contact: <a href="mailto:{{ item.contact_email }}" style="color:var(--blue);">{{ item.contact_email }}</a>
+        </div>
+        <form method="post" action="{{ url_for('network.equipment_inquire', item_id=item.id) }}">
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Express interest</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('network.login', next=request.path) }}" class="btn btn-primary" style="width:100%;justify-content:center;">Sign in to inquire</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

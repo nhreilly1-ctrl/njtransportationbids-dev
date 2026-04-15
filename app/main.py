@@ -17,6 +17,9 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-prod")
 from app.notice_routes import notice_bp
 app.register_blueprint(notice_bp)
 
+from app.network_routes import network_bp
+app.register_blueprint(network_bp)
+
 @app.context_processor
 def inject_globals():
     return {"today_date": date.today().isoformat()}

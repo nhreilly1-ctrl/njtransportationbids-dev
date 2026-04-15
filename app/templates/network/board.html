@@ -1,0 +1,106 @@
+{% extends "network/base.html" %}
+{% block title %}Bid Board — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+
+<div style="display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+  <div>
+    <h1 style="font-size:20px;font-weight:500;margin-bottom:3px;">Bid board</h1>
+    <p style="font-size:13px;color:var(--text2);">Sub requests, teaming, and available-for-sub — posted by NJ heavy highway contractors.</p>
+  </div>
+  <div style="margin-left:auto;">
+    {% if user %}
+      <a href="{{ url_for('network.board_post') }}" class="btn btn-primary">Post to board</a>
+    {% else %}
+      <a href="{{ url_for('network.register') }}" class="btn btn-primary">Join to post</a>
+    {% endif %}
+  </div>
+</div>
+
+<form method="get" class="toolbar" style="margin-bottom:1.25rem;">
+  <select name="type" onchange="this.form.submit()">
+    <option value="">All post types</option>
+    {% for k,v in post_types.items() %}
+      <option value="{{ k }}" {{ 'selected' if k == selected_type }}>{{ v }}</option>
+    {% endfor %}
+  </select>
+  <select name="county" onchange="this.form.submit()">
+    <option value="">All counties</option>
+    {% for c in counties %}
+      <option value="{{ c }}" {{ 'selected' if c == selected_county }}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <select name="trade" onchange="this.form.submit()">
+    <option value="">All trades</option>
+    {% for t in trades %}
+      <option value="{{ t }}" {{ 'selected' if t == selected_trade }}>{{ t }}</option>
+    {% endfor %}
+  </select>
+  {% if selected_type or selected_county or selected_trade %}
+    <a href="{{ url_for('network.board') }}" class="btn">Clear</a>
+  {% endif %}
+</form>
+
+{% macro type_badge(t) %}
+  {% if t == 'sub_request' %}<span class="badge badge-coral">Seeking subs</span>
+  {% elif t == 'available_sub' %}<span class="badge badge-teal">Available as sub</span>
+  {% elif t == 'teaming' %}<span class="badge badge-purple">Teaming</span>
+  {% else %}<span class="badge badge-access">General</span>{% endif %}
+{% endmacro %}
+
+{% for post in posts %}
+  {% set poster = users_cache.get(post.user_id, {}) %}
+  {% set initials = (poster.company or 'XX')[:2].upper() %}
+  {% set is_soon = post.sub_due and post.sub_due <= (now_date | default('2099')) %}
+
+  <div class="bid-card {{ 'soon' if post.sub_due }}" style="margin-bottom:10px;">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);color:#0c447c;
+                display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;">
+      {{ initials }}</div>
+    <div class="bid-main">
+      <a href="{{ url_for('network.board_detail', post_id=post.id) }}" class="bid-title">{{ post.title }}</a>
+      <div class="bid-meta">
+        {{ poster.company or 'Anonymous' }} &nbsp;·&nbsp;
+        {{ post.county or 'Statewide' }} &nbsp;·&nbsp;
+        {{ post._ago }}
+      </div>
+      <div class="bid-tags">
+        {{ type_badge(post.type) }}
+        {% for t in (post.trades or [])[:3] %}
+          <span class="badge badge-access">{{ t }}</span>
+        {% endfor %}
+        {% if post.est_value %}
+          <span class="badge badge-access">Est. {{ post.est_value }}</span>
+        {% endif %}
+        {% if post.dbe_required %}
+          <span class="badge badge-green">DBE required</span>
+        {% endif %}
+        {% if post.bond_required %}
+          <span class="badge badge-access">Bond required</span>
+        {% endif %}
+        {% if post.responses | length > 0 %}
+          <span style="font-size:11px;color:var(--text3);">{{ post.responses|length }} response{{ 's' if post.responses|length != 1 }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="bid-due {{ 'soon-due' if post.sub_due }}">
+      {% if post.sub_due %}
+        <span class="due-label">Sub bids due</span>
+        <span class="due-date">{{ post.sub_due }}</span>
+      {% elif post.owner_due %}
+        <span class="due-label">Owner bid</span>
+        <span class="due-date">{{ post.owner_due }}</span>
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <div style="padding:3rem 0;text-align:center;color:var(--text2);font-size:14px;">
+    No posts yet matching these filters.
+    {% if user %}
+      <a href="{{ url_for('network.board_post') }}" style="color:var(--blue);">Be the first to post.</a>
+    {% else %}
+      <a href="{{ url_for('network.register') }}" style="color:var(--blue);">Join to post.</a>
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% endblock %}

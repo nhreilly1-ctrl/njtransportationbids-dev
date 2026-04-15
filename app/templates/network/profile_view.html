@@ -1,0 +1,78 @@
+{% extends "network/base.html" %}
+{% block title %}My Profile — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+  <div style="width:56px;height:56px;border-radius:50%;background:var(--blue-bg);color:#0c447c;
+              display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;">
+    {{ user.company[:2].upper() }}</div>
+  <div style="flex:1;">
+    <h1 style="font-size:20px;font-weight:500;">{{ user.company }}</h1>
+    <div style="font-size:13px;color:var(--text2);">{{ user.trade or '—' }} · {{ user.county or '' }} County</div>
+  </div>
+  <a href="{{ url_for('network.profile_edit') }}" class="btn">Edit profile</a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+  <div class="card">
+    <div class="section-label" style="margin-top:0;">Contact & firm</div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr><td style="color:var(--text2);padding:4px 0;width:45%;">Email</td><td>{{ user.email }}</td></tr>
+      {% if user.phone %}<tr><td style="color:var(--text2);padding:4px 0;">Phone</td><td>{{ user.phone }}</td></tr>{% endif %}
+      {% if user.website %}<tr><td style="color:var(--text2);padding:4px 0;">Website</td><td><a href="{{ user.website }}" style="color:var(--blue);">{{ user.website }}</a></td></tr>{% endif %}
+      <tr><td style="color:var(--text2);padding:4px 0;">Union status</td><td>{{ user.union_status or '—' }}</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="section-label" style="margin-top:0;">Bonding & insurance</div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;">
+      <tr><td style="color:var(--text2);padding:4px 0;width:55%;">Bonding single</td><td>{{ user.bonding_single or '—' }}</td></tr>
+      <tr><td style="color:var(--text2);padding:4px 0;">Bonding aggregate</td><td>{{ user.bonding_agg or '—' }}</td></tr>
+      <tr><td style="color:var(--text2);padding:4px 0;">GL limit</td><td>{{ user.insurance_gl or '—' }}</td></tr>
+      <tr><td style="color:var(--text2);padding:4px 0;">Workers comp</td><td>{{ user.insurance_workers or '—' }}</td></tr>
+    </table>
+  </div>
+</div>
+
+{% if user.prequal_codes or user.certifications %}
+<div class="card" style="margin-bottom:1rem;">
+  <div class="section-label" style="margin-top:0;">Prequalifications & certifications</div>
+  <div class="bid-tags">
+    {% for c in user.prequal_codes %}<span class="badge badge-blue">{{ c }}</span>{% endfor %}
+    {% for c in user.certifications %}<span class="badge badge-teal">{{ c }}</span>{% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if user.bio %}
+<div class="card" style="margin-bottom:1rem;">
+  <div class="section-label" style="margin-top:0;">About</div>
+  <div style="font-size:13px;color:var(--text);line-height:1.7;">{{ user.bio }}</div>
+</div>
+{% endif %}
+
+{% if user.notable_projects %}
+<div class="card">
+  <div class="section-label" style="margin-top:0;">Notable projects</div>
+  <table style="width:100%;font-size:13px;border-collapse:collapse;">
+    <thead>
+      <tr style="border-bottom:0.5px solid var(--border);">
+        <th style="text-align:left;padding:6px 0;font-weight:500;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Project</th>
+        <th style="text-align:left;padding:6px 0;font-weight:500;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Owner</th>
+        <th style="text-align:right;padding:6px 0;font-weight:500;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Value</th>
+        <th style="text-align:right;padding:6px 0;font-weight:500;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Year</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for p in user.notable_projects %}
+      <tr style="border-bottom:0.5px solid var(--border);">
+        <td style="padding:7px 0;">{{ p.name }}</td>
+        <td style="padding:7px 0;color:var(--text2);">{{ p.owner }}</td>
+        <td style="padding:7px 0;text-align:right;">{{ p.value }}</td>
+        <td style="padding:7px 0;text-align:right;color:var(--text2);">{{ p.year }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

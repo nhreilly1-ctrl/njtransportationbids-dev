@@ -1,0 +1,19 @@
+{% extends "network/base.html" %}
+{% block title %}{{ item.title }} — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+<div style="max-width:680px;">
+  <div style="margin-bottom:1rem;"><a href="{{ url_for('network.resources') }}" style="font-size:13px;color:var(--text2);text-decoration:none;">← Insurance & bonding</a></div>
+  <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;">
+    {{ {'insurance':'Insurance','bonding':'Bonding & surety','prevailing_wage':'Prevailing wage','compliance':'DBE & compliance'}.get(item.category, item.category) }}
+  </div>
+  <h1 style="font-size:20px;font-weight:500;margin-bottom:1.25rem;line-height:1.35;">{{ item.title }}</h1>
+  <div style="font-size:14px;color:var(--text);line-height:1.85;white-space:pre-line;">{{ item.body }}</div>
+  {% if item.url %}
+    <div class="divider"></div>
+    <a href="{{ item.url }}" target="_blank" rel="noopener" class="btn" style="font-size:13px;">Official source →</a>
+  {% endif %}
+  <div style="margin-top:1.5rem;padding:.75rem 1rem;background:var(--bg2);border-radius:var(--r);font-size:12px;color:var(--text3);">
+    This is reference information for general guidance only. It is not legal advice. Requirements vary by contract — always verify with the specific contract documents, your attorney, and your insurance broker.
+  </div>
+</div>
+{% endblock %}

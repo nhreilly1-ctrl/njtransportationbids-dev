@@ -1,0 +1,74 @@
+{% extends "network/base.html" %}
+{% block title %}List Equipment — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+<div style="max-width:620px;">
+  <div style="margin-bottom:1rem;"><a href="{{ url_for('network.equipment') }}" style="font-size:13px;color:var(--text2);text-decoration:none;">← Equipment</a></div>
+  <h1 style="font-size:18px;font-weight:500;margin-bottom:1.25rem;">List equipment</h1>
+  <form method="post">
+    <div class="form-group">
+      <label>Listing type</label>
+      <select name="listing_type" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+        {% for k,v in equip_types.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group">
+        <label>Category</label>
+        <select name="category" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>County (pickup / available)</label>
+        <select name="county" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          <option value="">Statewide</option>
+          {% for c in counties %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Title <span style="color:var(--text3);font-weight:400;">(year, make, model)</span></label>
+      <input type="text" name="title" required placeholder="e.g. 2019 Roadtec RP-190 Paver">
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" rows="4" style="width:100%;font-size:14px;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);resize:vertical;"
+                placeholder="Condition details, attachments, maintenance history, reason for selling..."></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="form-group"><label>Year</label><input type="text" name="year" placeholder="2019"></div>
+      <div class="form-group"><label>Hours / miles</label><input type="text" name="hours" placeholder="1,240 hrs"></div>
+      <div class="form-group">
+        <label>Condition</label>
+        <select name="condition" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          <option value="">—</option>
+          <option>Excellent</option><option>Good</option><option>Fair</option><option>As-is</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
+      <div class="form-group"><label>Price (leave blank for "inquire")</label><input type="text" name="price" placeholder="$185,000"></div>
+      <div class="form-group">
+        <label>Period (if lease)</label>
+        <select name="price_period" style="width:100%;height:40px;font-size:14px;padding:0 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--t);">
+          <option value="">—</option><option value="day">Per day</option>
+          <option value="week">Per week</option><option value="month">Per month</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+        <input type="checkbox" name="njdot_certified"> NJDOT-certified equipment
+      </label>
+    </div>
+    <div class="form-group">
+      <label>Contact email</label>
+      <input type="email" name="contact_email" placeholder="{{ user.email }}">
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="submit" class="btn btn-primary">Post listing</button>
+      <a href="{{ url_for('network.equipment') }}" class="btn">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

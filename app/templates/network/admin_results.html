@@ -1,0 +1,116 @@
+{% extends "network/base.html" %}
+{% block title %}Bid Results — Network Admin{% endblock %}
+{% block net_content %}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+  <div>
+    <h1 style="font-size:18px;font-weight:500;margin-bottom:3px;">Bid results — admin review</h1>
+    <p style="font-size:13px;color:var(--text2);">Verify community-submitted results before they appear publicly.</p>
+  </div>
+  <a href="{{ url_for('network.bid_results') }}" class="btn btn-sm" style="margin-left:auto;">← Public view</a>
+</div>
+
+<div id="action-msg" style="display:none;margin-bottom:.75rem;" class="flash"></div>
+
+{% set pending = results | selectattr('verified', 'equalto', false) | list %}
+{% set verified = results | selectattr('verified', 'equalto', true) | list %}
+
+{% if pending %}
+  <div class="section-label">Pending review ({{ pending|length }})</div>
+  {% for r in pending %}
+    <div class="card" style="margin-bottom:8px;border-left:3px solid var(--amber);border-radius:0 var(--rl) var(--rl) 0;" id="result-{{ r.id }}">
+      <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:3px;">{{ r.contract_title }}</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">
+            {{ r.owner_agency }} · {{ r.county or '—' }} · {{ r.bid_date or '—' }}
+            · Awarded to: {{ r.awarded_to or '—' }}
+          </div>
+          <div style="display:flex;gap:1.5rem;font-size:13px;flex-wrap:wrap;">
+            {% if r.award_amount %}
+              <div><span style="color:var(--text2);font-size:11px;">Award</span><br><strong style="color:var(--green);">{{ fmt_currency(r.award_amount) }}</strong></div>
+            {% endif %}
+            {% if r.second_bid %}
+              <div><span style="color:var(--text2);font-size:11px;">2nd bid</span><br>{{ fmt_currency(r.second_bid) }}</div>
+            {% endif %}
+            {% if r.engineer_estimate %}
+              <div><span style="color:var(--text2);font-size:11px;">Est.</span><br>{{ fmt_currency(r.engineer_estimate) }}</div>
+            {% endif %}
+            {% if r.num_bidders %}
+              <div><span style="color:var(--text2);font-size:11px;">Bidders</span><br>{{ r.num_bidders }}</div>
+            {% endif %}
+          </div>
+          {% if r.notes %}
+            <div style="font-size:12px;color:var(--text2);margin-top:.5rem;font-style:italic;">{{ r.notes }}</div>
+          {% endif %}
+          {% if r.source_url %}
+            <a href="{{ r.source_url }}" target="_blank" style="font-size:12px;color:var(--blue);">Source →</a>
+          {% endif %}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          <button class="btn btn-sm" style="background:var(--green-bg);color:var(--green);border-color:#c0dd97;"
+                  onclick="verifyResult('{{ r.id }}')">Verify & publish</button>
+          <button class="btn btn-sm btn-danger"
+                  onclick="deleteResult('{{ r.id }}')">Delete</button>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div style="padding:1.5rem;background:var(--green-bg);border-radius:var(--r);font-size:13px;color:var(--green);margin-bottom:1rem;">
+    No results pending review.
+  </div>
+{% endif %}
+
+{% if verified %}
+  <div class="section-label" style="margin-top:1.25rem;">Published ({{ verified|length }})</div>
+  {% for r in verified %}
+    <div class="card" style="margin-bottom:6px;opacity:.85;" id="result-{{ r.id }}">
+      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;">{{ r.contract_title }}</div>
+          <div style="font-size:12px;color:var(--text2);">
+            {{ r.owner_agency }} · {{ r.county or '—' }} · {{ r.bid_date or '—' }}
+            · <strong style="color:var(--green);">{{ fmt_currency(r.award_amount) }}</strong>
+            · {{ r.num_bidders or '—' }} bidders
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="deleteResult('{{ r.id }}')">Delete</button>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<script>
+function showMsg(text, err) {
+  const el = document.getElementById('action-msg');
+  el.textContent = text;
+  el.className = 'flash' + (err ? ' flash-error' : '');
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+function verifyResult(id) {
+  fetch('/network/admin/results/' + id + '/verify', { method: 'POST' })
+    .then(r => r.json()).then(d => {
+      if (d.ok) {
+        const row = document.getElementById('result-' + id);
+        if (row) row.style.opacity = '.3';
+        showMsg('Result verified and published.');
+      }
+    });
+}
+
+function deleteResult(id) {
+  if (!confirm('Delete this result permanently?')) return;
+  fetch('/network/admin/results/' + id + '/delete', { method: 'POST' })
+    .then(r => r.json()).then(d => {
+      if (d.ok) {
+        const row = document.getElementById('result-' + id);
+        if (row) row.remove();
+        showMsg('Result deleted.');
+      }
+    });
+}
+</script>
+{% endblock %}

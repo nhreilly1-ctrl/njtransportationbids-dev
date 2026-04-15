@@ -1,0 +1,86 @@
+{% extends "network/base.html" %}
+{% block title %}Bid Results — NJ Transportation Bids{% endblock %}
+{% block net_content %}
+
+<div style="display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+  <div>
+    <h1 style="font-size:20px;font-weight:500;margin-bottom:3px;">Bid results</h1>
+    <p style="font-size:13px;color:var(--text2);">Award amounts, low bid spreads, and engineer estimate comparisons — submitted by the community and pulled from public records.</p>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:8px;">
+    {% if user %}
+      <a href="{{ url_for('network.bid_results_submit') }}" class="btn btn-primary">Submit a result</a>
+    {% else %}
+      <a href="{{ url_for('network.register') }}" class="btn btn-primary">Join to submit</a>
+    {% endif %}
+  </div>
+</div>
+
+<div style="background:var(--blue-bg);border:0.5px solid #b5d4f4;border-radius:var(--r);padding:.75rem 1rem;font-size:13px;color:#0c447c;margin-bottom:1.25rem;">
+  Results are community-submitted and admin-reviewed. Always verify award amounts independently through the awarding agency. Public bid tabulations are official — this board is for convenience and estimation reference only.
+</div>
+
+<form method="get" class="toolbar" style="margin-bottom:1.25rem;">
+  <input type="text" name="agency" placeholder="Search agency..." value="{{ selected_agency }}" style="max-width:200px;">
+  <select name="county" onchange="this.form.submit()">
+    <option value="">All counties</option>
+    {% for c in counties %}<option value="{{ c }}" {{ 'selected' if c == selected_county }}>{{ c }}</option>{% endfor %}
+  </select>
+  <select name="year" onchange="this.form.submit()">
+    <option value="">All years</option>
+    {% for y in range(2026, 2022, -1) %}<option value="{{ y }}" {{ 'selected' if selected_year == y|string }}>{{ y }}</option>{% endfor %}
+  </select>
+  <button type="submit" class="btn">Filter</button>
+  {% if selected_agency or selected_county or selected_year %}
+    <a href="{{ url_for('network.bid_results') }}" class="btn">Clear</a>{% endif %}
+</form>
+
+{% if results %}
+<div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:13px;">
+    <thead>
+      <tr style="background:var(--bg2);">
+        <th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Contract</th>
+        <th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Agency / County</th>
+        <th style="text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Bid date</th>
+        <th style="text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Award</th>
+        <th style="text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">2nd bid</th>
+        <th style="text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">Est.</th>
+        <th style="text-align:center;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--border);">#</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for r in results %}
+      <tr style="{{ 'opacity:.6' if not r.verified }}">
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);max-width:240px;">
+          <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ r.contract_title }}">{{ r.contract_title }}</div>
+          <div style="font-size:11px;color:var(--text2);">{{ r.awarded_to or '—' }}
+            {% if not r.verified %}<span class="badge badge-amber" style="font-size:10px;margin-left:4px;">Pending review</span>{% endif %}
+          </div>
+        </td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--text2);">
+          {{ r.owner_agency }}<br>{{ r.county or '—' }}
+        </td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);font-size:12px;white-space:nowrap;">{{ r.bid_date or '—' }}</td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);text-align:right;font-size:13px;font-weight:500;color:var(--green);">{{ fmt_currency(r.award_amount) }}</td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);text-align:right;font-size:12px;color:var(--text2);">{{ fmt_currency(r.second_bid) }}</td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);text-align:right;font-size:12px;color:var(--text2);">
+          {% if r.engineer_estimate and r.award_amount %}
+            {% set ratio = (r.award_amount / r.engineer_estimate * 100) | round(0) | int %}
+            {{ fmt_currency(r.engineer_estimate) }}
+            <div style="font-size:10px;color:{{ 'var(--green)' if ratio < 100 else 'var(--red)' }};">{{ ratio }}% of est.</div>
+          {% else %}{{ fmt_currency(r.engineer_estimate) }}{% endif %}
+        </td>
+        <td style="padding:9px 10px;border-bottom:0.5px solid var(--border);text-align:center;font-size:12px;color:var(--text2);">{{ r.num_bidders or '—' }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <div style="padding:3rem 0;text-align:center;color:var(--text2);font-size:14px;">
+    No results yet for these filters.
+    {% if user %}<a href="{{ url_for('network.bid_results_submit') }}" style="color:var(--blue);">Submit the first result.</a>{% endif %}
+  </div>
+{% endif %}
+{% endblock %}
