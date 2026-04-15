@@ -8,9 +8,9 @@
 
 {% if record_type == 'public_notice' %}
 <div class="filter-pills" style="margin-bottom:1rem;">
-  <a class="pill {{ 'active' if not notice_subtype }}" href="{{ url_for('notices_all') }}">All notices</a>
-  <a class="pill {{ 'active' if notice_subtype == 'construction' }}" href="{{ url_for('notices_construction') }}">Construction</a>
-  <a class="pill {{ 'active' if notice_subtype == 'professional_services' }}" href="{{ url_for('notices_profserv') }}">Professional services</a>
+  <a class="pill {{ 'active' if not notice_subtype }}" href="{{ url_for('notices2.notices_all') }}">All notices</a>
+  <a class="pill {{ 'active' if notice_subtype == 'construction' }}" href="{{ url_for('notices2.notices_construction') }}">Construction</a>
+  <a class="pill {{ 'active' if notice_subtype == 'professional_services' }}" href="{{ url_for('notices2.notices_profserv') }}">Professional services</a>
 </div>
 {% endif %}
 

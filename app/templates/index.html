@@ -19,7 +19,7 @@
       <div class="lbl">Professional services open</div>
     </div>
   </a>
-  <a href="{{ url_for('notices_all') }}" style="text-decoration:none; color:inherit;">
+  <a href="{{ url_for('notices2.notices_all') }}" style="text-decoration:none; color:inherit;">
     <div class="stat-card">
       <div class="num c-amber">{{ stats.public_notice }}</div>
       <div class="lbl">Public notices active</div>
@@ -52,9 +52,9 @@
     <div style="font-size:11px; font-weight:500; color:var(--amber); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem;">Public Notices</div>
     <div style="font-size:13px; color:var(--text2); line-height:1.5; margin-bottom:.75rem;">Legal advertisements and notices to contractors.</div>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <a href="{{ url_for('notices_construction') }}" style="font-size:12px; color:var(--blue); text-decoration:none; background:var(--blue-bg); padding:3px 10px; border-radius:20px;">Construction</a>
-      <a href="{{ url_for('notices_profserv') }}" style="font-size:12px; color:var(--teal); text-decoration:none; background:var(--teal-bg); padding:3px 10px; border-radius:20px;">Prof. Services</a>
-      <a href="{{ url_for('notices_all') }}" style="font-size:12px; color:var(--amber); text-decoration:none; background:var(--amber-bg); padding:3px 10px; border-radius:20px;">All notices</a>
+      <a href="{{ url_for('notices2.notices_construction') }}" style="font-size:12px; color:var(--blue); text-decoration:none; background:var(--blue-bg); padding:3px 10px; border-radius:20px;">Construction</a>
+      <a href="{{ url_for('notices2.notices_profserv') }}" style="font-size:12px; color:var(--teal); text-decoration:none; background:var(--teal-bg); padding:3px 10px; border-radius:20px;">Prof. Services</a>
+      <a href="{{ url_for('notices2.notices_all') }}" style="font-size:12px; color:var(--amber); text-decoration:none; background:var(--amber-bg); padding:3px 10px; border-radius:20px;">All notices</a>
     </div>
   </div>
 </div>

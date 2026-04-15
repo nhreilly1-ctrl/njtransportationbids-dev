@@ -10,7 +10,7 @@
 {% set back_url = {
   'construction': url_for('bids_construction'),
   'professional_services': url_for('bids_profserv'),
-  'public_notice': url_for('notices_all'),
+  'public_notice': url_for('notices2.notices_all'),
 }.get(opp.record_type, url_for('bids_construction')) %}
 
 <div style="margin-bottom:.75rem;"><a href="{{ back_url }}" style="font-size:13px; color:var(--text2); text-decoration:none;">← {{ type_label }}s</a></div>

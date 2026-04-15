@@ -97,14 +97,14 @@
   <div class="nav-item"><a href="{{ url_for('bids_construction') }}" class="{{ 'active' if _nav == 'bids_construction' }}">Construction Bids</a></div>
   <div class="nav-item"><a href="{{ url_for('bids_profserv') }}" class="{{ 'active' if _nav == 'bids_profserv' }}">Professional Services</a></div>
   <div class="nav-item">
-    <span class="{{ 'active' if _nav in ('notices_all','notices_construction','notices_profserv') }}">Public Notices</span>
+    <span class="{{ 'active' if _nav in ('notices2.notices_all','notices2.notices_construction','notices2.notices_profserv') }}">Public Notices</span>
     <div class="nav-drop">
       <div class="drop-label">Public Notices</div>
-      <a href="{{ url_for('notices_all') }}" class="{{ 'active' if _nav == 'notices_all' }}">All notices</a>
+      <a href="{{ url_for('notices2.notices_all') }}" class="{{ 'active' if _nav == 'notices2.notices_all' }}">All notices</a>
       <div class="drop-divider"></div>
       <div class="drop-label">By type</div>
-      <a href="{{ url_for('notices_construction') }}" class="sub {{ 'active' if _nav == 'notices_construction' }}">Construction</a>
-      <a href="{{ url_for('notices_profserv') }}" class="sub {{ 'active' if _nav == 'notices_profserv' }}">Professional Services</a>
+      <a href="{{ url_for('notices2.notices_construction') }}" class="sub {{ 'active' if _nav == 'notices2.notices_construction' }}">Construction</a>
+      <a href="{{ url_for('notices2.notices_profserv') }}" class="sub {{ 'active' if _nav == 'notices2.notices_profserv' }}">Professional Services</a>
     </div>
   </div>
   <div class="nav-item"><a href="{{ url_for('sources') }}" class="{{ 'active' if _nav == 'sources' }}">Sources</a></div>
