@@ -373,6 +373,9 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
 
             log.info(f"  NJDOT PS ACCEPT: {title[:80]} | Due: {due_date}")
 
+            # NJDOT PS table has no separate description column — the desc is
+            # just the title text, so we don't store it to avoid redundancy.
+            # next_step guides users to search BidX by TP number.
             items.append(_record(
                 source_id    = src["id"],
                 source_name  = src["name"],
@@ -382,7 +385,7 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
                 record_type  = src["record_type"],
                 access_type  = "BidX (NJDOT forwards to BidX for documents)",
                 contract_number = tp_num,
-                description  = desc,
+                description  = "",  # no separate desc on NJDOT PS table
             ))
 
     log.info(f"  NJDOT ProfServ: {len(items)} records")
@@ -413,7 +416,11 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
         or soup
     )
 
-    CONTRACT_RE = re.compile(r"Contract\s+No\.?\s*([\w\-\/]+)", re.IGNORECASE)
+    # Handles "Contract No. DB-823A" and "Contract No. DB – 823A" (en-dash with spaces)
+    CONTRACT_RE = re.compile(
+        r"Contract\s+No\.?\s*([\w]+(?:\s*[-–—]\s*[\w]+)*)",
+        re.IGNORECASE
+    )
 
     # Solicitation Date regex — labeled field in the sidebar.
     # The page uses en-dash dates like "4 – 7 – 2026", so we normalize first.
@@ -550,23 +557,46 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
                     break
 
         # ── Description: first substantial paragraph in the block ─────────────
+        # Also used as fallback title if the heading was too generic
+        GENERIC_HEADINGS = {
+            "professional services", "construction services", "current procurements",
+            "procurement", "solicitation", "services",
+        }
         description = ""
         if block:
-            for p_tag in block.find_all(["p", "div"]):
+            for p_tag in block.find_all(["p", "div", "td"]):
                 p_text = _clean(p_tag.get_text(" ", strip=True))
-                # Skip short text, contract number lines, date labels, headings
-                if len(p_text) < 40:
+                if len(p_text) < 20:
                     continue
                 if CONTRACT_RE.match(p_text):
                     continue
                 if re.match(r"^(Posted|Pre-Proposal|Deadline|Solicitation|Contract No)", p_text, re.I):
                     continue
+                # Skip if it's just the heading we already extracted
+                if p_text.lower().strip() == title.lower().strip():
+                    continue
                 description = p_text[:500]
                 break
 
-        # Main URL: the DRJTBC source page; doc_url: the PDF if available
-        page_url = src["url"]
-        main_url = pdf_url if pdf_url else page_url
+        # If heading was generic ("Professional Services"), use description as title instead
+        if title.lower().strip() in GENERIC_HEADINGS and description:
+            real_title = description[:200]
+            description = ""   # don't show it twice
+        else:
+            real_title = title
+
+        # Rebuild full title with contract number
+        full_title = (
+            f"{contract_no} — {real_title}"
+            if contract_no and contract_no.lower() not in real_title.lower()
+            else real_title
+        )
+
+        if _is_garbage(full_title):
+            continue
+
+        # Main URL: PDF if available, otherwise source page
+        main_url = pdf_url if pdf_url else src["url"]
 
         # ── Dedup & record ────────────────────────────────────────────────────
         uid = _make_id(src["id"], full_title, main_url)

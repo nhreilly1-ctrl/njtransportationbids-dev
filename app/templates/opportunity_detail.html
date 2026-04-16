@@ -50,12 +50,18 @@
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
   <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.25rem;">
     <div class="section-label" style="margin-top:0;">Source &amp; documents</div>
-    <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">{{ opp.next_step or 'Open the official source and follow the solicitation instructions. Confirm due dates and submission method before committing estimating time.' }}</p>
     {% set main_url = opp.url or opp.official_url %}
+    {% if opp.next_step %}
+      <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">{{ opp.next_step }}</p>
+    {% elif main_url and ('bidexpress' in main_url or 'bidx' in main_url) %}
+      <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">This solicitation is hosted on BidX. Search for <strong>{{ opp.contract_number }}</strong> on BidX to find the bid documents and submission instructions.</p>
+    {% else %}
+      <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Open the official source to access bid documents, confirm due dates, and review submission requirements before committing estimating time.</p>
+    {% endif %}
     {% if main_url %}
       {% if 'bidx' in main_url or 'bidexpress' in main_url %}
         <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">View on BidX ↗</a>
-        <div style="font-size:11px; color:var(--text3); margin-top:.4rem;">NJDOT forwards bid documents to BidX. Free account required to download plans.</div>
+        <div style="font-size:11px; color:var(--text3); margin-top:.4rem;">NJDOT forwards bid documents to BidX. Free account may be required to download plans.</div>
       {% elif main_url.lower().endswith('.pdf') %}
         <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">Download RFP / Bid Documents ↗</a>
       {% else %}
