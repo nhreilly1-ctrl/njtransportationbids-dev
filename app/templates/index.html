@@ -35,10 +35,7 @@
   </a>
 </div>
 
-<div class="home-outer">
-
-  <!-- ── MAIN COLUMN ── -->
-  <div>
+<div>
 
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.5rem;">
       <a href="{{ url_for('bids_construction') }}" style="text-decoration:none;">
@@ -149,12 +146,9 @@
       <a href="{{ url_for('bids_profserv') }}" class="btn">Professional services</a>
       <a href="{{ url_for('export_csv') }}" class="btn" style="margin-left:auto;">Export CSV</a>
     </div>
-  </div>
-
-  <!-- ── SIDEBAR ── -->
-  <aside class="home-sidebar">
-
-    <!-- Bidding Platforms -->
+  <!-- sidebar removed — now rendered globally in base.html -->
+  <!-- __ placeholder_remove_start __ -->
+  <div style="display:none;">
     <div class="sb-card">
       <div class="sb-head" style="color:var(--blue);">
         <div class="dot" style="background:var(--blue);"></div>Bidding Platforms
@@ -294,6 +288,6 @@
       </a>
     </div>
 
-  </aside>
-</div>
+  </div>
+  <!-- __ placeholder_remove_end __ -->
 {% endblock %}

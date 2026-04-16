@@ -361,7 +361,14 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
                     desc_parts.append(ctext)
 
             desc  = max(desc_parts, key=len) if desc_parts else ""
-            title = f"{tp_num} — {desc}" if desc else tp_num
+
+            # Clean up NJDOT PS titles:
+            # 1. Strip trailing "Advertised MM/DD/YYYY" — already in due_date field
+            # 2. Strip leading "(N) —" sub-project number — noise in the title
+            desc_clean = re.sub(r'\s+Advertised\s+\d{1,2}/\d{1,2}/\d{4}$', '', desc).strip()
+            desc_clean = re.sub(r'^\(\d+\)\s*[—\-]\s*', '', desc_clean).strip()
+
+            title = f"{tp_num} — {desc_clean}" if desc_clean else tp_num
 
             if _is_garbage(title) or len(title.split()) < 3:
                 continue
@@ -373,9 +380,7 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
 
             log.info(f"  NJDOT PS ACCEPT: {title[:80]} | Due: {due_date}")
 
-            # NJDOT PS table has no separate description column — the desc is
-            # just the title text, so we don't store it to avoid redundancy.
-            # next_step guides users to search BidX by TP number.
+            # Description: the project name (cleaned) gives users context on the detail page.
             items.append(_record(
                 source_id    = src["id"],
                 source_name  = src["name"],
@@ -385,7 +390,7 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
                 record_type  = src["record_type"],
                 access_type  = "BidX (NJDOT forwards to BidX for documents)",
                 contract_number = tp_num,
-                description  = "",  # no separate desc on NJDOT PS table
+                description  = desc_clean,
             ))
 
     log.info(f"  NJDOT ProfServ: {len(items)} records")
@@ -556,34 +561,38 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
                     pdf_url = a_href
                     break
 
-        # ── Description: first substantial paragraph in the block ─────────────
-        # Also used as fallback title if the heading was too generic
+        # ── Extract paragraphs from the block for title and description ──────
         GENERIC_HEADINGS = {
             "professional services", "construction services", "current procurements",
             "procurement", "solicitation", "services",
         }
-        description = ""
+
+        # Collect all substantial text chunks from the block (excluding dates/labels)
+        paragraphs: list[str] = []
         if block:
-            for p_tag in block.find_all(["p", "div", "td"]):
+            for p_tag in block.find_all(["p", "div", "td", "li"]):
                 p_text = _clean(p_tag.get_text(" ", strip=True))
                 if len(p_text) < 20:
                     continue
                 if CONTRACT_RE.match(p_text):
                     continue
-                if re.match(r"^(Posted|Pre-Proposal|Deadline|Solicitation|Contract No)", p_text, re.I):
+                if re.match(r"^(Posted|Pre-Proposal|Deadline|Solicitation|Contract No|Download|View|Click)", p_text, re.I):
                     continue
-                # Skip if it's just the heading we already extracted
                 if p_text.lower().strip() == title.lower().strip():
                     continue
-                description = p_text[:500]
-                break
+                # Skip if it's just a date
+                if re.match(r"^\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4}$", p_text):
+                    continue
+                if p_text not in paragraphs:
+                    paragraphs.append(p_text[:500])
 
-        # If heading was generic ("Professional Services"), use description as title instead
-        if title.lower().strip() in GENERIC_HEADINGS and description:
-            real_title = description[:200]
-            description = ""   # don't show it twice
+        # If heading was generic, first paragraph becomes the real title
+        if title.lower().strip() in GENERIC_HEADINGS and paragraphs:
+            real_title = paragraphs[0][:200]
+            description = paragraphs[1][:500] if len(paragraphs) > 1 else ""
         else:
             real_title = title
+            description = paragraphs[0][:500] if paragraphs else ""
 
         # Rebuild full title with contract number
         full_title = (

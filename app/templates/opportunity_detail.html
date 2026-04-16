@@ -61,7 +61,7 @@
     {% if main_url %}
       {% if 'bidx' in main_url or 'bidexpress' in main_url %}
         <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">View on BidX ↗</a>
-        <div style="font-size:11px; color:var(--text3); margin-top:.4rem;">NJDOT forwards bid documents to BidX. Free account may be required to download plans.</div>
+        <div style="font-size:11px; color:var(--text3); margin-top:.4rem;">NJDOT forwards bid documents to BidX. Account required to download plans.</div>
       {% elif main_url.lower().endswith('.pdf') %}
         <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">Download RFP / Bid Documents ↗</a>
       {% else %}
