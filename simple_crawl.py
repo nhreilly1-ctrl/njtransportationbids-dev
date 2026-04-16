@@ -124,6 +124,8 @@ def _record(
     record_type: str = "construction",
     access_type: str = "Public access",
     contract_number: str = "",
+    description: str = "",
+    doc_url: str = "",
 ) -> dict:
     return {
         "id":            _make_id(source_id, title, url),
@@ -137,6 +139,8 @@ def _record(
         "access_type":   access_type,
         "record_type":   record_type,
         "contract_number": contract_number,
+        "description":   description,
+        "doc_url":       doc_url,
         "status":        "open",
         "crawled_at":    _now(),
     }
@@ -378,6 +382,7 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
                 record_type  = src["record_type"],
                 access_type  = "BidX (NJDOT forwards to BidX for documents)",
                 contract_number = tp_num,
+                description  = desc,
             ))
 
     log.info(f"  NJDOT ProfServ: {len(items)} records")
@@ -536,16 +541,35 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
             continue
 
         # ── PDF download link ─────────────────────────────────────────────────
-        pdf_url = src["url"]  # fallback to the page itself
+        pdf_url = ""
         if block:
             for a in block.find_all("a", href=True):
-                href = urljoin(base, a["href"])
-                if href.lower().endswith(".pdf"):
-                    pdf_url = href
+                a_href = urljoin(base, a["href"])
+                if a_href.lower().endswith(".pdf"):
+                    pdf_url = a_href
                     break
 
+        # ── Description: first substantial paragraph in the block ─────────────
+        description = ""
+        if block:
+            for p_tag in block.find_all(["p", "div"]):
+                p_text = _clean(p_tag.get_text(" ", strip=True))
+                # Skip short text, contract number lines, date labels, headings
+                if len(p_text) < 40:
+                    continue
+                if CONTRACT_RE.match(p_text):
+                    continue
+                if re.match(r"^(Posted|Pre-Proposal|Deadline|Solicitation|Contract No)", p_text, re.I):
+                    continue
+                description = p_text[:500]
+                break
+
+        # Main URL: the DRJTBC source page; doc_url: the PDF if available
+        page_url = src["url"]
+        main_url = pdf_url if pdf_url else page_url
+
         # ── Dedup & record ────────────────────────────────────────────────────
-        uid = _make_id(src["id"], full_title, pdf_url)
+        uid = _make_id(src["id"], full_title, main_url)
         if uid in seen:
             continue
         seen.add(uid)
@@ -556,11 +580,13 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
             source_id       = src["id"],
             source_name     = src["name"],
             title           = full_title,
-            url             = pdf_url,
+            url             = main_url,
             due_date_raw    = sol_date_raw,
             county          = "Warren/Hunterdon/Mercer",
             record_type     = src["record_type"],
             contract_number = contract_no,
+            description     = description,
+            doc_url         = pdf_url,
         ))
 
     log.info(f"  DRJTBC ProfServ: {len(items)} records")

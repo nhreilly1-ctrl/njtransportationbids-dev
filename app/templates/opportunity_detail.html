@@ -40,11 +40,31 @@
   </div>
 </div>
 
+{% if opp.description %}
+<div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.25rem; margin-bottom:1rem;">
+  <div class="section-label" style="margin-top:0;">Description</div>
+  <p style="font-size:13px; color:var(--text2); line-height:1.6; margin:0;">{{ opp.description }}</p>
+</div>
+{% endif %}
+
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
   <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.25rem;">
-    <div class="section-label" style="margin-top:0;">Next step</div>
+    <div class="section-label" style="margin-top:0;">Source &amp; documents</div>
     <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">{{ opp.next_step or 'Open the official source and follow the solicitation instructions. Confirm due dates and submission method before committing estimating time.' }}</p>
-    {% if opp.official_url %}<a href="{{ opp.official_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem;">Open official source ↗</a>{% endif %}
+    {% set main_url = opp.url or opp.official_url %}
+    {% if main_url %}
+      {% if 'bidx' in main_url or 'bidexpress' in main_url %}
+        <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">View on BidX ↗</a>
+        <div style="font-size:11px; color:var(--text3); margin-top:.4rem;">NJDOT forwards bid documents to BidX. Free account required to download plans.</div>
+      {% elif main_url.lower().endswith('.pdf') %}
+        <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">Download RFP / Bid Documents ↗</a>
+      {% else %}
+        <a href="{{ main_url }}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-bottom:.5rem; display:inline-block;">Open official source ↗</a>
+      {% endif %}
+    {% endif %}
+    {% if opp.doc_url and opp.doc_url != main_url %}
+      <br><a href="{{ opp.doc_url }}" target="_blank" rel="noopener" style="font-size:13px; color:var(--blue); display:inline-block; margin-top:.5rem;">Download bid documents ↗</a>
+    {% endif %}
   </div>
   <div style="background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); padding:1.25rem;">
     <div class="section-label" style="margin-top:0;">Record details</div>
@@ -54,7 +74,7 @@
       <tr><td style="color:var(--text2); padding:4px 0;">Source</td><td style="padding:4px 0;">{{ opp.source_name or '—' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">County</td><td style="padding:4px 0;">{{ opp.county or 'Statewide' }}</td></tr>
       <tr><td style="color:var(--text2); padding:4px 0;">Access</td><td style="padding:4px 0;">{{ opp.access_type or '—' }}</td></tr>
-      <tr><td style="color:var(--text2); padding:4px 0;">Platform</td><td style="padding:4px 0;">{{ opp.platform or '—' }}</td></tr>
+      {% if opp.contract_number %}<tr><td style="color:var(--text2); padding:4px 0;">Contract No.</td><td style="padding:4px 0;">{{ opp.contract_number }}</td></tr>{% endif %}
     </table>
   </div>
 </div>

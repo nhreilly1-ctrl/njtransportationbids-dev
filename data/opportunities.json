@@ -11,8 +11,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-819",
+    "description": "(1) \u2014 Clarksville Road (CR 638), Bridge over Amtrak Advertised 4/21/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065010+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818763+00:00"
   },
   {
     "id": "opp-42e77b8d875f",
@@ -26,8 +28,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-818",
+    "description": "(1) \u2014 Rt 122, Lock St to Rt 22 Advertised 4/21/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065020+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818766+00:00"
   },
   {
     "id": "opp-b12e273263d8",
@@ -41,8 +45,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-820",
+    "description": "(2) \u2014 Vegetation Safety Management Project, Rt. 55 Advertised 4/28/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065000+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818760+00:00"
   },
   {
     "id": "opp-7c04f7359170",
@@ -56,8 +62,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-821",
+    "description": "(3) \u2014 Multi \u2014 Discipline Environmental Advertised 4/30/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064990+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818756+00:00"
   },
   {
     "id": "opp-a41e208bb40d",
@@ -71,8 +79,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-811",
+    "description": "(1) \u2014 Route 206, Valley Road to Brown Avenue, Somerset County Advertised 4/30/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065030+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818769+00:00"
   },
   {
     "id": "opp-592e192d69d1",
@@ -86,8 +96,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-823",
+    "description": "(1) \u2014 Rt. 23 and Rt. 94 Rockfall Mitigation Advertised 5/6/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064969+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818745+00:00"
   },
   {
     "id": "opp-15487888e8d9",
@@ -101,8 +113,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-822",
+    "description": "(1) \u2014 Rt. 168, Merchant St. to Ferry Ave. Pavement Advertised 5/6/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064980+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818748+00:00"
   },
   {
     "id": "opp-e4f2bad99c30",
@@ -116,8 +130,10 @@
     "access_type": "BidX (NJDOT forwards to BidX for documents)",
     "record_type": "professional_services",
     "contract_number": "TP-824",
+    "description": "(2) \u2014 Highway Safety Improvement Program (HSIP) Project Development & Support Advertised 5/14/2026",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064957+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818741+00:00"
   },
   {
     "id": "opp-b1446619442c",
@@ -131,8 +147,10 @@
     "access_type": "Public access",
     "record_type": "construction",
     "contract_number": "",
+    "description": "",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064899+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818718+00:00"
   },
   {
     "id": "opp-ffac2929d377",
@@ -146,8 +164,10 @@
     "access_type": "Public access",
     "record_type": "construction",
     "contract_number": "",
+    "description": "",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064931+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818733+00:00"
   },
   {
     "id": "opp-a7f6962f2fe2",
@@ -161,8 +181,10 @@
     "access_type": "Public access",
     "record_type": "construction",
     "contract_number": "",
+    "description": "",
+    "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.064946+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818738+00:00"
   },
   {
     "id": "opp-a19c5b92d8d1",
@@ -176,8 +198,10 @@
     "access_type": "Public access",
     "record_type": "professional_services",
     "contract_number": "Contract No. DB",
+    "description": "Network Video Management System (NVMS) Integrator Services",
+    "doc_url": "https://www.drjtbc.org/wp-content/uploads/DB-823ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065039+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818773+00:00"
   },
   {
     "id": "opp-7d6024f5a96f",
@@ -191,8 +215,10 @@
     "access_type": "Public access",
     "record_type": "professional_services",
     "contract_number": "Contract No. C",
+    "description": "Capital Program Management Consultant (CPMC) Services Task Order Agreement",
+    "doc_url": "https://www.drjtbc.org/wp-content/uploads/C-825ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-04-16T22:07:40.065049+00:00"
+    "crawled_at": "2026-04-16T22:16:23.818776+00:00"
   },
   {
     "id": "opp-350e07fb8993",
