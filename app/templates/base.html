@@ -45,6 +45,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.25rem; width: 100%; }
     .home-outer { display:grid; grid-template-columns:minmax(0,1fr) clamp(220px,22%,280px); gap:1.5rem; align-items:start; width:100%; }
     .page-outer { display:grid; grid-template-columns:minmax(0,1fr) clamp(220px,22%,280px); gap:1.5rem; align-items:start; width:100%; }
+    .page-outer.no-sidebar { grid-template-columns:1fr; }
     @media(max-width:900px){ .page-outer { grid-template-columns:1fr; } .page-sidebar-global { display:none; } }
     .sb-card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--rl); overflow:hidden; margin-bottom:12px; }
     .sb-head { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; padding:9px 14px 8px; border-bottom:0.5px solid var(--border); display:flex; align-items:center; gap:6px; }
@@ -154,11 +155,9 @@
     {% endfor %}
   {% endwith %}
   {% set _hide_sidebar = request.endpoint and (request.endpoint.startswith('admin') or request.endpoint.startswith('network.') or request.endpoint in ('admin_login','admin_logout')) %}
-  {% if _hide_sidebar %}
-    {% block content %}{% endblock %}
-  {% else %}
-  <div class="page-outer">
+  <div class="page-outer {{ 'no-sidebar' if _hide_sidebar else '' }}">
     <div>{% block content %}{% endblock %}</div>
+    {% if not _hide_sidebar %}
     <aside class="page-sidebar-global">
       <!-- Bidding Platforms -->
       <div class="sb-card">
@@ -217,8 +216,8 @@
         <a class="sb-link" href="{{ url_for('network.resources') }}"><div class="sb-link-label">Bonding Mechanics &amp; SBA Program</div><span class="sb-guide">Guide</span></a>
       </div>
     </aside>
+    {% endif %}
   </div>
-  {% endif %}
 </div>
 </body>
 </html>
