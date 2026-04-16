@@ -270,9 +270,10 @@ def parse_njdot_construction(html: str, src: dict) -> list[dict]:
 
 def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
     """
-    NJDOT Professional Services: HTML table.
-    Columns vary but always contain TP number (linked), discipline, description, due date.
-    We find any row where first cell contains a TP-XXXXXX style number.
+    NJDOT Professional Services: simple table, TP number links go to BidX.
+    Status "Advertised" = open; "Pending Selection" = closed → skip.
+    We grab the solicitation text from each row and keep the BidX link.
+    access_type note tells users the link forwards to BidX.
     """
     soup  = BeautifulSoup(html, "html.parser")
     base  = src["url"]
@@ -280,87 +281,93 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
     seen:  set[str]   = set()
 
     content = soup.find(id="content") or soup
+    tables  = content.find_all("table")
 
-    # Find all tables in content — profserv sometimes splits into multiple tables
-    tables = content.find_all("table")
-    if not tables:
-        log.warning("  NJDOT ProfServ: no table found — scanning all links for TP numbers")
-        # Fallback: scan all links in content for TP numbers
-        TP_RE2 = re.compile(r"\bTP-\d+\b", re.IGNORECASE)
-        for anchor in content.find_all("a", href=True):
-            href  = urljoin(base, anchor["href"])
-            atext = _clean(anchor.get_text(" ", strip=True))
-            if TP_RE2.search(atext):
-                uid = _make_id(src["id"], atext, href)
-                if uid not in seen:
-                    seen.add(uid)
-                    items.append(_record(src["id"], src["name"], atext, href,
-                                         record_type=src["record_type"]))
-        log.info(f"  NJDOT ProfServ (fallback): {len(items)} records")
-        return items[:60]
-
-    # Debug: log what the first row of the first table looks like
-    first_table = tables[0]
-    first_rows  = first_table.find_all("tr")[:3]
-    for i, row in enumerate(first_rows):
-        cells = row.find_all(["td","th"])
-        log.debug(f"  Table row {i}: {[_clean(c.get_text(' ',strip=True))[:40] for c in cells]}")
-
-    TP_RE = re.compile(r"\bTP-\d+\b", re.IGNORECASE)
+    # TP numbers on the page render as "TP – 817" (en dash + spaces), not "TP-817"
+    # Match: TP-817 / TP817 / TP – 817 / TP — 817 (any dash variant, optional spaces)
+    TP_RE = re.compile(r"\bTP\s*[-–—]?\s*(\d+)\b", re.IGNORECASE)
 
     for table in tables:
-        for row in table.find_all("tr"):
+        rows = table.find_all("tr")
+        # Log table header for diagnostics
+        if rows:
+            header_cells = rows[0].find_all(["th", "td"])
+            log.debug(f"  Table header: {[_clean(c.get_text(' ',strip=True))[:30] for c in header_cells]}")
+
+        for row in rows:
             cells = row.find_all(["td", "th"])
             if len(cells) < 2:
                 continue
 
-            # First cell must contain a TP number
-            first_text = _clean(cells[0].get_text(" ", strip=True))
-            tp_match   = TP_RE.search(first_text)
-            if not tp_match:
-                continue
-            tp_num = tp_match.group(0).upper()
+            row_text = _clean(row.get_text(" ", strip=True))
 
-            anchor = cells[0].find("a", href=True)
-            if not anchor:
+            # Skip closed solicitations
+            row_lower = row_text.lower()
+            if "pending selection" in row_lower or "awarded" in row_lower or "cancelled" in row_lower:
+                log.info(f"  NJDOT PS SKIP (closed): {row_text[:60]}")
                 continue
-            href = urljoin(base, anchor["href"])
 
-            # Scan remaining cells for description and due date
-            desc     = ""
+            # Find the TP anchor — the link to BidX
+            tp_anchor = None
+            tp_num    = ""
+            href      = ""
+
+            for cell in cells:
+                for a in cell.find_all("a", href=True):
+                    atxt = _clean(a.get_text(" ", strip=True))
+                    m = TP_RE.search(atxt)
+                    if m or TP_RE.search(a["href"]):
+                        tp_anchor = a
+                        tp_num    = f"TP-{m.group(1)}" if m else atxt
+                        href      = urljoin(base, a["href"])
+                        break
+                if tp_anchor:
+                    break
+
+            # Also accept rows where first cell text matches TP pattern (no link)
+            if not tp_anchor:
+                first_text = _clean(cells[0].get_text(" ", strip=True))
+                m = TP_RE.search(first_text)
+                if m:
+                    tp_num = f"TP-{m.group(1)}"
+                    a = cells[0].find("a", href=True)
+                    href = urljoin(base, a["href"]) if a else src["url"]
+
+            if not tp_num:
+                log.info(f"  NJDOT PS SKIP (no TP): {row_text[:60]}")
+                continue
+
+            # Collect description from non-TP, non-date, non-status cells
+            desc_parts: list[str] = []
             due_date = ""
-            discipline = ""
 
-            for i, cell in enumerate(cells[1:], start=1):
-                cell_text = _clean(cell.get_text(" ", strip=True))
-                if not cell_text:
+            for cell in cells:
+                ctext = _clean(cell.get_text(" ", strip=True))
+                if not ctext:
                     continue
-                # Due date cell: matches date pattern
-                if DATE_RE.match(cell_text) or re.match(r"^\d{1,2}/\d{1,2}/\d{4}$", cell_text):
-                    due_date = cell_text
+                if TP_RE.search(ctext) and len(ctext) < 20:
+                    continue   # just the TP number cell
+                if re.match(r"^\d{1,2}/\d{1,2}/\d{2,4}$", ctext):
+                    due_date = ctext
                     continue
-                # Discipline codes: short alphanumeric codes like "B-1 H-1"
-                if re.match(r"^([A-Z]-\d+\s*)+$", cell_text):
-                    discipline = cell_text
+                if ctext.lower() in {"advertised", "pending selection", "open",
+                                     "closed", "cancelled", "awarded"}:
                     continue
-                # Longest remaining cell is usually the description
-                if len(cell_text) > len(desc) and len(cell_text) > 10:
-                    desc = cell_text
+                if len(ctext) >= 10:
+                    desc_parts.append(ctext)
 
-            if not desc:
-                desc = first_text  # fallback
+            desc  = max(desc_parts, key=len) if desc_parts else ""
+            title = f"{tp_num} — {desc}" if desc else tp_num
 
-            title = f"{tp_num} — {desc}"
-            if discipline:
-                title = f"[{discipline.strip()}] {title}"
-
-            if _is_garbage(title):
+            if _is_garbage(title) or len(title.split()) < 3:
                 continue
 
             uid = _make_id(src["id"], title, href)
             if uid in seen:
                 continue
             seen.add(uid)
+
+            log.info(f"  NJDOT PS ACCEPT: {title[:80]} | Due: {due_date}")
 
             items.append(_record(
                 source_id    = src["id"],
@@ -369,6 +376,8 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
                 url          = href,
                 due_date_raw = due_date,
                 record_type  = src["record_type"],
+                access_type  = "BidX (NJDOT forwards to BidX for documents)",
+                contract_number = tp_num,
             ))
 
     log.info(f"  NJDOT ProfServ: {len(items)} records")
@@ -377,121 +386,178 @@ def parse_njdot_profserv(html: str, src: dict) -> list[dict]:
 
 def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
     """
-    DRJTBC Professional Services: WordPress page with RFP blocks.
-    Each active RFP has a solicitation deadline date somewhere in its block.
-    Strategy:
-      1. Find all RFPFINAL.PDF links
-      2. Walk UP the DOM (up to 8 levels) to find a section that contains
-         a solicitation deadline date AND a heading/title
-      3. Only keep records that have a deadline — filters out expired/archived RFPs
+    DRJTBC Professional Services: each solicitation is its own block/table.
+    Structure per ad:
+      - Starts with "Contract No. XXXX"
+      - Title line
+      - Paragraph description
+      - PDF download link(s)
+      - Sidebar dates: Posted | Pre-Proposal Meeting | Deadline for Inquiries | Solicitation Date
+    "Solicitation Date" is the closing date — skip if it's before today.
     """
     soup  = BeautifulSoup(html, "html.parser")
     base  = src["url"]
     items: list[dict] = []
     seen:  set[str]   = set()
+    today = date.today()
 
     content = (
-        soup.find("div", class_=re.compile(r"entry-content|page-content|wpb_wrapper|main", re.I))
+        soup.find("div", class_=re.compile(r"entry-content|page-content|wpb_wrapper|main-content", re.I))
         or soup.find("main")
         or soup.find("article")
         or soup
     )
 
-    CONTRACT_RE = re.compile(
-        r"(?:Contract|RFP|RFQ|IFB|Project)\s+No\.?\s*([\w\-]+)", re.IGNORECASE
-    )
-    DATE_ANY = re.compile(r"\b(\d{1,2}/\d{1,2}/\d{4})\b")
-    DEADLINE_RE = re.compile(
-        r"(?:solicitation|submission|proposal|due|deadline|closing)\s+(?:date|deadline)?[:\s]*"
-        r"(\d{1,2}/\d{1,2}/\d{4})",
+    CONTRACT_RE = re.compile(r"Contract\s+No\.?\s*([\w\-\/]+)", re.IGNORECASE)
+
+    # Solicitation Date regex — labeled field in the sidebar.
+    # The page uses en-dash dates like "4 – 7 – 2026", so we normalize first.
+    # Label may appear as "Solicitation Date", "Solicitation:", "Solicitation Deadline", etc.
+    SOLICIT_RE = re.compile(
+        r"Solicitation\s*(?:Date|Deadline|Due)?\s*[:\-–]?\s*"
+        r"(\w+\.?\s+\d{1,2},?\s*\d{4}|\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})",
         re.IGNORECASE
     )
 
-    for anchor in content.find_all("a", href=True):
-        href = urljoin(base, anchor["href"])
+    DATE_PARSE_FMTS = [
+        "%B %d, %Y", "%B %d %Y", "%b %d, %Y", "%b %d %Y",
+        "%B. %d, %Y", "%m/%d/%Y", "%m/%d/%y",
+    ]
 
-        # Match any PDF that has both "RFP" and "FINAL" in the filename
-        fname_upper = href.split("/")[-1].upper()
-        if not (fname_upper.endswith(".PDF") and "RFP" in fname_upper and "FINAL" in fname_upper):
+    def normalize_dates(text: str) -> str:
+        """Convert en-dash/em-dash date formats like '4 – 7 – 2026' → '4/7/2026'."""
+        return re.sub(
+            r"\b(\d{1,2})\s*[–—]\s*(\d{1,2})\s*[–—]\s*(\d{4})\b",
+            r"\1/\2/\3",
+            text
+        )
+
+    def parse_date_str(s: str) -> date | None:
+        s = s.strip().rstrip(".")
+        for fmt in DATE_PARSE_FMTS:
+            try:
+                return datetime.strptime(s, fmt).date()
+            except ValueError:
+                pass
+        return None
+
+    # ── Strategy: find every "Contract No." element, then identify its block ──
+
+    # Collect candidate container elements — tables, divs, sections, articles
+    # that contain "Contract No." text
+    BLOCK_TAGS = ["table", "div", "section", "article", "li"]
+
+    processed_blocks: set[int] = set()  # track by id() to avoid duplicates
+
+    for contract_node in content.find_all(string=CONTRACT_RE):
+        # Walk up to find a "meaningful" block that contains date sidebar info
+        block = contract_node.find_parent()
+        block_text = ""
+
+        for _ in range(12):
+            if not block or block.name in ["html", "body"]:
+                break
+            bt = _clean(block.get_text(" ", strip=True))
+            # A good block contains the solicitation date label
+            if SOLICIT_RE.search(bt):
+                block_text = bt
+                break
+            # Also stop if we've grown large enough (whole-page fallback)
+            if len(bt) > 2000:
+                break
+            block = block.find_parent()
+
+        if not block_text:
+            # Use whatever parent we stopped at
+            block_text = _clean((block or contract_node.find_parent()).get_text(" ", strip=True))
+
+        # Normalize en-dash dates ("4 – 7 – 2026" → "4/7/2026") before regex search
+        block_text_norm = normalize_dates(block_text)
+
+        # Deduplicate blocks
+        block_id = id(block)
+        if block_id in processed_blocks:
+            continue
+        processed_blocks.add(block_id)
+
+        # ── Solicitation Date (= closing date) ──────────────────────────────
+        sol_m = SOLICIT_RE.search(block_text_norm)
+        if not sol_m:
+            log.info(f"  DRJTBC SKIP (no Solicitation Date label): {block_text_norm[:80]}")
             continue
 
-        # Walk up the DOM to find a section large enough to contain
-        # the full bid block (contract no + name + deadline)
-        section = anchor.parent
-        section_text = ""
-        for _ in range(8):
-            p = section.find_parent()
-            if not p or p.name in ["html", "body"]:
-                break
-            section = p
-            section_text = _clean(section.get_text(" ", strip=True))
-            # Stop when we have a block with enough context
-            if len(section_text) > 80 and DATE_ANY.search(section_text):
-                break
+        sol_date_raw = sol_m.group(1).strip()
+        sol_date     = parse_date_str(sol_date_raw)
 
-        if not section_text:
-            section_text = _clean(anchor.parent.get_text(" ", strip=True))
-
-        # Only keep blocks with a solicitation deadline date
-        deadline_match = DEADLINE_RE.search(section_text)
-        date_match     = DATE_ANY.search(section_text)
-        if not deadline_match and not date_match:
-            log.info(f"  DRJTBC SKIP (no deadline): {href.split('/')[-1]}")
+        if sol_date and sol_date < today:
+            log.info(f"  DRJTBC SKIP (closed {sol_date_raw}): {block_text_norm[:60]}")
             continue
 
-        due_date = (deadline_match.group(1) if deadline_match
-                    else date_match.group(1) if date_match else "")
+        # ── Contract number ──────────────────────────────────────────────────
+        cm = CONTRACT_RE.search(block_text_norm)
+        contract_no = _clean(cm.group(0)) if cm else ""
 
-        # Find the nearest heading above the PDF link — that's the RFP name
-        heading = anchor.find_previous(["h1", "h2", "h3", "h4", "h5", "strong", "b"])
-        if heading:
-            title = _clean(heading.get_text(" ", strip=True))
-        else:
-            title = ""
+        # ── Title ────────────────────────────────────────────────────────────
+        # Look for a heading tag within the block
+        title = ""
+        if block:
+            for tag in block.find_all(["h2", "h3", "h4", "h5", "strong", "b"]):
+                t = _clean(tag.get_text(" ", strip=True))
+                # Skip if it's just the contract number or a sidebar label
+                if len(t) < 10:
+                    continue
+                if CONTRACT_RE.match(t):
+                    continue
+                if re.match(r"^(Posted|Pre-Proposal|Deadline|Solicitation|Date)", t, re.I):
+                    continue
+                title = t
+                break
 
-        # Fallback: extract first substantial non-boilerplate line from section
-        if not title or len(title.split()) < 3:
-            for chunk in section_text.split("  "):
+        # Fallback: text immediately after "Contract No. XXXX" line
+        if not title and cm:
+            after = block_text_norm[cm.end():].lstrip(" \t:—-")
+            for chunk in re.split(r"\s{3,}|\n", after):
                 chunk = _clean(chunk)
-                if len(chunk) < 10:
-                    continue
-                if re.match(r"^(document|download|rfp|request for proposal|click|pdf|view)", chunk, re.I):
-                    continue
-                if len(chunk.split()) >= 3:
-                    title = chunk
+                if len(chunk) >= 12 and not re.match(r"^\d{1,2}/\d", chunk):
+                    title = chunk[:250]
                     break
 
-        # Final fallback: clean up the PDF filename
-        if not title or len(title.split()) < 2:
-            fname = href.split("/")[-1]
-            fname = re.sub(r"RFPFINAL\.PDF$|_RFP\.PDF$|-RFP\.PDF$|RFP_FINAL\.PDF$", "",
-                           fname, flags=re.I)
-            title = _clean(fname.replace("-", " ").replace("_", " "))
+        if not title:
+            title = contract_no or "DRJTBC Solicitation"
 
-        if not title or _is_garbage(title):
+        # Combine contract number + title
+        full_title = (
+            f"{contract_no} — {title}"
+            if contract_no and contract_no.lower() not in title.lower()
+            else title
+        )
+
+        if _is_garbage(full_title):
             continue
 
-        # Prepend contract number if found and not already in title
-        contract_no = ""
-        cm = CONTRACT_RE.search(section_text)
-        if cm:
-            contract_no = _clean(cm.group(0))
-            if contract_no.lower() not in title.lower():
-                title = f"{contract_no} — {title}"
+        # ── PDF download link ─────────────────────────────────────────────────
+        pdf_url = src["url"]  # fallback to the page itself
+        if block:
+            for a in block.find_all("a", href=True):
+                href = urljoin(base, a["href"])
+                if href.lower().endswith(".pdf"):
+                    pdf_url = href
+                    break
 
-        log.info(f"  DRJTBC ACCEPT: {title[:80]} | Due: {due_date}")
-
-        uid = _make_id(src["id"], title, href)
+        # ── Dedup & record ────────────────────────────────────────────────────
+        uid = _make_id(src["id"], full_title, pdf_url)
         if uid in seen:
             continue
         seen.add(uid)
 
+        log.info(f"  DRJTBC ACCEPT: {full_title[:80]} | Solicitation: {sol_date_raw}")
+
         items.append(_record(
             source_id       = src["id"],
             source_name     = src["name"],
-            title           = title,
-            url             = href,
-            due_date_raw    = due_date,
+            title           = full_title,
+            url             = pdf_url,
+            due_date_raw    = sol_date_raw,
             county          = "Warren/Hunterdon/Mercer",
             record_type     = src["record_type"],
             contract_number = contract_no,
@@ -500,110 +566,6 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
     log.info(f"  DRJTBC ProfServ: {len(items)} records")
     return items[:10]
 
-
-def parse_drjtbc(html: str, src: dict) -> list[dict]:
-    """
-    DRJTBC: WordPress-based site. Bid items appear as linked text in the
-    main content area, often as <li> or <p> elements with PDF links.
-    Strategy: find all anchors in the page body, filter aggressively
-    to keep only bid-relevant links (PDFs, bid detail pages).
-    """
-    soup  = BeautifulSoup(html, "html.parser")
-    base  = src["url"]
-    items: list[dict] = []
-    seen:  set[str]   = set()
-
-    # Try multiple content selectors
-    content = (
-        soup.find("div", class_=re.compile(r"entry-content|page-content|wpb_wrapper|main-content", re.I))
-        or soup.find("main")
-        or soup.find("article")
-        or soup.find("div", id=re.compile(r"content|main", re.I))
-        or soup.body
-        or soup
-    )
-
-    # Nav/footer words to skip
-    NAV_SKIP = {
-        "home", "about", "contact", "news", "events", "careers",
-        "accessibility", "privacy", "sitemap", "faq", "search",
-        "construction services", "professional services", "notice to contractors",
-        "current procurements", "doing business", "back to top",
-        "bid express", "login", "register", "skip to content",
-    }
-
-    # DRJTBC bid links are either PDFs or specific bid detail sub-pages
-    BID_KEYWORDS = [
-        "contract", "rfp", "rfq", "ifb", "solicitation", "bid",
-        "notice to contractors", "procurement", "project", "repair",
-        "bridge", "resurfacing", "drainage", "construction", "inspection",
-        "engineering", "design", "services for", "services -", "no.",
-    ]
-
-    SKIP_URL_PATTERNS = [
-        "/construction-services/$", "/professional-services/$",
-        "/doing-business/", "/about/", "/news/", "/contact/",
-        "/careers/", "/board/", "/forms/", "/maps/",
-    ]
-
-    for anchor in content.find_all("a", href=True):
-        raw_href = anchor["href"]
-        href     = urljoin(base, raw_href)
-        title    = _clean(anchor.get_text(" ", strip=True))
-
-        if not title or len(title) < 10:
-            continue
-        if title.lower().strip() in NAV_SKIP:
-            continue
-        if any(skip in raw_href for skip in ["#", "javascript:", "mailto:", "tel:"]):
-            continue
-        # Only keep links to drjtbc.org
-        if "drjtbc.org" not in href:
-            continue
-        # Skip category/nav pages
-        if href.rstrip("/") == src["url"].rstrip("/"):
-            continue
-        if any(re.search(p, href, re.I) for p in SKIP_URL_PATTERNS):
-            continue
-        # DRJTBC: only accept PDF links — their actual bid docs are always PDFs
-        # HTML page links on this site are mostly nav/info pages, not bids
-        if not href.lower().endswith(".pdf"):
-            continue
-        # Require at least 4 words for a meaningful bid title
-        if len(title.split()) < 4:
-            continue
-
-        # Look for a date in the surrounding text
-        due_date = ""
-        for parent in [anchor.find_parent(t) for t in ["li", "p", "tr", "div"] if anchor.find_parent(t)]:
-            if parent:
-                nearby = _clean(parent.get_text(" ", strip=True))
-                # Look for dates in various formats
-                date_m = re.search(
-                    r"\b(\d{1,2}/\d{1,2}/\d{4}|\w+ \d{1,2},\s*\d{4})\b",
-                    nearby
-                )
-                if date_m:
-                    due_date = date_m.group(1)
-                    break
-
-        uid = _make_id(src["id"], title, href)
-        if uid in seen:
-            continue
-        seen.add(uid)
-
-        items.append(_record(
-            source_id    = src["id"],
-            source_name  = src["name"],
-            title        = title,
-            url          = href,
-            due_date_raw = due_date,
-            county       = "Warren/Hunterdon/Mercer",
-            record_type  = src["record_type"],
-        ))
-
-    log.info(f"  {src['name']}: {len(items)} records")
-    return items[:40]
 
 
 # ── Parser dispatch ───────────────────────────────────────────────────────────
