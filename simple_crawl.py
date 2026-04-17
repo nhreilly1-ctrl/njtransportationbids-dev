@@ -233,6 +233,7 @@ SOURCES = {
         "record_type": "construction",   # per-record type inferred from title
         "parser":      "sjta",
         "county":      "Atlantic",
+        "use_js":      True,             # BidExpress is JS-rendered
     },
 }
 
