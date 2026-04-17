@@ -1,26 +1,17 @@
-name: Daily notice crawl
+name: Daily Crawl
 
 on:
   schedule:
-    - cron: '0 10 * * *'      # 6:00 AM ET daily (10:00 UTC)
-    - cron: '0 14 * * 1'      # Monday 10:00 AM ET — weekly sources
-  workflow_dispatch:            # Manual trigger from GitHub Actions UI
-    inputs:
-      mode:
-        description: 'Crawl mode'
-        required: false
-        default: 'daily'
-        type: choice
-        options:
-          - daily
-          - weekly
-          - tier1
-          - seed-sos
+    - cron: '0 10 * * 1-5'   # 6:00 AM ET weekdays
+    - cron: '0 22 * * 1-5'   # 6:00 PM ET weekdays
+  workflow_dispatch:           # Manual trigger from GitHub Actions tab
 
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -32,50 +23,21 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: Install dependencies
         run: pip install requests beautifulsoup4 lxml
 
-      - name: Run daily crawl (Tier 1 + Tier 2)
-        if: github.event.inputs.mode == 'daily' || github.event_name == 'schedule' && github.event.schedule == '0 10 * * *'
-        run: |
-          cd crawlers
-          python notice_runner.py
-        env:
-          PYTHONPATH: ${{ github.workspace }}
+      - name: Run crawler
+        run: python3 simple_crawl.py
 
-      - name: Run weekly crawl (all sources + SoS seed)
-        if: github.event.inputs.mode == 'weekly' || github.event_name == 'schedule' && github.event.schedule == '0 14 * * 1'
+      - name: Commit updated data if changed
         run: |
-          cd crawlers
-          python notice_runner.py --seed-sos
-          python notice_runner.py --weekly
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-
-      - name: Run Tier 1 only
-        if: github.event.inputs.mode == 'tier1'
-        run: |
-          cd crawlers
-          python notice_runner.py --tier 1
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-
-      - name: Seed SoS directory
-        if: github.event.inputs.mode == 'seed-sos'
-        run: |
-          cd crawlers
-          python notice_runner.py --seed-sos
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-
-      - name: Commit updated data
-        run: |
-          git config user.name  "crawl-bot"
+          git config user.name "crawl-bot"
           git config user.email "bot@njtransportationbids.com"
-          git add data/notices/
-          git diff --staged --quiet || git commit -m "Auto crawl $(date +'%Y-%m-%d %H:%M') UTC"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git add data/opportunities.json data/notices/
+          if git diff --cached --quiet; then
+            echo "No changes — skipping commit"
+          else
+            git commit -m "chore: crawl update $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
