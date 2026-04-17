@@ -180,8 +180,8 @@ SOURCES = {
     "njtransit": {
         "id":          "state-njtransit",
         "name":        "NJ Transit",
-        "url":         "https://www.bidexpress.com/businesses/1462/home?agency=true",
-        "record_type": "construction",   # per-record type resolved by IFB/RFP in job no
+        "url":         "https://www.njtransit.com/procurement/calendar",
+        "record_type": "construction",   # per-record type resolved by IFB/RFP in doc href
         "parser":      "njtransit",
         "county":      "Statewide",
     },
@@ -945,19 +945,185 @@ def _parse_bidexpress(html: str, src: dict, infer_type_fn=None) -> list[dict]:
 
 def parse_njtransit(html: str, src: dict) -> list[dict]:
     """
-    NJ Transit on BidExpress (businesses/1462).
-    Job number prefix determines type:
-        IFB-xx-xxx  →  construction
-        RFP-xx-xxx  →  professional_services
-    Defaults to construction when prefix is absent or unrecognized.
-    """
-    def infer_type(title: str, job_no: str) -> str:
-        combined = (job_no + " " + title).upper()
-        if "RFP" in combined:
-            return "professional_services"
-        return "construction"
+    NJ Transit Procurement Calendar: https://www.njtransit.com/procurement/calendar
 
-    return _parse_bidexpress(html, src, infer_type_fn=infer_type)
+    Page structure (one row per solicitation, expand-all reveals detail):
+      - Column: Event Date  → closing date
+      - Column: Description cell — contains 3 paragraphs:
+            Para 1:  "Description" (header label — skip)
+            Para 2:  Project name  (use this as title)
+            Para 3+: BidExpress boilerplate + other links (ignore)
+        GOLD LINK in the cell: direct href to the actual bid document.
+            "IFB" anywhere in that href  → construction
+            "RFP" anywhere in that href  → professional_services
+            Ignore all other links (BidExpress, other internal NJ Transit links).
+
+    The expand-all toggle is CSS/JS only; full HTML is present in the page source.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    base  = src["url"]
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    # BidExpress / boilerplate link patterns to IGNORE
+    IGNORE_HREF = re.compile(
+        r"bidexpress\.com|njtransit\.com/procurement$|/procurement/calendar$",
+        re.I,
+    )
+    # The gold doc link: must contain IFB or RFP (case-insensitive)
+    DOC_HREF = re.compile(r"\bIFB\b|\bRFP\b|\bRFQ\b", re.I)
+
+    def _find_doc_link(container):
+        """Return (url, record_type) for the gold bid-doc link, or ('', 'construction')."""
+        for a in container.find_all("a", href=True):
+            href = a["href"]
+            if IGNORE_HREF.search(href):
+                continue
+            if DOC_HREF.search(href):
+                full = href if href.startswith("http") else urljoin(base, href)
+                rtype = "professional_services" if re.search(r"\bRFP\b|\bRFQ\b", href, re.I) else "construction"
+                return full, rtype
+        return "", "construction"
+
+    # ── Try table rows first ──────────────────────────────────────────────────
+    # Some layouts use <tr> rows; others use <div> blocks.
+    rows_found = 0
+    for table in soup.find_all("table"):
+        for row in table.find_all("tr"):
+            cells = row.find_all(["td", "th"])
+            if len(cells) < 2:
+                continue
+            if all(c.name == "th" for c in cells):
+                continue  # header row
+
+            # ── Closing date ──────────────────────────────────────────────────
+            due_date = ""
+            for cell in cells:
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", cell.get_text())
+                if m:
+                    due_date = m.group(1)
+                    break
+
+            # ── Find the description cell (the one with >1 paragraph or a doc link) ──
+            desc_cell = None
+            for cell in cells:
+                if cell.find("a", href=DOC_HREF):
+                    desc_cell = cell
+                    break
+                if len(cell.find_all(["p", "div"])) >= 2:
+                    desc_cell = cell
+
+            if desc_cell is None:
+                continue
+
+            # ── Gold doc link ─────────────────────────────────────────────────
+            doc_url, record_type = _find_doc_link(desc_cell)
+
+            # ── Project title: 2nd non-empty paragraph, skip "Description" ───
+            title = ""
+            paras = desc_cell.find_all(["p", "div", "li", "span"])
+            for p in paras:
+                t = _clean(p.get_text(" ", strip=True))
+                if not t or len(t) < 6:
+                    continue
+                if t.lower().strip() in ("description", "project description", "title"):
+                    continue
+                if IGNORE_HREF.search(t):
+                    continue
+                if re.match(r"^\d{1,2}/\d", t):
+                    continue
+                title = t[:200]
+                break
+
+            # Fallback: longest cell text segment
+            if not title:
+                for seg in desc_cell.stripped_strings:
+                    t = _clean(seg)
+                    if (len(t) > 15
+                            and t.lower() not in ("description",)
+                            and not re.match(r"^\d{1,2}/\d", t)):
+                        title = t[:200]
+                        break
+
+            if not title or _is_garbage(title):
+                continue
+
+            rows_found += 1
+            uid = _make_id(src["id"], title, doc_url or base)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  NJ Transit ACCEPT: {title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id    = src["id"],
+                source_name  = src["name"],
+                title        = title,
+                url          = doc_url or base,
+                due_date_raw = due_date,
+                county       = "Statewide",
+                record_type  = record_type,
+                access_type  = "Public" if doc_url else "BidExpress (NJ Transit)",
+                description  = title,
+                doc_url      = doc_url,
+            ))
+
+    # ── Fallback: div-based layout (if no table rows found) ──────────────────
+    if rows_found == 0:
+        log.info("  NJ Transit: no table rows matched — trying div layout")
+        for block in soup.find_all(
+            "div",
+            class_=re.compile(r"row|item|procure|solicitation|calendar", re.I)
+        ):
+            doc_url, record_type = _find_doc_link(block)
+            if not doc_url:
+                continue
+
+            due_date = ""
+            m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", block.get_text())
+            if m:
+                due_date = m.group(1)
+
+            title = ""
+            for p in block.find_all(["p", "h3", "h4", "strong", "div"]):
+                t = _clean(p.get_text(" ", strip=True))
+                if (len(t) > 15
+                        and t.lower() not in ("description",)
+                        and not re.match(r"^\d{1,2}/\d", t)
+                        and not IGNORE_HREF.search(t)):
+                    title = t[:200]
+                    break
+
+            if not title or _is_garbage(title):
+                continue
+
+            uid = _make_id(src["id"], title, doc_url)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  NJ Transit ACCEPT (div): {title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id    = src["id"],
+                source_name  = src["name"],
+                title        = title,
+                url          = doc_url,
+                due_date_raw = due_date,
+                county       = "Statewide",
+                record_type  = record_type,
+                access_type  = "Public",
+                description  = title,
+                doc_url      = doc_url,
+            ))
+
+    log.info(f"  NJ Transit: {len(items)} records")
+    return items[:60]
 
 
 def parse_sjta(html: str, src: dict) -> list[dict]:
