@@ -1,12 +1,14 @@
 """
 simple_crawl.py
 ---------------
-Targets the 4 cleanest, highest-quality NJ transportation bid sources:
+Targets the cleanest, highest-quality NJ transportation bid sources:
 
   1. NJDOT Construction Services       — HTML list, trusted, daily
   2. NJDOT Professional Services       — HTML table, trusted, daily
-  3. DRJTBC Notice to Contractors      — HTML list, trusted, daily
-  4. DRJTBC Current Procurements       — HTML list, trusted, daily
+  3. DRJTBC Current Procurements       — HTML blocks, trusted, daily
+  4. NJTA Current Solicitations        — HTML table, construction + PS
+  5. NJ Transit Active Solicitations   — HTML table, IFB=construction RFP=PS
+  6. SJTA Doing Business               — HTML table, BidX job numbers
 
 All sources are static HTML, publicly accessible, no auth required.
 Output writes to data/opportunities.json and merges with existing records.
@@ -167,6 +169,29 @@ SOURCES = {
         "url":         "https://www.drjtbc.org/professional-services/current/",
         "record_type": "professional_services",
         "parser":      "drjtbc_profserv",
+    },
+    "njta": {
+        "id":          "state-njta",
+        "name":        "NJ Turnpike Authority",
+        "url":         "https://www.njta.gov/business-hub/current-solicitations/",
+        "record_type": "construction",   # per-record type resolved by URL pattern
+        "parser":      "njta",
+    },
+    "njtransit": {
+        "id":          "state-njtransit",
+        "name":        "NJ Transit",
+        "url":         "https://www.bidexpress.com/businesses/1462/home?agency=true",
+        "record_type": "construction",   # per-record type resolved by IFB/RFP in job no
+        "parser":      "njtransit",
+        "county":      "Statewide",
+    },
+    "sjta": {
+        "id":          "state-sjta",
+        "name":        "South Jersey Transportation Authority",
+        "url":         "https://www.bidexpress.com/businesses/29894/home?agency=true",
+        "record_type": "construction",   # per-record type inferred from title
+        "parser":      "sjta",
+        "county":      "Atlantic",
     },
 }
 
@@ -633,11 +658,336 @@ def parse_drjtbc_profserv(html: str, src: dict) -> list[dict]:
 
 
 
+def parse_njta(html: str, src: dict) -> list[dict]:
+    """
+    NJTA Current Solicitations: standard HTML table.
+    - Closing date column
+    - Status column: "Open" / "Closed"
+    - Project name is a hyperlink:
+        "contract-no-"                  in href → construction
+        "order-for-professional-services" in href → professional_services
+    - Detail page is unpopulated but has a single BidX link; we store the NJTA
+      detail URL and flag access_type so the detail page tells users to go to BidX.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    base  = src["url"]
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    PS_HREF_WORDS  = {"order-for-professional-services", "professional-services", "rfq", "rfp"}
+    CON_HREF_WORDS = {"contract-no", "contract-number"}
+    PS_TITLE_WORDS = {"engineer", "design", "inspection", "consulting", "planning",
+                      "study", "management", "survey", "environmental", "architect"}
+
+    content = (soup.find("main") or soup.find(id=re.compile(r"content|main", re.I))
+               or soup)
+
+    for table in content.find_all("table"):
+        for row in table.find_all("tr"):
+            cells = row.find_all(["td", "th"])
+            if len(cells) < 2:
+                continue
+
+            # Skip obvious header rows
+            row_lower = " ".join(c.get_text(strip=True) for c in cells).lower()
+            if ("project" in row_lower or "solicitation" in row_lower) and "status" in row_lower and len(row_lower) < 120:
+                continue
+
+            # Skip closed rows
+            status_text = cells[-1].get_text(strip=True).lower()
+            if any(w in status_text for w in ("closed", "awarded", "cancelled")):
+                log.info(f"  NJTA SKIP (closed): {row_lower[:60]}")
+                continue
+
+            # Find project link
+            project_link = None
+            title = ""
+            for cell in cells:
+                for a in cell.find_all("a", href=True):
+                    href_l = a["href"].lower()
+                    if any(w in href_l for w in CON_HREF_WORDS | PS_HREF_WORDS):
+                        project_link = a
+                        title = _clean(a.get_text(" ", strip=True))
+                        break
+                if project_link:
+                    break
+
+            # Fallback: first substantial link in row
+            if not project_link:
+                for cell in cells:
+                    a = cell.find("a", href=True)
+                    if a:
+                        t = _clean(a.get_text(" ", strip=True))
+                        if len(t) > 10 and not _is_garbage(t):
+                            project_link = a
+                            title = t
+                            break
+
+            if not title or _is_garbage(title):
+                continue
+
+            href      = urljoin(base, project_link["href"]) if project_link else src["url"]
+            href_l    = href.lower()
+
+            # Determine record type
+            if any(w in href_l for w in PS_HREF_WORDS):
+                record_type = "professional_services"
+            elif any(w in href_l for w in CON_HREF_WORDS):
+                record_type = "construction"
+            else:
+                record_type = "professional_services" if any(w in title.lower() for w in PS_TITLE_WORDS) else "construction"
+
+            # Closing date
+            due_date = ""
+            for cell in cells:
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", cell.get_text())
+                if m:
+                    due_date = m.group(1)
+                    break
+
+            uid = _make_id(src["id"], title, href)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(f"  NJTA ACCEPT: {title[:80]} | {record_type} | Due: {due_date}")
+            items.append(_record(
+                source_id    = src["id"],
+                source_name  = src["name"],
+                title        = title,
+                url          = href,
+                due_date_raw = due_date,
+                county       = "Statewide",
+                record_type  = record_type,
+                access_type  = "BidX (NJTA)",
+                description  = title,
+            ))
+
+    log.info(f"  NJTA: {len(items)} records")
+    return items[:60]
+
+
+def _parse_bidexpress(html: str, src: dict, infer_type_fn=None) -> list[dict]:
+    """
+    Generic BidExpress agency listing page parser.
+
+    Target URL pattern:
+        https://www.bidexpress.com/businesses/{id}/home?agency=true
+
+    BidExpress table columns (standard agency view):
+        Ad Date  |  Job No.  |  Description  |  Letting Date  |  Status
+
+    - Only "Active" rows are kept.
+    - Job No. cell contains an <a href="/businesses/{id}/projects/{pid}"> link.
+    - Status cell contains plain text: Active / Awarded / Cancelled / etc.
+
+    infer_type_fn(title, job_no) -> 'construction' | 'professional_services'
+    If None, falls back to src['record_type'].
+    """
+    BIDX_BASE = "https://www.bidexpress.com"
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    tables = soup.find_all("table")
+    if not tables:
+        log.warning(f"  {src['name']}: no <table> found — page may require JavaScript rendering")
+        return []
+
+    for table in tables:
+        rows = table.find_all("tr")
+        if len(rows) < 2:
+            continue
+
+        # ── Column detection from header row ─────────────────────────────────
+        header_cells = rows[0].find_all(["th", "td"])
+        headers = [c.get_text(strip=True).lower() for c in header_cells]
+        log.info(f"  {src['name']} table headers: {headers}")
+
+        def _col(keywords):
+            return next(
+                (i for i, h in enumerate(headers) if any(kw in h for kw in keywords)),
+                None,
+            )
+
+        job_col    = _col(["job no", "job #", "job num", "contract no"])
+        desc_col   = _col(["desc", "title", "project name", "project desc"])
+        date_col   = _col(["letting", "closing", "due date", "event date", "bid opening", "opening"])
+        status_col = _col(["status", "phase", "state"])
+
+        # ── Data rows ─────────────────────────────────────────────────────────
+        for row in rows[1:]:
+            cells = row.find_all(["td", "th"])
+            if not cells:
+                continue
+            if all(c.name == "th" for c in cells):
+                continue   # sub-header row
+
+            row_text  = " ".join(c.get_text(" ", strip=True) for c in cells)
+            row_lower = row_text.lower().strip()
+            if not row_lower:
+                continue
+
+            # ── Status filter ─────────────────────────────────────────────────
+            status_text = ""
+            if status_col is not None and status_col < len(cells):
+                status_text = cells[status_col].get_text(strip=True).lower()
+            else:
+                for cell in cells:
+                    ct = cell.get_text(strip=True).lower()
+                    if ct in ("active", "awarded", "cancelled", "closed",
+                              "complete", "completed", "award pending"):
+                        status_text = ct
+                        break
+
+            SKIP_STATUS = {"awarded", "cancelled", "closed", "complete",
+                           "completed", "award pending"}
+            if status_text in SKIP_STATUS:
+                log.info(f"  {src['name']} SKIP ({status_text}): {row_lower[:60]}")
+                continue
+
+            # ── Job number + detail URL ───────────────────────────────────────
+            job_no     = ""
+            detail_url = src["url"]
+
+            if job_col is not None and job_col < len(cells):
+                jcell = cells[job_col]
+                a = jcell.find("a", href=True)
+                if a:
+                    href = a["href"]
+                    detail_url = (href if href.startswith("http")
+                                  else urljoin(BIDX_BASE, href))
+                job_no = _clean(jcell.get_text(" ", strip=True))
+
+            if not job_no:
+                # Fallback: any link to a /projects/ page
+                for cell in cells:
+                    a = cell.find("a", href=True)
+                    if a and "/projects/" in a["href"]:
+                        detail_url = urljoin(BIDX_BASE, a["href"])
+                        job_no = _clean(cell.get_text(" ", strip=True))
+                        break
+
+            if not job_no:
+                continue
+
+            # ── Title / description ───────────────────────────────────────────
+            title = ""
+            if desc_col is not None and desc_col < len(cells):
+                title = _clean(cells[desc_col].get_text(" ", strip=True))[:200]
+
+            if not title:
+                for i, cell in enumerate(cells):
+                    if i == job_col or i == status_col:
+                        continue
+                    t = _clean(cell.get_text(" ", strip=True))
+                    if (len(t) > 15
+                            and not re.match(r"^\d{1,2}/\d", t)
+                            and t.lower() not in ("active", "awarded", "cancelled")):
+                        title = t[:200]
+                        break
+
+            if not title:
+                title = f"Contract {job_no}"
+
+            if _is_garbage(title):
+                continue
+
+            # ── Due date ─────────────────────────────────────────────────────
+            due_date = ""
+            if date_col is not None and date_col < len(cells):
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b",
+                              cells[date_col].get_text())
+                if m:
+                    due_date = m.group(1)
+
+            if not due_date:
+                for cell in cells:
+                    m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", cell.get_text())
+                    if m:
+                        due_date = m.group(1)
+                        break
+
+            # ── Record type ───────────────────────────────────────────────────
+            if infer_type_fn:
+                record_type = infer_type_fn(title, job_no)
+            else:
+                record_type = src.get("record_type", "construction")
+
+            full_title = (f"{job_no} — {title}"
+                          if job_no and job_no not in title else title)
+
+            uid = _make_id(src["id"], full_title, detail_url)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  {src['name']} ACCEPT: {full_title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id       = src["id"],
+                source_name     = src["name"],
+                title           = full_title,
+                url             = detail_url,
+                due_date_raw    = due_date,
+                county          = src.get("county", "Statewide"),
+                record_type     = record_type,
+                access_type     = "BidExpress",
+                contract_number = job_no,
+                description     = title,
+            ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items[:60]
+
+
+def parse_njtransit(html: str, src: dict) -> list[dict]:
+    """
+    NJ Transit on BidExpress (businesses/1462).
+    Job number prefix determines type:
+        IFB-xx-xxx  →  construction
+        RFP-xx-xxx  →  professional_services
+    Defaults to construction when prefix is absent or unrecognized.
+    """
+    def infer_type(title: str, job_no: str) -> str:
+        combined = (job_no + " " + title).upper()
+        if "RFP" in combined:
+            return "professional_services"
+        return "construction"
+
+    return _parse_bidexpress(html, src, infer_type_fn=infer_type)
+
+
+def parse_sjta(html: str, src: dict) -> list[dict]:
+    """
+    South Jersey Transportation Authority on BidExpress (businesses/29894).
+    SJTA is a highway + airport authority; type inferred from title keywords.
+    """
+    PS_WORDS = {
+        "engineer", "engineering", "design", "inspection", "consulting",
+        "planning", "study", "management", "survey", "environmental",
+        "architect", "professional services",
+    }
+
+    def infer_type(title: str, job_no: str) -> str:
+        tl = title.lower()
+        return ("professional_services"
+                if any(w in tl for w in PS_WORDS)
+                else "construction")
+
+    return _parse_bidexpress(html, src, infer_type_fn=infer_type)
+
+
 # ── Parser dispatch ───────────────────────────────────────────────────────────
 PARSERS = {
     "njdot_construction": parse_njdot_construction,
     "njdot_profserv":     parse_njdot_profserv,
     "drjtbc_profserv":    parse_drjtbc_profserv,
+    "njta":               parse_njta,
+    "njtransit":          parse_njtransit,
+    "sjta":               parse_sjta,
 }
 
 # ── Data management ───────────────────────────────────────────────────────────
