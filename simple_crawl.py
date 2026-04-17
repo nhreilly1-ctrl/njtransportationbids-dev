@@ -69,6 +69,45 @@ def fetch(url: str, timeout: int = 25) -> str | None:
         log.warning(f"  Fetch failed {url}: {e}")
         return None
 
+
+def fetch_js(url: str, click_text: str | None = None, wait_ms: int = 2500) -> str | None:
+    """
+    Fetch a JavaScript-rendered page using a headless Chromium browser (Playwright).
+    If click_text is provided, clicks the first button/link containing that text
+    (e.g. "Expand All") and waits wait_ms milliseconds before capturing the HTML.
+    Falls back gracefully if Playwright is not installed.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        log.warning("  Playwright not installed — falling back to requests fetch")
+        return fetch(url)
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(
+                user_agent=(
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+                )
+            )
+            page.goto(url, wait_until="networkidle", timeout=45_000)
+            if click_text:
+                try:
+                    page.get_by_text(click_text, exact=False).first.click()
+                    page.wait_for_timeout(wait_ms)
+                except Exception:
+                    # Button not found or already expanded — continue anyway
+                    pass
+            html = page.content()
+            browser.close()
+            log.info(f"  JS fetch OK ({len(html):,} chars): {url}")
+            return html
+    except Exception as e:
+        log.warning(f"  JS fetch failed {url}: {e}")
+        return None
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 DATE_RE = re.compile(r"^\d{1,2}/\d{1,2}/\d{2,4}$")
 LEVEL_CODE_RE = re.compile(r"^[A-Z]-\d+\s+Level\s+[A-Z]$", re.IGNORECASE)
@@ -184,6 +223,8 @@ SOURCES = {
         "record_type": "construction",   # per-record type resolved by IFB/RFP in doc href
         "parser":      "njtransit",
         "county":      "Statewide",
+        "use_js":      True,             # page is JS-rendered; requires Playwright
+        "js_click":    "Expand All",     # click this button before scraping
     },
     "sjta": {
         "id":          "state-sjta",
@@ -1231,7 +1272,10 @@ def merge(existing: list[dict], fresh: list[dict]) -> list[dict]:
 
 def crawl_source(key: str, src: dict) -> list[dict]:
     log.info(f"Crawling: {src['name']}")
-    html = fetch(src["url"])
+    if src.get("use_js"):
+        html = fetch_js(src["url"], click_text=src.get("js_click"))
+    else:
+        html = fetch(src["url"])
     if not html:
         log.error(f"  Skipped — fetch failed")
         return []

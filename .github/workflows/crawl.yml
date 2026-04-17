@@ -25,7 +25,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 lxml
+        run: pip install requests beautifulsoup4 lxml playwright
+
+      - name: Install Playwright browser
+        run: playwright install chromium --with-deps
 
       - name: Run crawler
         run: python3 simple_crawl.py
