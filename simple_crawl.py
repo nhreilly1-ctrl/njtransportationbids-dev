@@ -1045,6 +1045,16 @@ def parse_njtransit(html: str, src: dict) -> list[dict]:
                     due_date = m.group(1)
                     break
 
+            # ── Skip past records (archive entries) ───────────────────────────
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    due = date(int(parts[2]), int(parts[0]), int(parts[1]))
+                    if due < date.today():
+                        continue
+                except Exception:
+                    pass
+
             # ── Find the description cell (the one with >1 paragraph or a doc link) ──
             desc_cell = None
             for cell in cells:
@@ -1312,7 +1322,7 @@ def main() -> None:
     for key, src in targets.items():
         records = crawl_source(key, src)
         all_fresh.extend(records)
-        time.sleep(1.5)   # polite pause between requests
+        time.sleep(1.5)
 
     log.info(f"\nTotal fresh records: {len(all_fresh)}")
 
