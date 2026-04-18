@@ -855,9 +855,9 @@ def _parse_bidexpress(html: str, src: dict, infer_type_fn=None) -> list[dict]:
                 None,
             )
 
-        job_col    = _col(["job no", "job #", "job num", "contract no"])
+        job_col    = _col(["job no", "job #", "job num", "contract no", "number", "bid no", "solicitation"])
         desc_col   = _col(["desc", "title", "project name", "project desc"])
-        date_col   = _col(["letting", "closing", "due date", "event date", "bid opening", "opening"])
+        date_col   = _col(["letting", "closing", "due date", "event date", "bid opening", "opening", "deadline"])
         status_col = _col(["status", "phase", "state"])
 
         # ── Data rows ─────────────────────────────────────────────────────────
@@ -905,11 +905,13 @@ def _parse_bidexpress(html: str, src: dict, infer_type_fn=None) -> list[dict]:
                 job_no = _clean(jcell.get_text(" ", strip=True))
 
             if not job_no:
-                # Fallback: any link to a /projects/ page
+                # Fallback: any link to a BidExpress detail page
                 for cell in cells:
                     a = cell.find("a", href=True)
-                    if a and "/projects/" in a["href"]:
-                        detail_url = urljoin(BIDX_BASE, a["href"])
+                    href = a["href"] if a else ""
+                    if a and any(p in href for p in ("/projects/", "/bids/", "/solicitations/")):
+                        detail_url = (href if href.startswith("http")
+                                      else urljoin(BIDX_BASE, href))
                         job_no = _clean(cell.get_text(" ", strip=True))
                         break
 
