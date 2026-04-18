@@ -245,6 +245,7 @@ SOURCE_RULES = {
     "state-drjtbc-profserv": {"score": 5.0, "mode": "trusted", "label": "Trusted"},
     "state-njta": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "state-njtransit": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
+    "state-sjta": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "state-panynj-construction": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "state-panynj-profserv": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "county-camden": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
