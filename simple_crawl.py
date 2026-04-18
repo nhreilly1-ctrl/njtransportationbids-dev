@@ -92,7 +92,10 @@ def fetch_js(url: str, click_text: str | None = None, wait_ms: int = 2500) -> st
                     "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
                 )
             )
-            page.goto(url, wait_until="networkidle", timeout=45_000)
+            # Use "domcontentloaded" — njtransit.com never reaches networkidle
+            # due to background polling. Wait a fixed interval for JS to render.
+            page.goto(url, wait_until="domcontentloaded", timeout=45_000)
+            page.wait_for_timeout(wait_ms)   # let JS render the table
             if click_text:
                 try:
                     page.get_by_text(click_text, exact=False).first.click()
