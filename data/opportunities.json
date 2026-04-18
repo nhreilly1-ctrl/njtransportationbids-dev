@@ -1,175 +1,5 @@
 [
   {
-    "id": "opp-db0e053742e0",
-    "title": "Contract 2025 \u2014 33 General and/or Special Legal Counsel",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "09/05/2025",
-    "due_date": "09/05/2025",
-    "url": "https://www.bidexpress.com/solicitations/42643",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2025 \u2014 33 General and/or Special Legal Counsel",
-    "description": "Contract 2025 \u2014 33 General and/or Special Legal Counsel",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.514113+00:00"
-  },
-  {
-    "id": "opp-97059d313e05",
-    "title": "Contract 2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "12/11/2025",
-    "due_date": "12/11/2025",
-    "url": "https://www.bidexpress.com/solicitations/43918",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
-    "description": "Contract 2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513972+00:00"
-  },
-  {
-    "id": "opp-8219d4de1bfb",
-    "title": "Contract 2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "12/18/2025",
-    "due_date": "12/18/2025",
-    "url": "https://www.bidexpress.com/solicitations/43888",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
-    "description": "Contract 2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513827+00:00"
-  },
-  {
-    "id": "opp-8c8c555cad3c",
-    "title": "Contract 2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "01/06/2026",
-    "due_date": "01/06/2026",
-    "url": "https://www.bidexpress.com/solicitations/44126",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
-    "description": "Contract 2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513697+00:00"
-  },
-  {
-    "id": "opp-3499475ab3f1",
-    "title": "Contract 2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "01/28/2026",
-    "due_date": "01/28/2026",
-    "url": "https://www.bidexpress.com/solicitations/44593",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
-    "description": "Contract 2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513559+00:00"
-  },
-  {
-    "id": "opp-45fe079475d2",
-    "title": "Contract 2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "02/10/2026",
-    "due_date": "02/10/2026",
-    "url": "https://www.bidexpress.com/solicitations/44848",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
-    "description": "Contract 2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513416+00:00"
-  },
-  {
-    "id": "opp-2a9001035c8b",
-    "title": "Contract 2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "02/11/2026",
-    "due_date": "02/11/2026",
-    "url": "https://www.bidexpress.com/solicitations/44630",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
-    "description": "Contract 2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513278+00:00"
-  },
-  {
-    "id": "opp-241325c6fd91",
-    "title": "Contract 2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "02/18/2026",
-    "due_date": "02/18/2026",
-    "url": "https://www.bidexpress.com/solicitations/44823",
-    "access_type": "BidExpress",
-    "record_type": "construction",
-    "contract_number": "2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
-    "description": "Contract 2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513146+00:00"
-  },
-  {
-    "id": "opp-5ae51ccae577",
-    "title": "Contract 2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "03/17/2026",
-    "due_date": "03/17/2026",
-    "url": "https://www.bidexpress.com/solicitations/45215",
-    "access_type": "BidExpress",
-    "record_type": "professional_services",
-    "contract_number": "2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
-    "description": "Contract 2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.513000+00:00"
-  },
-  {
-    "id": "opp-4bd4f93606ba",
-    "title": "Contract 2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
-    "source_id": "state-sjta",
-    "source_name": "South Jersey Transportation Authority",
-    "county": "Atlantic",
-    "due_date_raw": "04/16/2026",
-    "due_date": "04/16/2026",
-    "url": "https://www.bidexpress.com/solicitations/46251",
-    "access_type": "BidExpress",
-    "record_type": "professional_services",
-    "contract_number": "2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
-    "description": "Contract 2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.512835+00:00"
-  },
-  {
     "id": "opp-ae81b0c785cf",
     "title": "TP-819 \u2014 Clarksville Road (CR 638), Bridge over Amtrak",
     "source_id": "state-njdot-profserv",
@@ -184,7 +14,7 @@
     "description": "Clarksville Road (CR 638), Bridge over Amtrak",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015181+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529928+00:00"
   },
   {
     "id": "opp-01a0c5e2f94e",
@@ -201,7 +31,7 @@
     "description": "Rt 122, Lock St to Rt 22",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015182+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529931+00:00"
   },
   {
     "id": "opp-fc73f72c1832",
@@ -218,7 +48,7 @@
     "description": "Contract 2026 \u2014 15 General Engineering Consultant Atlantic City Expressway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.510740+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530112+00:00"
   },
   {
     "id": "opp-45948f18d658",
@@ -235,7 +65,7 @@
     "description": "Contract 2026 \u2014 17 Traffic Engineering Consultant Atlantic City Expressway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.510900+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530114+00:00"
   },
   {
     "id": "opp-a8daaab1a7f0",
@@ -252,7 +82,7 @@
     "description": "Contract 2026 \u2014 16 Airport Engineering Consultant Atlantic City International Airport",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.511065+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530116+00:00"
   },
   {
     "id": "opp-329347a05cfa",
@@ -269,7 +99,7 @@
     "description": "Contract 2026 \u2014 19 Atlantic City International Airport Construct Taxiway R \u2014 Phase 1",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.511205+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530118+00:00"
   },
   {
     "id": "opp-680d19411c22",
@@ -286,7 +116,7 @@
     "description": "Vegetation Safety Management Project, Rt. 55",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015179+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529925+00:00"
   },
   {
     "id": "opp-7e342622dd3e",
@@ -303,7 +133,7 @@
     "description": "Multi \u2014 Discipline Environmental",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015178+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529921+00:00"
   },
   {
     "id": "opp-40f69bfb7021",
@@ -320,7 +150,7 @@
     "description": "Route 206, Valley Road to Brown Avenue, Somerset County",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015183+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529934+00:00"
   },
   {
     "id": "opp-2a01c3b638b6",
@@ -337,7 +167,7 @@
     "description": "Contract 2026 \u2014 18 Atlantic City International Airport (ACY) Terminal Roof & HVAC Rehabilitation Project",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.511352+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530119+00:00"
   },
   {
     "id": "opp-c59dc6b14c50",
@@ -354,7 +184,7 @@
     "description": "Rt. 23 and Rt. 94 Rockfall Mitigation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015175+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529915+00:00"
   },
   {
     "id": "opp-cf59e2fcb3cd",
@@ -371,7 +201,7 @@
     "description": "Rt. 168, Merchant St. to Ferry Ave. Pavement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015176+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529918+00:00"
   },
   {
     "id": "opp-4aae2c08c4f5",
@@ -388,7 +218,7 @@
     "description": "Contract 2026 \u2014 20 Runway Rubber and Contaminant Removal Surface Preparation and Runway/Taxiway Painting at Atlantic City International Airport",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.511501+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530121+00:00"
   },
   {
     "id": "opp-ce76d3ec5348",
@@ -405,7 +235,7 @@
     "description": "Highway Safety Improvement Program (HSIP) Project Development & Support",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015173+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529911+00:00"
   },
   {
     "id": "opp-b1446619442c",
@@ -422,7 +252,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015156+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529890+00:00"
   },
   {
     "id": "opp-ffac2929d377",
@@ -439,7 +269,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015169+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529903+00:00"
   },
   {
     "id": "opp-a7f6962f2fe2",
@@ -456,7 +286,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015171+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529907+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -473,7 +303,7 @@
     "description": "Professional services for electronic surveillance type integrators with appropriate experience in working with integrated systems consisting of access control, video management, video analytics, control centers and supporting systems including, but not limited to, active directory services, network managed services and operations management technology. Document Download: Request for Proposals Requirements Conformance Tables (EXCEL): \u2018Tab 8 \u2014 15 Requirements Conformance Tables\u2019 Price Proposal For",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/DB-823ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015185+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529937+00:00"
   },
   {
     "id": "opp-37e4d760f463",
@@ -490,7 +320,7 @@
     "description": "Capital Program Management Consultant (CPMC) Services Task Order Agreement Professional engineering services for various Task Order Assignments to provide staff augmentation to Commission staff to provide program management, project management, and technical support services as part of the Commission\u2019s Capital Program delivery. Document Download: Request for Proposals Pre \u2014 Proposal Sign \u2014 In Sheet Addendum 1 (Response to Inquiries)",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/C-825ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015186+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529940+00:00"
   },
   {
     "id": "opp-8675ddc4dc05",
@@ -507,7 +337,7 @@
     "description": "Contract No. P200.865 Roadway Lighting Improvements",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015188+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529944+00:00"
   },
   {
     "id": "opp-f411d2beb180",
@@ -524,7 +354,7 @@
     "description": "RFP ENTERPRISE RESOURCE PLANNING (ERP) BUSINESS ADMINISTRATION SOFTWARE MANAGED SERVICES RM \u2014 196137",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015189+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529947+00:00"
   },
   {
     "id": "opp-72d798a20940",
@@ -541,7 +371,7 @@
     "description": "Order for Professional Services No. P4259",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015191+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529950+00:00"
   },
   {
     "id": "opp-832b985fa06d",
@@ -558,7 +388,7 @@
     "description": "RM \u2014 200613 RFP SELF \u2014 FUNDED HEALTH BENEFITS PROGRAM SERVICES",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015192+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529954+00:00"
   },
   {
     "id": "opp-19309a79db36",
@@ -575,7 +405,7 @@
     "description": "Contract No. P500.786 Construction of Pre \u2014 Engineered Metal Buildings",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015194+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529957+00:00"
   },
   {
     "id": "opp-76a59c5ee3f4",
@@ -592,7 +422,7 @@
     "description": "Order For Professional Services No. A4354",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015195+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529961+00:00"
   },
   {
     "id": "opp-acbcacb4b6ff",
@@ -609,7 +439,7 @@
     "description": "Order For Professional Services No. T4295 and P4311",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015196+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529964+00:00"
   },
   {
     "id": "opp-a073a5c2f6ec",
@@ -626,7 +456,7 @@
     "description": "R \u2014 200550 RFB Solar Powered Arrow Board Trailers",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015197+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529967+00:00"
   },
   {
     "id": "opp-a674035c6845",
@@ -643,7 +473,7 @@
     "description": "RM \u2014 200534 RFB Bobcat Parts, Repairs & Diagnostic Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015199+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529970+00:00"
   },
   {
     "id": "opp-77bc369fd24f",
@@ -660,7 +490,7 @@
     "description": "RM \u2014 200301 RFB Tree Trimming and Removal Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015200+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529973+00:00"
   },
   {
     "id": "opp-6f5b50f0e5de",
@@ -677,7 +507,7 @@
     "description": "Notice of Intent \u2014 The Newark Bay \u2014 Hudson County Extension Improvements Program: Construction of a New Cable \u2014 Stayed Bridge and Approaches to Remove Traffic from the Existing Newark Bay Bridge",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015202+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529976+00:00"
   },
   {
     "id": "opp-d59546aa3f37",
@@ -694,7 +524,7 @@
     "description": "Order for Professional Services No. P3320",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015203+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529979+00:00"
   },
   {
     "id": "opp-3bf1e44063f8",
@@ -711,7 +541,7 @@
     "description": "Contract No. T200.618 Roadway Lighting Improvements at New Jersey Turnpike Interchange 9",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015205+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529983+00:00"
   },
   {
     "id": "opp-cd5cc48d99dd",
@@ -728,7 +558,7 @@
     "description": "Order For Professional Services No. T4261 Design Services For Contract No. T300.866",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015206+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529986+00:00"
   },
   {
     "id": "opp-455d13a80a29",
@@ -745,7 +575,7 @@
     "description": "Contract No. P200.828 Drainage Repairs, Milepost 120.6 to 123.6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015207+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529990+00:00"
   },
   {
     "id": "opp-b2d8283325a1",
@@ -762,7 +592,7 @@
     "description": "R \u2014 200455 RFB Swipe Access for VMS Cabinets",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015209+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529993+00:00"
   },
   {
     "id": "opp-2346228b8093",
@@ -779,7 +609,7 @@
     "description": "RM \u2014 200049 RFB Remanufactured Turbos for HD Vehicles Over 15K GVWR for the Turnpike and Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015210+00:00"
+    "crawled_at": "2026-04-18T00:46:36.529997+00:00"
   },
   {
     "id": "opp-0627c94a315a",
@@ -796,7 +626,7 @@
     "description": "RM \u2014 199091 RFB REBID Repair and Replace Glass at all Facilities and Toll Booths",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015211+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530001+00:00"
   },
   {
     "id": "opp-5144bce9ef7b",
@@ -813,7 +643,7 @@
     "description": "OPS No. P4350 \u2014 Supervision of Construction Services for Contract No. P200.865, Roadway Lighting Improvements at Garden State Parkway Interchange 145",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015213+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530005+00:00"
   },
   {
     "id": "opp-879fee82e3d6",
@@ -830,7 +660,7 @@
     "description": "Contract No. T200.901 Interchange 1 To 4 Capacity Enhancements Program, Toll Plaza 1 Operational Improvements, Milepost 2.0 to 2.9",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015214+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530008+00:00"
   },
   {
     "id": "opp-dbfcb32dc957",
@@ -847,7 +677,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%200000215-%20Advertisement_0.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015215+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530010+00:00"
   },
   {
     "id": "opp-0b1539a4f1e6",
@@ -864,7 +694,7 @@
     "description": "NOTE: There are no costs for submitting a proposal.",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015217+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530013+00:00"
   },
   {
     "id": "opp-da76c9609c2e",
@@ -881,7 +711,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015218+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530015+00:00"
   },
   {
     "id": "opp-1cefc9b2a8aa",
@@ -898,7 +728,7 @@
     "description": "***THIS PROCUREMENT IS HEREBY CANCELLED AND MAY BE RE \u2014 SOLICITED IN THE NEAR FUTURE.***",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%200000189%20State%20Goods%20and%20Services%20-%20Advertisement%20-%20(Nov%202025).pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015220+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530016+00:00"
   },
   {
     "id": "opp-2d620831d3ff",
@@ -915,7 +745,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%200000223-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015221+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530018+00:00"
   },
   {
     "id": "opp-0f132130062c",
@@ -932,7 +762,7 @@
     "description": "NOTE: There are no costs for submitting a proposal.",
     "doc_url": "https://content.njtransit.com/sites/default/files/RFP%200000198%20-%20Advertisement_0.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015222+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530020+00:00"
   },
   {
     "id": "opp-4311bd905695",
@@ -949,7 +779,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%200000217-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015224+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530022+00:00"
   },
   {
     "id": "opp-40303c935ee5",
@@ -966,7 +796,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%200000230%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015225+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530024+00:00"
   },
   {
     "id": "opp-8d11e5699a82",
@@ -983,7 +813,7 @@
     "description": "NOTE: There are no costs for submitting a proposal.",
     "doc_url": "https://content.njtransit.com/sites/default/files/RFP%20No.%200000236-%20Advertisement_0.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015227+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530025+00:00"
   },
   {
     "id": "opp-dad6a079663c",
@@ -1000,7 +830,7 @@
     "description": "BL26 \u2014 10 \u2014 Up for auction are ten (10) decommissioned Bus (008 NABI/416.15.02 Bus 5204, 5213, 5224, 5228, 5244, 5331, 5339, 5341, 5344, and 5349). The buses are not in driving condition and are sold ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015228+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530027+00:00"
   },
   {
     "id": "opp-501a2e732457",
@@ -1017,7 +847,7 @@
     "description": "BL26 \u2014 11 \u2014 Up for auction are ten (10) decommissioned Bus (NABI/416.15.02 Bus 5395, 5390, 5391, 5397, 5392, 5398, 5393, 5388, 5394, 5400). The buses are not in driving condition and are sold in \u201cAS I",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015229+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530029+00:00"
   },
   {
     "id": "opp-a5f2a10245a3",
@@ -1034,7 +864,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 25 \u2014 612 \"Facility Maintenance and Management Services Contract Newark Penn Station and Newark Light Rail Mezzanine\" General navigation, registration, and solicit",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015230+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530030+00:00"
   },
   {
     "id": "opp-172814da6e89",
@@ -1051,7 +881,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%2024-618R%20-%20State%20Goods%20and%20Services%20-%20Advertisement_0.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015232+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530032+00:00"
   },
   {
     "id": "opp-dbcb775583d6",
@@ -1068,7 +898,7 @@
     "description": "Contractor Bid Amount Lucchini North America, Inc. Line Item 15 \u2014 Base Year 1 $ 1,229,700.00 Lucchini North America, Inc. Line Item 15A \u2014 Option Year 1 $ 1,266,600.00 Alstom Transportation Inc. Line I",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015233+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530034+00:00"
   },
   {
     "id": "opp-a4e2172107b9",
@@ -1085,7 +915,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 26 \u2014 602 \"Facility Maintenance, Operations, and Management Services at Trenton Transit Center.\" General navigation, registration, and solicitation review for prop",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015234+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530036+00:00"
   },
   {
     "id": "opp-7a688d3a73b2",
@@ -1102,7 +932,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%200000197%20-%20Advertisement%20(Nov%202025%20DBE%20IFR)_2.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015236+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530037+00:00"
   },
   {
     "id": "opp-1aef303b5747",
@@ -1119,7 +949,7 @@
     "description": "Contractor Bid Amount Progress Rail Services Corporation $ 1,139,270.00 Voestalpine Railway Systems Nortrak LLC $ 842,272.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015237+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530039+00:00"
   },
   {
     "id": "opp-c8c6ba3b010b",
@@ -1136,7 +966,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 0000234, \"Northeast Corridor (NEC), North Jersey Coast Line (NJCL) and Raritan Valley Line (RVL) Rail Origin \u2014 Destination Survey \u2014 2025/2026\". General navigation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015238+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530040+00:00"
   },
   {
     "id": "opp-f3ec51dd0e72",
@@ -1153,7 +983,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 0000236, \"Facility Inspections FY27 \u2014 FY29\". General navigation, registration, and solicitation review for proposing a solicitation is FREE. NOTE: There are no co",
     "doc_url": "https://content.njtransit.com/sites/default/files/RFP%20No.%200000236-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015239+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530042+00:00"
   },
   {
     "id": "opp-d91141b59bc1",
@@ -1170,7 +1000,7 @@
     "description": "Contractor Bid Amount Air & Gas Technologies, Inc. $ 2,574,972.03 Airmatic Compressor $ 2,605,922.65",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015241+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530044+00:00"
   },
   {
     "id": "opp-3863420dad31",
@@ -1187,7 +1017,7 @@
     "description": "Contractor Bid Amount Joseph Robinette $ 1,550.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015242+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530045+00:00"
   },
   {
     "id": "opp-c7a2bc1a8daf",
@@ -1204,7 +1034,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%2026-301%20-%20Advertisement_3.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015243+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530047+00:00"
   },
   {
     "id": "opp-1b04bcd143ba",
@@ -1221,7 +1051,7 @@
     "description": "Contractor Bid Amount Core Mechanical Inc. $ 6,966,722.10 GE Mechanical LLC $ 7,557,140.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015244+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530049+00:00"
   },
   {
     "id": "opp-71f2d44d8ab3",
@@ -1238,7 +1068,7 @@
     "description": "Note: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%200000215-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015246+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530050+00:00"
   },
   {
     "id": "opp-84a0a38748e2",
@@ -1255,7 +1085,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 0000198, \"NEWARK LIGHT RAIL ADA & STATION MODERNIZATION\". General navigation, registration, and solicitation review for proposing a solicitation is FREE. NOTE: Th",
     "doc_url": "https://content.njtransit.com/sites/default/files/RFP%200000198%20-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015247+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530052+00:00"
   },
   {
     "id": "opp-cfa1b93d0b73",
@@ -1272,7 +1102,7 @@
     "description": "Note: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%200000197%20-%20Advertisement%20(Nov%202025%20DBE%20IFR)_0.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015248+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530054+00:00"
   },
   {
     "id": "opp-564259219a3a",
@@ -1289,7 +1119,7 @@
     "description": "Pre \u2014 Proposal Conference for RFP No. 0000192, \"RAIL OPERATIONS PLANNING, CORRIDOR PLANNING AND STATION / ACCESS PLANNING\". General navigation, registration, and solicitation review for proposing a so",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015249+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530055+00:00"
   },
   {
     "id": "opp-db1d09dd526d",
@@ -1306,7 +1136,7 @@
     "description": "NOTE: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%200000179%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015250+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530057+00:00"
   },
   {
     "id": "opp-cd0b890341f0",
@@ -1323,7 +1153,7 @@
     "description": "Contractor Bid Amount Model 1 Commercial Vehicles, Inc. $ 11,719,410.00 Rohrer Enterprises, LLC $ 12,024,510.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015252+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530059+00:00"
   },
   {
     "id": "opp-15f9b5c8d5a6",
@@ -1340,7 +1170,7 @@
     "description": "Contractor Bid Amount Ray Jones (A1 Uniform) $ 2,313,016.22 Saf \u2014 Gard Safety Shoe Co $ 1,964,676.23",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015253+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530060+00:00"
   },
   {
     "id": "opp-013c380c4b92",
@@ -1357,7 +1187,7 @@
     "description": "Contractor Bid Amount Amsted Rail \u2014 Line Item 1 \u2014 Base Year 1 $ 1,390,000.00 Amsted Rail \u2014 Line Item 1 \u2014 Base Year 2 $ 1,390,000.00 Amsted Rail \u2014 Line Item 1 \u2014 Base Year 3 $ 1,390,000.00 Amsted Rail \u2014",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015254+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530062+00:00"
   },
   {
     "id": "opp-32909e6d0a1c",
@@ -1374,7 +1204,7 @@
     "description": "Note: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%2024-618R%20-%20State%20Goods%20and%20Services%20-%20Advertisement.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015256+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530064+00:00"
   },
   {
     "id": "opp-48f9a49c2d04",
@@ -1391,7 +1221,7 @@
     "description": "Contractor Bid Amount Easton Coach Company $ 0.00 MPC Bus Corp. $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015257+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530066+00:00"
   },
   {
     "id": "opp-1ddec0c4edda",
@@ -1408,7 +1238,7 @@
     "description": "Contractor Bid Amount Clever Devices Ltd. $ 0.00 DILAX Systems INc. $ 0.00 Infodev Electronic Designers International Inc. $ 0.00 Transit Fixed/On \u2014 Demand, LLC $ 0.00 Urban Transportation Associates,",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015258+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530067+00:00"
   },
   {
     "id": "opp-8b2be89eadf3",
@@ -1425,7 +1255,7 @@
     "description": "***THIS PROCUREMENT IS HEREBY CANCELLED AND MAY BE RE \u2014 SOLICITED IN THE NEAR FUTURE.***",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015259+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530069+00:00"
   },
   {
     "id": "opp-1dee8a57fda0",
@@ -1442,7 +1272,7 @@
     "description": "Contractor Bid Amount LB FOSTER $ 13,302,720.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015261+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530070+00:00"
   },
   {
     "id": "opp-fa2e7462533a",
@@ -1459,7 +1289,7 @@
     "description": "EXPRESSION OF INTEREST (EOI) No. 26 \u2014 606, \u201cMultilevel Overhaul and Modernization\u201d. Notice is hereby given that New Jersey Transit (NJ TRANSIT) is issuing an Expression of Interest (EOI) to identify q",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015262+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530072+00:00"
   },
   {
     "id": "opp-3495e03304c7",
@@ -1476,7 +1306,7 @@
     "description": "Solicitation of Offers to Purchase (SOP) No. AP024426, Annual Scrap Removal Contract of Central Maintenance Facility (CMF). The New Jersey Transit Corporation (NJ Transit) is soliciting an offer to pu",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015263+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530074+00:00"
   },
   {
     "id": "opp-62da2dd333dd",
@@ -1493,7 +1323,7 @@
     "description": "Contractor Bid Amount C&K Scrap Metal $ 293,826.01",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015264+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530076+00:00"
   },
   {
     "id": "opp-890e4ea9d47f",
@@ -1510,7 +1340,7 @@
     "description": "Contractor Bid Amount Eflyn Electronics Ltd. $ 933,228.00 KIOSK Information Systems $ 413,910.00 REDYREF $ 498,366.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015266+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530077+00:00"
   },
   {
     "id": "opp-9b84d6f0ec0d",
@@ -1527,7 +1357,7 @@
     "description": "Note: There are no costs for submitting a bid.",
     "doc_url": "https://content.njtransit.com/sites/default/files/IFB%20No.%2026-301%20-%20Advertisement_1.pdf",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015267+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530079+00:00"
   },
   {
     "id": "opp-c466ae839a07",
@@ -1544,7 +1374,7 @@
     "description": "Contractor Bid Amount AECOM Technical Services, Inc. $ 0.00 Bailey White Solutions, LLC $ 0.00 ETC Institute $ 0.00 HWP LLC $ 0.00 KFH Group $ 0.00 Resource Systems Group, Inc. $ 0.00 WBA Research $ 0",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015268+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530081+00:00"
   },
   {
     "id": "opp-959ca4e8b642",
@@ -1561,7 +1391,7 @@
     "description": "Contractor Bid Amount D. A. Nolt, Inc. $ 10,527,952.00 Pravco, Inc. $ 10,726,156.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015270+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530082+00:00"
   },
   {
     "id": "opp-4d7537882bd0",
@@ -1578,7 +1408,7 @@
     "description": "Contractor Bid Amount Model 1 Commercial Vehicles, Inc. $ 6,546,316.00 Rohrer Enterprises, LLC $ 6,945,160.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015271+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530084+00:00"
   },
   {
     "id": "opp-9fe5e9d66032",
@@ -1595,7 +1425,7 @@
     "description": "Contractor Bid Amount HWP LLC $ 0.00 KDL Infrastructure Advisory LLC $ 0.00 Telos Advisors $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015272+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530086+00:00"
   },
   {
     "id": "opp-09ddc9908b79",
@@ -1612,7 +1442,7 @@
     "description": "Contractor Bid Amount HDR Engineering, Inc. $ 0.00 Jacobs Engineering Group Inc. $ 0.00 STV Incorporated $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015273+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530088+00:00"
   },
   {
     "id": "opp-6d6e362fd9c4",
@@ -1629,7 +1459,7 @@
     "description": "BL26 \u2014 6 \u2014 Up for auction are eleven (11) decommissioned Buses (2008 NABI/416.15.02 Buses 5215, 5248, 5254, 5267, 5271, 5273, 5277, 5333, 5338, 5342, and 5365). These buses are not in driving conditio",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015275+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530089+00:00"
   },
   {
     "id": "opp-47ec8ca35093",
@@ -1646,7 +1476,7 @@
     "description": "BL26 \u2014 7 \u2014 Up for auction is one (1) decommissioned Bus (2018 MCI/D4500 Bus 18043). This bus is not in driving condition and are sold in \u201cAS IS\u201d \u201cWHERE IS\u201d condition. Bus is located at 442 Avenue P, N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015276+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530091+00:00"
   },
   {
     "id": "opp-254e20a0b28f",
@@ -1663,7 +1493,7 @@
     "description": "Contractor Bid Amount George S. Hall, Inc. $ 5,222,299.86 Life Saving Investments $ 75,860,000.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015277+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530092+00:00"
   },
   {
     "id": "opp-f76c9d540528",
@@ -1680,7 +1510,7 @@
     "description": "Contractor Bid Amount Edens Corporation $ 0.00 FRONT ROW PARKING LLC $ 0.00 LAZ Parking NY/NJ $ 0.00 SP Plus, LLC $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015279+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530094+00:00"
   },
   {
     "id": "opp-9d61a0f25767",
@@ -1697,7 +1527,7 @@
     "description": "Contractor Bid Amount Aerial Rise, LLC $ 1,050,825.00 Stronghold Systems, LLC $ 3,974,073.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015280+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530096+00:00"
   },
   {
     "id": "opp-adbe8f3b4925",
@@ -1714,7 +1544,7 @@
     "description": "Contractor Bid Amount ACTION UNIFORM CO LLC $ 4,550,364.00 GALLS, LLC $ 5,899,409.95",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015281+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530097+00:00"
   },
   {
     "id": "opp-53e2d851270a",
@@ -1731,7 +1561,7 @@
     "description": "Contractor Bid Amount AECOM Technical Services, Inc. $ 0.00 Econsult Solutions, Inc. $ 0.00 Golden Staffing and Consulting Firm $ 0.00 Greystone Select Incorporated d/b/a Greystone Real Estate Advisor",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015282+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530099+00:00"
   },
   {
     "id": "opp-806d7dd299cc",
@@ -1748,7 +1578,7 @@
     "description": "Contractor Bid Amount LAZ Parking NY/NJ $ 0.00 Parking Systems $ 0.00 SP Plus, LLC $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015284+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530101+00:00"
   },
   {
     "id": "opp-46e390ee8c5d",
@@ -1765,7 +1595,7 @@
     "description": "Contractor Bid Amount Anselmi & DeCicco, Inc. $ 0.00 Dobco, Inc. $ 0.00 Forte Construction Corp $ 0.00 Hall Construction Co., Inc. $ 0.00 Herzog Contracting Corp./DMR a JV $ 0.00 MLJ CONTRACTING CORP ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015285+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530102+00:00"
   },
   {
     "id": "opp-14f854fb90dd",
@@ -1782,7 +1612,7 @@
     "description": "Contractor Bid Amount Kayla Daly $ 325.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015286+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530104+00:00"
   },
   {
     "id": "opp-d24243ae4b55",
@@ -1799,7 +1629,7 @@
     "description": "Contractor Bid Amount Atlas Elevator Inc $ 3,385,000.00 Excel Elevator & Escalator $ 3,808,000.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015287+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530106+00:00"
   },
   {
     "id": "opp-04db10acb3f1",
@@ -1816,7 +1646,7 @@
     "description": "Contractor Bid Amount DMR Construction Services, Inc. $ 17,993,157.87 Hall Construction Co., Inc. $ 18,850,000.00 Union Paving and Construction Co., Inc. $ 14,970,557.26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015289+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530107+00:00"
   },
   {
     "id": "opp-88231b1d605c",
@@ -1833,7 +1663,7 @@
     "description": "Contractor Bid Amount Independence Constructors Corp $ 14,352,624.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015290+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530109+00:00"
   },
   {
     "id": "opp-28a4640e4bf0",
@@ -1850,7 +1680,7 @@
     "description": "Contractor Bid Amount Arup Us, Inc $ 0.00 Expect Moore Consulting $ 0.00 VHB $ 0.00 WSP USA Inc $ 0.00",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:31.015291+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530111+00:00"
   },
   {
     "id": "opp-a827ec033be7",
@@ -1867,7 +1697,7 @@
     "description": "Contract 6 Solicitations",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.511609+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530123+00:00"
   },
   {
     "id": "opp-bea842749f32",
@@ -1884,6 +1714,176 @@
     "description": "Contract 1 \u2014 10 of 250 Solicitations \u2190 Previous 1 2 3 4 5 6 7 8 9 \u2026 24 25 Next \u2192",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-04-18T00:20:29.514310+00:00"
+    "crawled_at": "2026-04-18T00:46:36.530124+00:00"
+  },
+  {
+    "id": "opp-8c8c555cad3c",
+    "title": "Contract 2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "01/06/2026",
+    "due_date": "01/06/2026",
+    "url": "https://www.bidexpress.com/solicitations/44126",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
+    "description": "Contract 2025 \u2014 58 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513697+00:00"
+  },
+  {
+    "id": "opp-3499475ab3f1",
+    "title": "Contract 2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "01/28/2026",
+    "due_date": "01/28/2026",
+    "url": "https://www.bidexpress.com/solicitations/44593",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
+    "description": "Contract 2026 \u2014 03 Purchase and Delivery of 2025 or Current Production Year 14 Passenger CNG Standard Cutaway Bus with Wheelchair Lift or Equal \u2014 Reissue",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513559+00:00"
+  },
+  {
+    "id": "opp-45fe079475d2",
+    "title": "Contract 2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "02/10/2026",
+    "due_date": "02/10/2026",
+    "url": "https://www.bidexpress.com/solicitations/44848",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
+    "description": "Contract 2026 \u2014 07 Refuse Removal Services at Various South Jersey Transportation Authority Locations",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513416+00:00"
+  },
+  {
+    "id": "opp-2a9001035c8b",
+    "title": "Contract 2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "02/11/2026",
+    "due_date": "02/11/2026",
+    "url": "https://www.bidexpress.com/solicitations/44630",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
+    "description": "Contract 2026 \u2014 01 Atlantic City Expressway (ACE) 2026 Maintenance Yards Roof Rehabilitation Project",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513278+00:00"
+  },
+  {
+    "id": "opp-241325c6fd91",
+    "title": "Contract 2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "02/18/2026",
+    "due_date": "02/18/2026",
+    "url": "https://www.bidexpress.com/solicitations/44823",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
+    "description": "Contract 2026 \u2014 05 2025 Atlantic City Expressway Connector Tunnel CO Monitoring System Replacement \u2014 REBID",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513146+00:00"
+  },
+  {
+    "id": "opp-5ae51ccae577",
+    "title": "Contract 2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "03/17/2026",
+    "due_date": "03/17/2026",
+    "url": "https://www.bidexpress.com/solicitations/45215",
+    "access_type": "BidExpress",
+    "record_type": "professional_services",
+    "contract_number": "2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
+    "description": "Contract 2026 \u2014 11 Out \u2014 of \u2014 Home Advertising Development and Management New Locations",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513000+00:00"
+  },
+  {
+    "id": "opp-4bd4f93606ba",
+    "title": "Contract 2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "04/16/2026",
+    "due_date": "04/16/2026",
+    "url": "https://www.bidexpress.com/solicitations/46251",
+    "access_type": "BidExpress",
+    "record_type": "professional_services",
+    "contract_number": "2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
+    "description": "Contract 2026 \u2014 14 General and/or Special Legal Counsel for the South Jersey Transportation Planning Organization",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.512835+00:00"
+  },
+  {
+    "id": "opp-db0e053742e0",
+    "title": "Contract 2025 \u2014 33 General and/or Special Legal Counsel",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "09/05/2025",
+    "due_date": "09/05/2025",
+    "url": "https://www.bidexpress.com/solicitations/42643",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2025 \u2014 33 General and/or Special Legal Counsel",
+    "description": "Contract 2025 \u2014 33 General and/or Special Legal Counsel",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.514113+00:00"
+  },
+  {
+    "id": "opp-97059d313e05",
+    "title": "Contract 2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "12/11/2025",
+    "due_date": "12/11/2025",
+    "url": "https://www.bidexpress.com/solicitations/43918",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
+    "description": "Contract 2025 \u2014 51 Terminal Information System with FIDS, BIDS, GIDS, Advertising, and Finance at Atlantic City International Airport",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513972+00:00"
+  },
+  {
+    "id": "opp-8219d4de1bfb",
+    "title": "Contract 2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
+    "source_id": "state-sjta",
+    "source_name": "South Jersey Transportation Authority",
+    "county": "Atlantic",
+    "due_date_raw": "12/18/2025",
+    "due_date": "12/18/2025",
+    "url": "https://www.bidexpress.com/solicitations/43888",
+    "access_type": "BidExpress",
+    "record_type": "construction",
+    "contract_number": "2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
+    "description": "Contract 2025 \u2014 44 Atlantic City Expressway Connector (ACEC) 2025 Tunnel CO Monitoring System Replacement",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-18T00:20:29.513827+00:00"
   }
 ]
