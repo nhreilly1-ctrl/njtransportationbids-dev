@@ -955,6 +955,16 @@ def _parse_bidexpress(html: str, src: dict, infer_type_fn=None) -> list[dict]:
                         due_date = m.group(1)
                         break
 
+            # ── Skip past records ─────────────────────────────────────────────
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    due = date(int(parts[2]), int(parts[0]), int(parts[1]))
+                    if due < date.today():
+                        continue
+                except Exception:
+                    pass
+
             # ── Record type ───────────────────────────────────────────────────
             if infer_type_fn:
                 record_type = infer_type_fn(title, job_no)
