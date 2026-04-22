@@ -173,6 +173,16 @@ def _is_garbage(title: str) -> bool:
         "no costs for submitting",
         "of 253 solicitations",
         "previous 1 2 3",
+        # NJ Transit bid tabulations — award results, not open solicitations
+        "contractor bid amount",
+        "bid amount ",
+        # Cancelled procurements
+        "hereby cancelled",
+        "is hereby cancelled",
+        "procurement is hereby",
+        # Bus / vehicle auction notices (not infrastructure bids)
+        "up for auction",
+        "decommissioned bus",
     )
     for sub in GARBAGE_SUBSTRINGS:
         if sub in t:
