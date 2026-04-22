@@ -276,6 +276,14 @@ SOURCES = {
         "parser":      "bergen_county",
         "county":      "Bergen",
     },
+    "ocean-county": {
+        "id":          "county-ocean",
+        "name":        "Ocean County Procurement Portal",
+        "url":         "https://www.co.ocean.nj.us/Purchasing",
+        "record_type": "construction",
+        "parser":      "ocean_county",
+        "county":      "Ocean",
+    },
     "sjta": {
         "id":          "state-sjta",
         "name":        "South Jersey Transportation Authority",
@@ -1643,6 +1651,132 @@ def parse_bergen_county(html: str, src: dict) -> list[dict]:
     return items
 
 
+# ── Ocean County ──────────────────────────────────────────────────────────────
+
+def parse_ocean_county(html: str, src: dict) -> list[dict]:
+    """
+    Ocean County Procurement Portal: co.ocean.nj.us/Purchasing
+    Table with title as first column — no consistent categorization.
+    Keyword filter on title column to pull transportation/road work only.
+    Link in title row leads to project detail page.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    for table in soup.find_all("table"):
+        rows = table.find_all("tr")
+        if len(rows) < 2:
+            continue
+
+        # Try to detect header row for date/number columns
+        header_cells = rows[0].find_all(["th", "td"])
+        headers = [c.get_text(" ", strip=True).lower() for c in header_cells]
+
+        def _col(keywords):
+            for kw in keywords:
+                for i, h in enumerate(headers):
+                    if kw in h:
+                        return i
+            return None
+
+        date_col = _col(["due", "closing", "opening", "date", "deadline"])
+        num_col  = _col(["number", "rfp", "rfq", "rfi", "bid #", "#"])
+
+        for row in rows[1:]:
+            cells = row.find_all(["td", "th"])
+            if not cells:
+                continue
+
+            # First column is the title
+            first_cell = cells[0]
+            title = _clean(first_cell.get_text(" ", strip=True))
+
+            if not title or _is_garbage(title):
+                continue
+
+            # Keyword filter on title
+            if not TRANSPORT_KW.search(title):
+                continue
+
+            # Link — prefer link in first cell, fallback to any link in row
+            detail_url = ""
+            a = first_cell.find("a", href=True)
+            if not a:
+                for cell in cells:
+                    a = cell.find("a", href=True)
+                    if a:
+                        break
+            if a:
+                detail_url = a["href"]
+                if not detail_url.startswith("http"):
+                    detail_url = urljoin(src["url"], detail_url)
+
+            # Project number
+            job_no = ""
+            if num_col is not None and num_col < len(cells):
+                job_no = _clean(cells[num_col].get_text(" ", strip=True))
+
+            # Due date
+            due_date = ""
+            if date_col is not None and date_col < len(cells):
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b",
+                              cells[date_col].get_text())
+                if m:
+                    due_date = m.group(1)
+            # Fallback: scan all cells for a date
+            if not due_date:
+                for cell in cells:
+                    m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", cell.get_text())
+                    if m:
+                        due_date = m.group(1)
+                        break
+
+            # Future-only
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    if date(int(parts[2]), int(parts[0]), int(parts[1])) < date.today():
+                        continue
+                except Exception:
+                    pass
+
+            tl = title.lower()
+            record_type = ("professional_services"
+                           if any(w in tl for w in ["rfp", "rfq", "rfi", "engineering",
+                                                     "design", "consulting", "professional",
+                                                     "inspection", "planning"])
+                           else "construction")
+
+            full_title = (f"{job_no} — {title}"
+                          if job_no and job_no not in title else title)
+
+            uid = _make_id(src["id"], full_title, detail_url)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  {src['name']} ACCEPT: {full_title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id       = src["id"],
+                source_name     = src["name"],
+                title           = full_title,
+                url             = detail_url or src["url"],
+                due_date_raw    = due_date,
+                county          = src.get("county", "Ocean"),
+                record_type     = record_type,
+                access_type     = "Public access",
+                contract_number = job_no,
+                description     = title,
+            ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items
+
+
 # ── Parser dispatch ───────────────────────────────────────────────────────────
 PARSERS = {
     "njdot_construction": parse_njdot_construction,
@@ -1654,6 +1788,7 @@ PARSERS = {
     "camden_county":      parse_camden_county,
     "monmouth_county":    parse_monmouth_county,
     "bergen_county":      parse_bergen_county,
+    "ocean_county":       parse_ocean_county,
 }
 
 # ── Data management ───────────────────────────────────────────────────────────

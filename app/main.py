@@ -251,6 +251,7 @@ SOURCE_RULES = {
     "county-camden": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
     "county-monmouth": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
     "county-bergen": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
+    "county-ocean": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
     "county-burlington": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
     "municipal-jersey-city": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
     "municipal-hoboken": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
