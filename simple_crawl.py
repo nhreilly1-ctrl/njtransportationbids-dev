@@ -250,16 +250,8 @@ SOURCES = {
         "record_type": "construction",   # per-record type resolved by URL pattern
         "parser":      "njta",
     },
-    "njtransit": {
-        "id":          "state-njtransit",
-        "name":        "NJ Transit",
-        "url":         "https://www.njtransit.com/procurement/calendar",
-        "record_type": "construction",   # per-record type resolved by IFB/RFP in doc href
-        "parser":      "njtransit",
-        "county":      "Statewide",
-        "use_js":      True,             # page is JS-rendered; requires Playwright
-        "js_click":    "Expand All",     # click this button before scraping
-    },
+    # "njtransit" removed — procurement calendar mixes scrap sales, EOIs,
+    # cooperative purchasing, and cancelled notices; not useful for this audience.
     "sjta": {
         "id":          "state-sjta",
         "name":        "South Jersey Transportation Authority",
