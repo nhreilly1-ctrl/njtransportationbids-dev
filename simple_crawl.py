@@ -1320,8 +1320,13 @@ def parse_camden_county(html: str, src: dict) -> list[dict]:
             if desc_col is not None and desc_col < len(cells):
                 desc = _clean(cells[desc_col].get_text(" ", strip=True))
 
-            # Skip CCMUA / water authority rows
-            combined = f"{title} {desc}"
+            # Project number — check early so CCMUA filter can see it
+            job_no = ""
+            if num_col is not None and num_col < len(cells):
+                job_no = _clean(cells[num_col].get_text(" ", strip=True))
+
+            # Skip CCMUA / water authority rows — check title, desc, AND project number
+            combined = f"{job_no} {title} {desc}"
             if CAMDEN_SKIP_SOURCES.search(combined):
                 continue
 
@@ -1332,11 +1337,6 @@ def parse_camden_county(html: str, src: dict) -> list[dict]:
 
             if not title:
                 continue
-
-            # Project number
-            job_no = ""
-            if num_col is not None and num_col < len(cells):
-                job_no = _clean(cells[num_col].get_text(" ", strip=True))
 
             # Gold link — "View Advertisement" cell
             ad_url = ""
@@ -1462,8 +1462,18 @@ def parse_monmouth_county(html: str, src: dict) -> list[dict]:
             if not title:
                 continue
 
-            # Transportation keyword filter
+            # Transportation keyword filter on title
             if not TRANSPORT_KW.search(title):
+                continue
+
+            # Exclude equipment-only / supply bids (not infrastructure work)
+            EQUIP_SKIP = re.compile(
+                r"furnish and deliver|furnish &|supply and deliver|"
+                r"purchase of|acquisition of|fleet|vehicle|truck|equipment only|"
+                r"root cutter|stump|mower|sweeper",
+                re.I,
+            )
+            if EQUIP_SKIP.search(title):
                 continue
 
             # Future-only
