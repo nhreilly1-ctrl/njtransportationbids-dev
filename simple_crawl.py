@@ -1574,6 +1574,10 @@ def parse_bergen_county(html: str, src: dict) -> list[dict]:
             if not title or _is_garbage(title):
                 continue
 
+            # Keyword filter on the project/title column
+            if not TRANSPORT_KW.search(title):
+                continue
+
             job_no = ""
             if num_col is not None and num_col < len(cells):
                 job_no = _clean(cells[num_col].get_text(" ", strip=True))
