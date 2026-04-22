@@ -248,7 +248,9 @@ SOURCE_RULES = {
     "state-sjta": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "state-panynj-construction": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
     "state-panynj-profserv": {"score": 4.5, "mode": "trusted", "label": "Trusted"},
-    "county-camden": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
+    "county-camden": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
+    "county-monmouth": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
+    "county-bergen": {"score": 4.0, "mode": "trusted", "label": "Trusted"},
     "county-burlington": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
     "municipal-jersey-city": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
     "municipal-hoboken": {"score": 4.0, "mode": "ai_review", "label": "AI review"},
@@ -1008,22 +1010,4 @@ def admin_sources():
     opps = [enrich(opp) for opp in load_opps()]
     for source in sources:
         source_id = source.get("id")
-        related = [opp for opp in opps if opp.get("source_id") == source_id]
-        source["total"] = len(related)
-        source["noise"] = len([opp for opp in related if opp["status"] == "noise"])
-        source["expired"] = len([opp for opp in related if opp["status"] == "expired"])
-        source["open"] = len([opp for opp in related if opp["status"] == "open"])
-        source["review_required"] = len([opp for opp in related if opp["status"] == "review_required"])
-        source["ai_review"] = len([opp for opp in related if opp["status"] == "ai_review"])
-        ratio = source["noise"] / max(source["total"], 1)
-        source["health"] = "bad" if ratio > 0.4 else "warn" if ratio > 0.15 else "good"
-    sources = sorted(sources, key=lambda s: (-s.get("crawlability_score", 0), s.get("name", "").lower()))
-    return render_template("admin_sources.html", sources=sources)
-
-
-init_db_schema()
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "10000"))
-    app.run(host="0.0.0.0", port=port, debug=True)
+        related = [op

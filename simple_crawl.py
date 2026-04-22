@@ -252,6 +252,30 @@ SOURCES = {
     },
     # "njtransit" removed — procurement calendar mixes scrap sales, EOIs,
     # cooperative purchasing, and cancelled notices; not useful for this audience.
+    "camden-county": {
+        "id":          "county-camden",
+        "name":        "Camden County Procurements",
+        "url":         "https://procurements.camdencounty.com/procurements/",
+        "record_type": "construction",   # per-record type inferred from title/desc
+        "parser":      "camden_county",
+        "county":      "Camden",
+    },
+    "monmouth-county": {
+        "id":          "county-monmouth",
+        "name":        "Monmouth County Purchasing",
+        "url":         "https://pol.co.monmouth.nj.us/",
+        "record_type": "construction",
+        "parser":      "monmouth_county",
+        "county":      "Monmouth",
+    },
+    "bergen-county": {
+        "id":          "county-bergen",
+        "name":        "Bergen County Solicitations",
+        "url":         "https://www.co.bergen.nj.us/government/purchasing/solicitations",
+        "record_type": "construction",
+        "parser":      "bergen_county",
+        "county":      "Bergen",
+    },
     "sjta": {
         "id":          "state-sjta",
         "name":        "South Jersey Transportation Authority",
@@ -1236,6 +1260,375 @@ def parse_sjta(html: str, src: dict) -> list[dict]:
     return _parse_bidexpress(html, src, infer_type_fn=infer_type)
 
 
+# ── Camden County ─────────────────────────────────────────────────────────────
+
+# Transportation keywords for description-column filter
+TRANSPORT_KW = re.compile(
+    r"road|bridge|culvert|drainage|pavement|paving|milling|overlay|curb|"
+    r"sidewalk|intersection|signal|highway|resurfacing|guardrail|guiderail|"
+    r"reconstruction|rehabilitation|construction|streetscape|infrastructure|"
+    r"retaining wall|stormwater|sewer|utility|rfp|engineering|design|"
+    r"inspection|planning|survey|consulting",
+    re.I,
+)
+
+# Source IDs to skip — Camden County MUA bids are sewer/water, not road
+CAMDEN_SKIP_SOURCES = re.compile(r"ccmua|mua|utilities authority|water", re.I)
+
+def parse_camden_county(html: str, src: dict) -> list[dict]:
+    """
+    Camden County Procurements: procurements.camdencounty.com/procurements/
+    Table columns: # | Project Number | Title | Description | View Advertisement | Opening Date
+    - Skip rows where Title/Description matches CCMUA or utilities authority
+    - Filter on Description column for transportation keywords
+    - 'View Advertisement' href = gold link to the actual bid ad
+    - 'Opening Date' = bid closing date
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    for table in soup.find_all("table"):
+        headers = [th.get_text(" ", strip=True).lower() for th in table.find_all("th")]
+        if not headers:
+            continue
+
+        def _col(keywords):
+            for kw in keywords:
+                for i, h in enumerate(headers):
+                    if kw in h:
+                        return i
+            return None
+
+        num_col   = _col(["project number", "rfp", "bid #", "bid no", "#"])
+        title_col = _col(["title", "project name", "name"])
+        desc_col  = _col(["description"])
+        ad_col    = _col(["advertisement", "view ad", "ad link"])
+        date_col  = _col(["opening date", "due date", "closing"])
+
+        for row in table.find_all("tr"):
+            cells = row.find_all(["td", "th"])
+            if not cells or all(c.name == "th" for c in cells):
+                continue
+
+            # Pull text from each relevant column
+            title = ""
+            if title_col is not None and title_col < len(cells):
+                title = _clean(cells[title_col].get_text(" ", strip=True))
+
+            desc = ""
+            if desc_col is not None and desc_col < len(cells):
+                desc = _clean(cells[desc_col].get_text(" ", strip=True))
+
+            # Skip CCMUA / water authority rows
+            combined = f"{title} {desc}"
+            if CAMDEN_SKIP_SOURCES.search(combined):
+                continue
+
+            # Keyword filter on description (or title if no description col)
+            filter_text = desc if desc else title
+            if not TRANSPORT_KW.search(filter_text):
+                continue
+
+            if not title:
+                continue
+
+            # Project number
+            job_no = ""
+            if num_col is not None and num_col < len(cells):
+                job_no = _clean(cells[num_col].get_text(" ", strip=True))
+
+            # Gold link — "View Advertisement" cell
+            ad_url = ""
+            if ad_col is not None and ad_col < len(cells):
+                a = cells[ad_col].find("a", href=True)
+                if a:
+                    ad_url = a["href"]
+                    if not ad_url.startswith("http"):
+                        ad_url = urljoin(src["url"], ad_url)
+            # Fallback: any link in the title cell
+            if not ad_url and title_col is not None and title_col < len(cells):
+                a = cells[title_col].find("a", href=True)
+                if a:
+                    ad_url = urljoin(src["url"], a["href"])
+
+            # Opening/closing date
+            due_date = ""
+            if date_col is not None and date_col < len(cells):
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b",
+                              cells[date_col].get_text())
+                if m:
+                    due_date = m.group(1)
+
+            # Future-only filter
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    if date(int(parts[2]), int(parts[0]), int(parts[1])) < date.today():
+                        continue
+                except Exception:
+                    pass
+
+            # Record type from title/desc
+            tl = combined.lower()
+            if any(w in tl for w in ["rfp", "rfq", "engineering", "design",
+                                      "inspection", "consulting", "professional"]):
+                record_type = "professional_services"
+            else:
+                record_type = "construction"
+
+            full_title = (f"{job_no} — {title}"
+                          if job_no and job_no not in title else title)
+
+            uid = _make_id(src["id"], full_title, ad_url or src["url"])
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  {src['name']} ACCEPT: {full_title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id       = src["id"],
+                source_name     = src["name"],
+                title           = full_title,
+                url             = ad_url or src["url"],
+                due_date_raw    = due_date,
+                county          = src.get("county", "Camden"),
+                record_type     = record_type,
+                access_type     = "Public access",
+                contract_number = job_no,
+                description     = desc or title,
+            ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items
+
+
+# ── Monmouth County ───────────────────────────────────────────────────────────
+
+def parse_monmouth_county(html: str, src: dict) -> list[dict]:
+    """
+    Monmouth County Purchasing: pol.co.monmouth.nj.us/
+    Table with Request ID links. Click Request ID to get to the work item.
+    Filter on title for transportation keywords.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    for table in soup.find_all("table"):
+        for row in table.find_all("tr"):
+            cells = row.find_all(["td", "th"])
+            if not cells or all(c.name == "th" for c in cells):
+                continue
+
+            # Find the Request ID link (first cell with a link usually)
+            req_link = None
+            req_id   = ""
+            title    = ""
+            due_date = ""
+            detail_url = ""
+
+            for cell in cells:
+                a = cell.find("a", href=True)
+                if a and not req_link:
+                    req_link   = a
+                    req_id     = _clean(a.get_text(" ", strip=True))
+                    detail_url = a["href"]
+                    if not detail_url.startswith("http"):
+                        detail_url = urljoin(src["url"], detail_url)
+
+            # Title — look for the longest text cell that isn't a date or ID
+            for cell in cells:
+                t = _clean(cell.get_text(" ", strip=True))
+                if (len(t) > 20
+                        and not re.match(r"^\d{1,2}/\d", t)
+                        and t != req_id):
+                    title = t[:200]
+                    break
+
+            if not title and req_id:
+                title = req_id
+
+            # Date
+            for cell in cells:
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", cell.get_text())
+                if m:
+                    due_date = m.group(1)
+                    break
+
+            if not title:
+                continue
+
+            # Transportation keyword filter
+            if not TRANSPORT_KW.search(title):
+                continue
+
+            # Future-only
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    if date(int(parts[2]), int(parts[0]), int(parts[1])) < date.today():
+                        continue
+                except Exception:
+                    pass
+
+            tl = title.lower()
+            record_type = ("professional_services"
+                           if any(w in tl for w in ["rfp", "rfq", "engineering",
+                                                     "design", "consulting", "professional"])
+                           else "construction")
+
+            full_title = (f"{req_id} — {title}"
+                          if req_id and req_id not in title else title)
+
+            uid = _make_id(src["id"], full_title, detail_url)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  {src['name']} ACCEPT: {full_title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id       = src["id"],
+                source_name     = src["name"],
+                title           = full_title,
+                url             = detail_url or src["url"],
+                due_date_raw    = due_date,
+                county          = src.get("county", "Monmouth"),
+                record_type     = record_type,
+                access_type     = "Public access",
+                contract_number = req_id,
+                description     = title,
+            ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items
+
+
+# ── Bergen County ─────────────────────────────────────────────────────────────
+
+def parse_bergen_county(html: str, src: dict) -> list[dict]:
+    """
+    Bergen County Solicitations: co.bergen.nj.us purchasing page.
+    Table style — 'View Opportunity' link leads to bid details.
+    No keyword filter — Bergen County road program is focused enough.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    for table in soup.find_all("table"):
+        headers = [th.get_text(" ", strip=True).lower() for th in table.find_all("th")]
+
+        def _col(keywords):
+            for kw in keywords:
+                for i, h in enumerate(headers):
+                    if kw in h:
+                        return i
+            return None
+
+        title_col = _col(["title", "description", "name", "solicitation"])
+        date_col  = _col(["due", "closing", "opening", "date"])
+        num_col   = _col(["number", "bid #", "solicitation #", "#"])
+
+        for row in table.find_all("tr"):
+            cells = row.find_all(["td", "th"])
+            if not cells or all(c.name == "th" for c in cells):
+                continue
+
+            # Gold link — "View Opportunity" or any detail link in the row
+            detail_url = ""
+            for cell in cells:
+                for a in cell.find_all("a", href=True):
+                    text = a.get_text(" ", strip=True).lower()
+                    if any(kw in text for kw in ["view", "opportunity", "details", "open"]):
+                        detail_url = a["href"]
+                        if not detail_url.startswith("http"):
+                            detail_url = urljoin(src["url"], detail_url)
+                        break
+                if detail_url:
+                    break
+            # Fallback: first link in row
+            if not detail_url:
+                for cell in cells:
+                    a = cell.find("a", href=True)
+                    if a:
+                        detail_url = urljoin(src["url"], a["href"])
+                        break
+
+            title = ""
+            if title_col is not None and title_col < len(cells):
+                title = _clean(cells[title_col].get_text(" ", strip=True))
+            if not title:
+                for cell in cells:
+                    t = _clean(cell.get_text(" ", strip=True))
+                    if len(t) > 15 and not re.match(r"^\d{1,2}/\d", t):
+                        title = t[:200]
+                        break
+
+            if not title or _is_garbage(title):
+                continue
+
+            job_no = ""
+            if num_col is not None and num_col < len(cells):
+                job_no = _clean(cells[num_col].get_text(" ", strip=True))
+
+            due_date = ""
+            if date_col is not None and date_col < len(cells):
+                m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b",
+                              cells[date_col].get_text())
+                if m:
+                    due_date = m.group(1)
+
+            # Future-only
+            if due_date:
+                try:
+                    parts = due_date.split("/")
+                    if date(int(parts[2]), int(parts[0]), int(parts[1])) < date.today():
+                        continue
+                except Exception:
+                    pass
+
+            tl = title.lower()
+            record_type = ("professional_services"
+                           if any(w in tl for w in ["rfp", "rfq", "engineering",
+                                                     "design", "consulting", "professional"])
+                           else "construction")
+
+            full_title = (f"{job_no} — {title}"
+                          if job_no and job_no not in title else title)
+
+            uid = _make_id(src["id"], full_title, detail_url)
+            if uid in seen:
+                continue
+            seen.add(uid)
+
+            log.info(
+                f"  {src['name']} ACCEPT: {full_title[:80]} "
+                f"| {record_type} | Due: {due_date}"
+            )
+            items.append(_record(
+                source_id       = src["id"],
+                source_name     = src["name"],
+                title           = full_title,
+                url             = detail_url or src["url"],
+                due_date_raw    = due_date,
+                county          = src.get("county", "Bergen"),
+                record_type     = record_type,
+                access_type     = "Public access",
+                contract_number = job_no,
+                description     = title,
+            ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items
+
+
 # ── Parser dispatch ───────────────────────────────────────────────────────────
 PARSERS = {
     "njdot_construction": parse_njdot_construction,
@@ -1244,6 +1637,9 @@ PARSERS = {
     "njta":               parse_njta,
     "njtransit":          parse_njtransit,
     "sjta":               parse_sjta,
+    "camden_county":      parse_camden_county,
+    "monmouth_county":    parse_monmouth_county,
+    "bergen_county":      parse_bergen_county,
 }
 
 # ── Data management ───────────────────────────────────────────────────────────
