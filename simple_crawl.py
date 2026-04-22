@@ -156,6 +156,27 @@ def _is_garbage(title: str) -> bool:
     }
     if t in GARBAGE_EXACT:
         return True
+    # Boilerplate strings that appear on procurement pages but aren't bids
+    GARBAGE_PREFIXES = (
+        "note: there are no costs",
+        "note: ",
+        "contract 1 \u2013",   # BidExpress pagination "Contract 1 – 30 of 253..."
+        "contract 1-",
+        "previous 1 2 3",
+        "solicitations - previous",
+        "solicitations \u2013 previous",
+    )
+    for pfx in GARBAGE_PREFIXES:
+        if t.startswith(pfx):
+            return True
+    GARBAGE_SUBSTRINGS = (
+        "no costs for submitting",
+        "of 253 solicitations",
+        "previous 1 2 3",
+    )
+    for sub in GARBAGE_SUBSTRINGS:
+        if sub in t:
+            return True
     return False
 
 def _record(
