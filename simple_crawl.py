@@ -279,10 +279,20 @@ SOURCES = {
     "ocean-county": {
         "id":          "county-ocean",
         "name":        "Ocean County Procurement Portal",
-        "url":         "https://www.co.ocean.nj.us/Purchasing",
+        "url":         "https://www.co.ocean.nj.us/Government/Departments/Purchasing/Current-Bids",
         "record_type": "construction",
         "parser":      "ocean_county",
         "county":      "Ocean",
+        "use_js":      True,   # portal is slow/JS-rendered
+        "js_wait_ms":  4000,
+    },
+    "trenton": {
+        "id":          "municipal-trenton",
+        "name":        "City of Trenton Bid Postings",
+        "url":         "https://www.trentonnj.org/Bids.aspx",
+        "record_type": "construction",
+        "parser":      "trenton",
+        "county":      "Mercer",
     },
     "sjta": {
         "id":          "state-sjta",
@@ -1777,6 +1787,128 @@ def parse_ocean_county(html: str, src: dict) -> list[dict]:
     return items
 
 
+# ── Trenton (CivicEngage) ─────────────────────────────────────────────────────
+
+def parse_trenton(html: str, src: dict) -> list[dict]:
+    """
+    City of Trenton Bid Postings on CivicEngage: trentonnj.org/Bids.aspx
+    Card/box layout — each bid is a div block with title, dates, description.
+    STBG-funded city: strong road and infrastructure signal.
+    Keyword filter on title + description.
+    """
+    soup  = BeautifulSoup(html, "html.parser")
+    items: list[dict] = []
+    seen:  set[str]   = set()
+
+    # CivicEngage bid listings are typically in divs with class containing
+    # 'bid', 'listing', 'post', or inside a table of cards
+    bid_blocks = (
+        soup.find_all("div", class_=re.compile(r"bid|listing|result|item|post", re.I))
+        or soup.find_all("li", class_=re.compile(r"bid|listing|result|item", re.I))
+    )
+
+    # Fallback: grab all tr rows if no div blocks found
+    if not bid_blocks:
+        bid_blocks = []
+        for table in soup.find_all("table"):
+            bid_blocks.extend(table.find_all("tr"))
+
+    for block in bid_blocks:
+        text = _clean(block.get_text(" ", strip=True))
+        if len(text) < 15:
+            continue
+
+        # Title — prefer heading tags, then first link text
+        title = ""
+        for tag in ["h2", "h3", "h4", "strong", "b"]:
+            el = block.find(tag)
+            if el:
+                t = _clean(el.get_text(" ", strip=True))
+                if len(t) > 10:
+                    title = t[:200]
+                    break
+        if not title:
+            a = block.find("a", href=True)
+            if a:
+                title = _clean(a.get_text(" ", strip=True))[:200]
+        if not title:
+            # First meaningful text segment
+            for seg in block.stripped_strings:
+                t = _clean(seg)
+                if len(t) > 15 and not re.match(r"^\d{1,2}/\d", t):
+                    title = t[:200]
+                    break
+
+        if not title or _is_garbage(title):
+            continue
+
+        # Keyword filter on title + full block text
+        if not TRANSPORT_KW.search(title) and not TRANSPORT_KW.search(text):
+            continue
+
+        # Detail link
+        detail_url = ""
+        a = block.find("a", href=True)
+        if a:
+            detail_url = a["href"]
+            if not detail_url.startswith("http"):
+                detail_url = urljoin(src["url"], detail_url)
+
+        # Due date — scan block text for dates
+        due_date = ""
+        # Look for "Close" or "Due" label near a date
+        date_match = re.search(
+            r"(?:clos|due|open|deadline)[^\d]{0,20}(\d{1,2}/\d{1,2}/\d{4})",
+            text, re.I
+        )
+        if date_match:
+            due_date = date_match.group(1)
+        else:
+            m = re.search(r"\b(\d{1,2}/\d{1,2}/\d{4})\b", text)
+            if m:
+                due_date = m.group(1)
+
+        # Future-only
+        if due_date:
+            try:
+                parts = due_date.split("/")
+                if date(int(parts[2]), int(parts[0]), int(parts[1])) < date.today():
+                    continue
+            except Exception:
+                pass
+
+        tl = title.lower()
+        record_type = ("professional_services"
+                       if any(w in tl for w in ["rfp", "rfq", "engineering",
+                                                 "design", "consulting", "professional",
+                                                 "inspection", "planning"])
+                       else "construction")
+
+        uid = _make_id(src["id"], title, detail_url)
+        if uid in seen:
+            continue
+        seen.add(uid)
+
+        log.info(
+            f"  {src['name']} ACCEPT: {title[:80]} "
+            f"| {record_type} | Due: {due_date}"
+        )
+        items.append(_record(
+            source_id    = src["id"],
+            source_name  = src["name"],
+            title        = title,
+            url          = detail_url or src["url"],
+            due_date_raw = due_date,
+            county       = src.get("county", "Mercer"),
+            record_type  = record_type,
+            access_type  = "Public access",
+            description  = text[:300],
+        ))
+
+    log.info(f"  {src['name']}: {len(items)} records")
+    return items
+
+
 # ── Parser dispatch ───────────────────────────────────────────────────────────
 PARSERS = {
     "njdot_construction": parse_njdot_construction,
@@ -1789,6 +1921,7 @@ PARSERS = {
     "monmouth_county":    parse_monmouth_county,
     "bergen_county":      parse_bergen_county,
     "ocean_county":       parse_ocean_county,
+    "trenton":            parse_trenton,
 }
 
 # ── Data management ───────────────────────────────────────────────────────────
@@ -1867,7 +2000,8 @@ def merge(existing: list[dict], fresh: list[dict]) -> list[dict]:
 def crawl_source(key: str, src: dict) -> list[dict]:
     log.info(f"Crawling: {src['name']}")
     if src.get("use_js"):
-        html = fetch_js(src["url"], click_text=src.get("js_click"))
+        html = fetch_js(src["url"], click_text=src.get("js_click"),
+                        wait_ms=src.get("js_wait_ms", 2500))
     else:
         html = fetch(src["url"])
     if not html:

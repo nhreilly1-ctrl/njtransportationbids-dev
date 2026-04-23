@@ -268,7 +268,7 @@ SOURCE_RULES = {
     "municipal-newark": {"score": 2.0, "mode": "metadata_only", "label": "Metadata only"},
     "county-atlantic": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
     "county-mercer": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
-    "municipal-trenton": {"score": 1.0, "mode": "disabled", "label": "Disabled"},
+    "municipal-trenton": {"score": 3.5, "mode": "trusted", "label": "Trusted"},
 }
 
 DEFAULT_SOURCE_RULE = {"score": 2.5, "mode": "manual_review", "label": "Manual review"}
