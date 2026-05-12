@@ -65,7 +65,7 @@
     "description": "Route 23 Between High Crest Drive and the Macopin",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828748+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377613+00:00"
   },
   {
     "id": "opp-169984e035ad",
@@ -116,7 +116,7 @@
     "description": "Contract 2026 \u2014 20 Runway Rubber and Contaminant Removal Surface Preparation and Runway/Taxiway Painting at Atlantic City International Airport",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828809+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377690+00:00"
   },
   {
     "id": "opp-374db9f7735d",
@@ -133,7 +133,7 @@
     "description": "LICENSED SITE REMEDIATION PROFESSIONAL (LSRP) TO PROVIDE PROFESSIONAL SERVICES FOR UNDERGROUND STORA Bid No. RFP2026 \u2014 17 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: A LICENSED SITE REMEDIATION PROFESSIONAL... [ R",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828807+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377688+00:00"
   },
   {
     "id": "opp-7e342622dd3e",
@@ -150,7 +150,7 @@
     "description": "Multi \u2014 Discipline Environmental",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828752+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377617+00:00"
   },
   {
     "id": "opp-ce76d3ec5348",
@@ -167,7 +167,7 @@
     "description": "Highway Safety Improvement Program (HSIP) Project Development & Support",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828750+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377615+00:00"
   },
   {
     "id": "opp-c0234dcbb5df",
@@ -184,7 +184,7 @@
     "description": "Administration Department 1 Bid FINANCIAL CONSULTING SERVICES FOR THE DEPARTMENT OF ADMINISTRATION Bid No. RFP2026 \u2014 18 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: FINANCIAL CONSULTING SERVICES FOR THE... [ Read o",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828805+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377686+00:00"
   },
   {
     "id": "opp-504e244abfca",
@@ -201,7 +201,24 @@
     "description": "FURNISH PAVEMENT REPAIRS AT THOMPSON PARK, LINCROFT, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828801+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377682+00:00"
+  },
+  {
+    "id": "opp-5c619993d693",
+    "title": "HOSTING ONLINE TAX SALES",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "5/27/2026",
+    "due_date": "5/27/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1157",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "HOSTING ONLINE TAX SALES Bid No. RFP2026 \u2014 19 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: HOSTING ONLINE TAX SALES IN ACCORDANCE WITH... [ Read on : HOSTING ONLINE TAX SALES ] Status: Closes: Open 5/27/2026 11:00 ",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-12T23:02:26.703915+00:00"
   },
   {
     "id": "opp-706a205be589",
@@ -218,7 +235,7 @@
     "description": "Route 7 & Boonton Line (Abandoned), Bridge Preventive Maintenance Contract, 2024 Advertised 5/14/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828746+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377611+00:00"
   },
   {
     "id": "opp-3c1d48033a7b",
@@ -235,7 +252,7 @@
     "description": "Route 40 Atlantic County Drainage Advertised 5/18/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828744+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377609+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -252,7 +269,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828714+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377559+00:00"
   },
   {
     "id": "opp-57450075e01e",
@@ -269,24 +286,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828727+00:00"
-  },
-  {
-    "id": "opp-51d385b1d379",
-    "title": "Route 23, Route 80 and Route 46 Interchange, Contract No. 053009234, Grading, Paving and Structures, Township of Fairfield, County of Essex, Township of Wayne and Borough of Totowa, County of Passaic; Route 202/Route 23; Milepost 63.93 to Route 23; Milepost 5.00 (SB) & 5.03 (NB), Route 80; Milepost 52.53 to 54.57, Route 46 EB; Milepost 56.02 to 56.33, Route 46 WB; Milepost 55.92 to 56.30; Federal Project No: 0023(349), UPC No: 009234, PE No: 1604511, CE No: 1604515, DP No: 26105",
-    "source_id": "state-njdot-construction",
-    "source_name": "NJDOT Construction Services",
-    "county": "Statewide",
-    "due_date_raw": "5/26/26",
-    "due_date": "5/26/26",
-    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NOTICETOCONTRACTORS_DP26105.pdf",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "",
-    "description": "",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828730+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377577+00:00"
   },
   {
     "id": "opp-d2d0c1035d1e",
@@ -303,7 +303,24 @@
     "description": "ADA South, Contract \u2014 4 Advertised 5/26/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828736+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377599+00:00"
+  },
+  {
+    "id": "opp-51d385b1d379",
+    "title": "Route 23, Route 80 and Route 46 Interchange, Contract No. 053009234, Grading, Paving and Structures, Township of Fairfield, County of Essex, Township of Wayne and Borough of Totowa, County of Passaic; Route 202/Route 23; Milepost 63.93 to Route 23; Milepost 5.00 (SB) & 5.03 (NB), Route 80; Milepost 52.53 to 54.57, Route 46 EB; Milepost 56.02 to 56.33, Route 46 WB; Milepost 55.92 to 56.30; Federal Project No: 0023(349), UPC No: 009234, PE No: 1604511, CE No: 1604515, DP No: 26105",
+    "source_id": "state-njdot-construction",
+    "source_name": "NJDOT Construction Services",
+    "county": "Statewide",
+    "due_date_raw": "5/28/26",
+    "due_date": "5/28/26",
+    "url": "https://www.nj.gov/transportation/contribute/business/procurement/ConstrServ/documents/NOTICETOCONTRACTORS_DP26105.pdf",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-12T23:02:36.377584+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -320,7 +337,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828732+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377581+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -337,7 +354,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828734+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377588+00:00"
   },
   {
     "id": "opp-cc02467f0c89",
@@ -354,7 +371,7 @@
     "description": "Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828738+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377602+00:00"
   },
   {
     "id": "opp-9e7ecd56c9ae",
@@ -371,7 +388,7 @@
     "description": "NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828742+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377607+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -388,7 +405,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:35:58.187297+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377591+00:00"
   },
   {
     "id": "opp-0f3021e70789",
@@ -405,7 +422,7 @@
     "description": "Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:00.681143+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377595+00:00"
   },
   {
     "id": "opp-cc49ed9518c2",
@@ -422,7 +439,7 @@
     "description": "US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828740+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377605+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -439,7 +456,7 @@
     "description": "Professional services for electronic surveillance type integrators with appropriate experience in working with integrated systems consisting of access control, video management, video analytics, control centers and supporting systems including, but not limited to, active directory services, network managed services and operations management technology. Document Download: Request for Proposals Requirements Conformance Tables (EXCEL): \u2018Tab 8 \u2014 15 Requirements Conformance Tables\u2019 Price Proposal For",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/DB-823ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828756+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377621+00:00"
   },
   {
     "id": "opp-37e4d760f463",
@@ -473,7 +490,7 @@
     "description": "Contract No. P200.865 Roadway Lighting Improvements",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828775+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377656+00:00"
   },
   {
     "id": "opp-f411d2beb180",
@@ -490,7 +507,7 @@
     "description": "RFP ENTERPRISE RESOURCE PLANNING (ERP) BUSINESS ADMINISTRATION SOFTWARE MANAGED SERVICES RM \u2014 196137",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828777+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377658+00:00"
   },
   {
     "id": "opp-72d798a20940",
@@ -507,7 +524,7 @@
     "description": "Order for Professional Services No. P4259",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828781+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377662+00:00"
   },
   {
     "id": "opp-832b985fa06d",
@@ -524,7 +541,7 @@
     "description": "RM \u2014 200613 RFP SELF \u2014 FUNDED HEALTH BENEFITS PROGRAM SERVICES",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828784+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377666+00:00"
   },
   {
     "id": "opp-19309a79db36",
@@ -541,7 +558,7 @@
     "description": "Contract No. P500.786 Construction of Pre \u2014 Engineered Metal Buildings",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828782+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377664+00:00"
   },
   {
     "id": "opp-76a59c5ee3f4",
@@ -558,7 +575,7 @@
     "description": "Order For Professional Services No. A4354",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828786+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377668+00:00"
   },
   {
     "id": "opp-acbcacb4b6ff",
@@ -575,7 +592,7 @@
     "description": "Order For Professional Services No. T4295 and P4311",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828788+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377669+00:00"
   },
   {
     "id": "opp-a073a5c2f6ec",
@@ -592,7 +609,7 @@
     "description": "R \u2014 200550 RFB Solar Powered Arrow Board Trailers",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828789+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377671+00:00"
   },
   {
     "id": "opp-a674035c6845",
@@ -609,7 +626,7 @@
     "description": "RM \u2014 200534 RFB Bobcat Parts, Repairs & Diagnostic Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828791+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377673+00:00"
   },
   {
     "id": "opp-77bc369fd24f",
@@ -626,7 +643,7 @@
     "description": "RM \u2014 200301 RFB Tree Trimming and Removal Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828793+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377674+00:00"
   },
   {
     "id": "opp-6f5b50f0e5de",
@@ -1867,7 +1884,7 @@
     "description": "Contract No. T200.904 Maintenance and Repair of Roadside Safety Features and Sign Structures on The New Jersey Turnpike",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828770+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377635+00:00"
   },
   {
     "id": "opp-e9969dd96fbe",
@@ -1884,7 +1901,7 @@
     "description": "Contract No. T200.889 Line Striping Installation and Maintenance Milepost 35 to 54",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828769+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377633+00:00"
   },
   {
     "id": "opp-03f72c03b463",
@@ -1901,7 +1918,7 @@
     "description": "Contract No. A200.915 Maintenance and Repair of Traffic Signals On The New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828779+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377660+00:00"
   },
   {
     "id": "opp-bbddd5aa162c",
@@ -1952,7 +1969,7 @@
     "description": "Contract No. T700.702 Underground Storage Tank Removal And Replacement Turnpike Maintenance District 6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828774+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377638+00:00"
   },
   {
     "id": "opp-470fd3cd5ed3",
@@ -2476,10 +2493,10 @@
     "access_type": "Public access",
     "record_type": "construction",
     "contract_number": "",
-    "description": "Show Me Open Bids Administration Department Health & Human Services Public Works Department Recreation, Natural Resources, & Culture Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
+    "description": "Show Me Open Bids Administration Department Finance Department Health & Human Services Public Works Department Recreation, Natural Resources, & Culture Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828803+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377684+00:00"
   },
   {
     "id": "opp-342171587b35",
@@ -2496,7 +2513,7 @@
     "description": "New Jersey E \u2014 ZPass Merchant Services RM \u2014 178825",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828758+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377623+00:00"
   },
   {
     "id": "opp-7417a21576f5",
@@ -2513,7 +2530,7 @@
     "description": "OPS No. A4355 and A4356 On \u2014 Call Engineering Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828772+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377637+00:00"
   },
   {
     "id": "opp-d839e13cf436",
@@ -2564,7 +2581,7 @@
     "description": "RFQ Outside Counsel (AUTHORITY COUNSEL, AUTHORITY COUNSEL (CONFLICTS), SPECIAL COUNSELS SERVICES) RM \u2014 200603",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828765+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377629+00:00"
   },
   {
     "id": "opp-16a2549bd6ed",
@@ -2581,7 +2598,7 @@
     "description": "Rental & Safety Training for Construction Equipment, Yard Equipment & Tools View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828798+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377680+00:00"
   },
   {
     "id": "opp-bd4513111cf9",
@@ -2598,7 +2615,7 @@
     "description": "OPS No. A4211 On \u2014 Call Services For Resilience And Sustainability Programs",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828767+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377631+00:00"
   },
   {
     "id": "opp-6bfedf017e00",
@@ -2615,7 +2632,7 @@
     "description": "River Road (CR \u2014 543) Roadway Improvements, from North 36th Street (CR \u2014 611) to ... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828797+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377678+00:00"
   },
   {
     "id": "opp-4277c80fab15",
@@ -2632,7 +2649,7 @@
     "description": "Professional engineering services for Construction Management / Inspection Services for the Easton \u2014 Philipsburg Toll Bridge Route 22 Viaduct sidewalk replacement over Broad Street in Philipsburg, New Jersey. Document Download: Request for Proposals",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/CM-809ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828754+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377619+00:00"
   },
   {
     "id": "opp-8a2da0714c52",
@@ -2649,7 +2666,7 @@
     "description": "RM \u2014 200082 RFB Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828761+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377625+00:00"
   },
   {
     "id": "opp-1a1a241f693b",
@@ -2666,7 +2683,7 @@
     "description": "RM \u2014 200081 RFB Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828763+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377628+00:00"
   },
   {
     "id": "opp-64039f0ac101",
@@ -2683,7 +2700,7 @@
     "description": "Contract 1 Solicitation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828811+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377691+00:00"
   },
   {
     "id": "opp-26a663de415d",
@@ -2700,7 +2717,7 @@
     "description": "Springdale Road (CR \u2014 673) Improvements, from NJ Route 70 to the Burlington Cou... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T17:36:27.828795+00:00"
+    "crawled_at": "2026-05-12T23:02:36.377676+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
