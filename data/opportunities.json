@@ -1,56 +1,5 @@
 [
   {
-    "id": "opp-b44a990afc4a",
-    "title": "TP-825 \u2014 Rt. 23 Between High Crest Drive and the Macopin",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "5/12/2026",
-    "due_date": "5/12/2026",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-825",
-    "description": "Rt. 23 Between High Crest Drive and the Macopin",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-04-24T14:55:58.352112+00:00"
-  },
-  {
-    "id": "opp-418c377aea8b",
-    "title": "PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS",
-    "source_id": "municipal-trenton",
-    "source_name": "City of Trenton Bid Postings",
-    "county": "Mercer",
-    "due_date_raw": "5/12/2026",
-    "due_date": "5/12/2026",
-    "url": "https://www.trentonnj.org/bids.aspx?bidID=1140",
-    "access_type": "Public access",
-    "record_type": "professional_services",
-    "contract_number": "",
-    "description": "PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS Bid No. BID2026 \u2014 44 PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS FOR TRENTON WATER WORKS Sealed bids shall be received by Isabel C. Garcia,...[ Read on ",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-01T14:21:26.459800+00:00"
-  },
-  {
-    "id": "opp-9b86438e0d07",
-    "title": "PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS",
-    "source_id": "municipal-trenton",
-    "source_name": "City of Trenton Bid Postings",
-    "county": "Mercer",
-    "due_date_raw": "5/12/2026",
-    "due_date": "5/12/2026",
-    "url": "https://www.trentonnj.org/bids.aspx?bidID=1144",
-    "access_type": "Public access",
-    "record_type": "professional_services",
-    "contract_number": "",
-    "description": "PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS Bid No. BID2026 \u2014 45 PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS AND COMPRESSORS Sealed bids shall be received by Isabel C. Garcia, QPA,...[",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-01T07:24:08.535152+00:00"
-  },
-  {
     "id": "opp-73ba0e4638fa",
     "title": "TP-825 \u2014 Route 23 Between High Crest Drive and the Macopin",
     "source_id": "state-njdot-profserv",
@@ -65,41 +14,7 @@
     "description": "Route 23 Between High Crest Drive and the Macopin",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377613+00:00"
-  },
-  {
-    "id": "opp-169984e035ad",
-    "title": "AIR VACUUM HANDLING",
-    "source_id": "municipal-trenton",
-    "source_name": "City of Trenton Bid Postings",
-    "county": "Mercer",
-    "due_date_raw": "5/12/2026",
-    "due_date": "5/12/2026",
-    "url": "https://www.trentonnj.org/bids.aspx?bidID=1144",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "",
-    "description": "AIR VACUUM HANDLING Bid No. BID2026 \u2014 45 PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS AND COMPRESSORS Sealed bids shall be received by Isabel C. Garcia, QPA,... [ Read on : AIR VACUUM HANDLING ] Status: Closes: Open 5/12/2026 11:00 AM",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-12T08:11:29.974696+00:00"
-  },
-  {
-    "id": "opp-153133f14fc6",
-    "title": "ELECTRIC MOTOR SERVICE",
-    "source_id": "municipal-trenton",
-    "source_name": "City of Trenton Bid Postings",
-    "county": "Mercer",
-    "due_date_raw": "5/12/2026",
-    "due_date": "5/12/2026",
-    "url": "https://www.trentonnj.org/bids.aspx?bidID=1140",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "",
-    "description": "ELECTRIC MOTOR SERVICE Bid No. BID2026 \u2014 44 PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS FOR TRENTON WATER WORKS Sealed bids shall be received by Isabel C. Garcia,... [ Read on : ELECTRIC MOTOR SERVICE ] Status: Closes: Open 5/12/2026 11:00 AM",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-12T08:11:29.974698+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345375+00:00"
   },
   {
     "id": "opp-4aae2c08c4f5",
@@ -116,7 +31,7 @@
     "description": "Contract 2026 \u2014 20 Runway Rubber and Contaminant Removal Surface Preparation and Runway/Taxiway Painting at Atlantic City International Airport",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377690+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345437+00:00"
   },
   {
     "id": "opp-374db9f7735d",
@@ -133,7 +48,7 @@
     "description": "LICENSED SITE REMEDIATION PROFESSIONAL (LSRP) TO PROVIDE PROFESSIONAL SERVICES FOR UNDERGROUND STORA Bid No. RFP2026 \u2014 17 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: A LICENSED SITE REMEDIATION PROFESSIONAL... [ R",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377688+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345435+00:00"
   },
   {
     "id": "opp-7e342622dd3e",
@@ -150,7 +65,7 @@
     "description": "Multi \u2014 Discipline Environmental",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377617+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345379+00:00"
   },
   {
     "id": "opp-ce76d3ec5348",
@@ -167,7 +82,7 @@
     "description": "Highway Safety Improvement Program (HSIP) Project Development & Support",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377615+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345377+00:00"
   },
   {
     "id": "opp-c0234dcbb5df",
@@ -184,7 +99,7 @@
     "description": "Administration Department 1 Bid FINANCIAL CONSULTING SERVICES FOR THE DEPARTMENT OF ADMINISTRATION Bid No. RFP2026 \u2014 18 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: FINANCIAL CONSULTING SERVICES FOR THE... [ Read o",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377686+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345432+00:00"
   },
   {
     "id": "opp-504e244abfca",
@@ -201,7 +116,7 @@
     "description": "FURNISH PAVEMENT REPAIRS AT THOMPSON PARK, LINCROFT, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377682+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345428+00:00"
   },
   {
     "id": "opp-5c619993d693",
@@ -218,7 +133,7 @@
     "description": "HOSTING ONLINE TAX SALES Bid No. RFP2026 \u2014 19 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: HOSTING ONLINE TAX SALES IN ACCORDANCE WITH... [ Read on : HOSTING ONLINE TAX SALES ] Status: Closes: Open 5/27/2026 11:00 ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:26.703915+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345433+00:00"
   },
   {
     "id": "opp-706a205be589",
@@ -235,7 +150,7 @@
     "description": "Route 7 & Boonton Line (Abandoned), Bridge Preventive Maintenance Contract, 2024 Advertised 5/14/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377611+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345373+00:00"
   },
   {
     "id": "opp-3c1d48033a7b",
@@ -252,7 +167,7 @@
     "description": "Route 40 Atlantic County Drainage Advertised 5/18/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377609+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345371+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -269,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377559+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345335+00:00"
   },
   {
     "id": "opp-57450075e01e",
@@ -286,7 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377577+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345350+00:00"
   },
   {
     "id": "opp-d2d0c1035d1e",
@@ -303,7 +218,7 @@
     "description": "ADA South, Contract \u2014 4 Advertised 5/26/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377599+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345363+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -320,7 +235,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377584+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345355+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -337,7 +252,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377581+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345353+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -354,7 +269,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377588+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345357+00:00"
   },
   {
     "id": "opp-cc02467f0c89",
@@ -371,7 +286,7 @@
     "description": "Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377602+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345365+00:00"
   },
   {
     "id": "opp-9e7ecd56c9ae",
@@ -388,7 +303,7 @@
     "description": "NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377607+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345370+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -405,7 +320,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377591+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345359+00:00"
   },
   {
     "id": "opp-0f3021e70789",
@@ -422,7 +337,7 @@
     "description": "Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377595+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345361+00:00"
   },
   {
     "id": "opp-cc49ed9518c2",
@@ -439,7 +354,7 @@
     "description": "US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377605+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345368+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -456,7 +371,7 @@
     "description": "Professional services for electronic surveillance type integrators with appropriate experience in working with integrated systems consisting of access control, video management, video analytics, control centers and supporting systems including, but not limited to, active directory services, network managed services and operations management technology. Document Download: Request for Proposals Requirements Conformance Tables (EXCEL): \u2018Tab 8 \u2014 15 Requirements Conformance Tables\u2019 Price Proposal For",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/DB-823ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377621+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345384+00:00"
   },
   {
     "id": "opp-37e4d760f463",
@@ -490,7 +405,7 @@
     "description": "Contract No. P200.865 Roadway Lighting Improvements",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377656+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345404+00:00"
   },
   {
     "id": "opp-f411d2beb180",
@@ -507,7 +422,7 @@
     "description": "RFP ENTERPRISE RESOURCE PLANNING (ERP) BUSINESS ADMINISTRATION SOFTWARE MANAGED SERVICES RM \u2014 196137",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377658+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345406+00:00"
   },
   {
     "id": "opp-72d798a20940",
@@ -524,7 +439,7 @@
     "description": "Order for Professional Services No. P4259",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377662+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345409+00:00"
   },
   {
     "id": "opp-832b985fa06d",
@@ -541,7 +456,7 @@
     "description": "RM \u2014 200613 RFP SELF \u2014 FUNDED HEALTH BENEFITS PROGRAM SERVICES",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377666+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345413+00:00"
   },
   {
     "id": "opp-19309a79db36",
@@ -558,7 +473,7 @@
     "description": "Contract No. P500.786 Construction of Pre \u2014 Engineered Metal Buildings",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377664+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345411+00:00"
   },
   {
     "id": "opp-76a59c5ee3f4",
@@ -575,7 +490,7 @@
     "description": "Order For Professional Services No. A4354",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377668+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345414+00:00"
   },
   {
     "id": "opp-acbcacb4b6ff",
@@ -592,7 +507,7 @@
     "description": "Order For Professional Services No. T4295 and P4311",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377669+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345416+00:00"
   },
   {
     "id": "opp-a073a5c2f6ec",
@@ -609,7 +524,7 @@
     "description": "R \u2014 200550 RFB Solar Powered Arrow Board Trailers",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377671+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345417+00:00"
   },
   {
     "id": "opp-a674035c6845",
@@ -626,7 +541,7 @@
     "description": "RM \u2014 200534 RFB Bobcat Parts, Repairs & Diagnostic Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377673+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345419+00:00"
   },
   {
     "id": "opp-77bc369fd24f",
@@ -643,7 +558,7 @@
     "description": "RM \u2014 200301 RFB Tree Trimming and Removal Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377674+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345421+00:00"
   },
   {
     "id": "opp-6f5b50f0e5de",
@@ -1884,7 +1799,7 @@
     "description": "Contract No. T200.904 Maintenance and Repair of Roadside Safety Features and Sign Structures on The New Jersey Turnpike",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377635+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345398+00:00"
   },
   {
     "id": "opp-e9969dd96fbe",
@@ -1901,7 +1816,7 @@
     "description": "Contract No. T200.889 Line Striping Installation and Maintenance Milepost 35 to 54",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377633+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345396+00:00"
   },
   {
     "id": "opp-03f72c03b463",
@@ -1918,7 +1833,7 @@
     "description": "Contract No. A200.915 Maintenance and Repair of Traffic Signals On The New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377660+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345407+00:00"
   },
   {
     "id": "opp-bbddd5aa162c",
@@ -1969,7 +1884,7 @@
     "description": "Contract No. T700.702 Underground Storage Tank Removal And Replacement Turnpike Maintenance District 6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377638+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345402+00:00"
   },
   {
     "id": "opp-470fd3cd5ed3",
@@ -2496,7 +2411,7 @@
     "description": "Show Me Open Bids Administration Department Finance Department Health & Human Services Public Works Department Recreation, Natural Resources, & Culture Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377684+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345430+00:00"
   },
   {
     "id": "opp-342171587b35",
@@ -2513,7 +2428,7 @@
     "description": "New Jersey E \u2014 ZPass Merchant Services RM \u2014 178825",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377623+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345386+00:00"
   },
   {
     "id": "opp-7417a21576f5",
@@ -2530,7 +2445,7 @@
     "description": "OPS No. A4355 and A4356 On \u2014 Call Engineering Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377637+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345400+00:00"
   },
   {
     "id": "opp-d839e13cf436",
@@ -2581,7 +2496,7 @@
     "description": "RFQ Outside Counsel (AUTHORITY COUNSEL, AUTHORITY COUNSEL (CONFLICTS), SPECIAL COUNSELS SERVICES) RM \u2014 200603",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377629+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345392+00:00"
   },
   {
     "id": "opp-16a2549bd6ed",
@@ -2598,7 +2513,7 @@
     "description": "Rental & Safety Training for Construction Equipment, Yard Equipment & Tools View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377680+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345426+00:00"
   },
   {
     "id": "opp-bd4513111cf9",
@@ -2615,7 +2530,7 @@
     "description": "OPS No. A4211 On \u2014 Call Services For Resilience And Sustainability Programs",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377631+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345394+00:00"
   },
   {
     "id": "opp-6bfedf017e00",
@@ -2632,7 +2547,7 @@
     "description": "River Road (CR \u2014 543) Roadway Improvements, from North 36th Street (CR \u2014 611) to ... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377678+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345424+00:00"
   },
   {
     "id": "opp-4277c80fab15",
@@ -2649,7 +2564,7 @@
     "description": "Professional engineering services for Construction Management / Inspection Services for the Easton \u2014 Philipsburg Toll Bridge Route 22 Viaduct sidewalk replacement over Broad Street in Philipsburg, New Jersey. Document Download: Request for Proposals",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/CM-809ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377619+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345382+00:00"
   },
   {
     "id": "opp-8a2da0714c52",
@@ -2666,7 +2581,7 @@
     "description": "RM \u2014 200082 RFB Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377625+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345388+00:00"
   },
   {
     "id": "opp-1a1a241f693b",
@@ -2683,7 +2598,7 @@
     "description": "RM \u2014 200081 RFB Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377628+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345390+00:00"
   },
   {
     "id": "opp-64039f0ac101",
@@ -2700,7 +2615,7 @@
     "description": "Contract 1 Solicitation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377691+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345439+00:00"
   },
   {
     "id": "opp-26a663de415d",
@@ -2717,7 +2632,7 @@
     "description": "Springdale Road (CR \u2014 673) Improvements, from NJ Route 70 to the Burlington Cou... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-12T23:02:36.377676+00:00"
+    "crawled_at": "2026-05-13T12:05:10.345422+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
@@ -3092,6 +3007,91 @@
     "doc_url": "",
     "status": "expired",
     "crawled_at": "2026-04-30T07:37:11.324647+00:00"
+  },
+  {
+    "id": "opp-b44a990afc4a",
+    "title": "TP-825 \u2014 Rt. 23 Between High Crest Drive and the Macopin",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "5/12/2026",
+    "due_date": "5/12/2026",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-825",
+    "description": "Rt. 23 Between High Crest Drive and the Macopin",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-04-24T14:55:58.352112+00:00"
+  },
+  {
+    "id": "opp-418c377aea8b",
+    "title": "PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "5/12/2026",
+    "due_date": "5/12/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1140",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "",
+    "description": "PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS Bid No. BID2026 \u2014 44 PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS FOR TRENTON WATER WORKS Sealed bids shall be received by Isabel C. Garcia,...[ Read on ",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-01T14:21:26.459800+00:00"
+  },
+  {
+    "id": "opp-9b86438e0d07",
+    "title": "PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "5/12/2026",
+    "due_date": "5/12/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1144",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "",
+    "description": "PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS Bid No. BID2026 \u2014 45 PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS AND COMPRESSORS Sealed bids shall be received by Isabel C. Garcia, QPA,...[",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-01T07:24:08.535152+00:00"
+  },
+  {
+    "id": "opp-169984e035ad",
+    "title": "AIR VACUUM HANDLING",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "5/12/2026",
+    "due_date": "5/12/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1144",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "AIR VACUUM HANDLING Bid No. BID2026 \u2014 45 PROVIDE QUARTERLY, SEMI \u2014 ANNUAL AND ANNUAL INSPECTIONS AND MAINTENANCE SERVICES FOR THE VACUUM PUMPS AND COMPRESSORS Sealed bids shall be received by Isabel C. Garcia, QPA,... [ Read on : AIR VACUUM HANDLING ] Status: Closes: Open 5/12/2026 11:00 AM",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-12T08:11:29.974696+00:00"
+  },
+  {
+    "id": "opp-153133f14fc6",
+    "title": "ELECTRIC MOTOR SERVICE",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "5/12/2026",
+    "due_date": "5/12/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1140",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "ELECTRIC MOTOR SERVICE Bid No. BID2026 \u2014 44 PROVIDE ANNUAL AND FOUR QUARTERLY INSPECTIONS PLUS EMERGENCY SERVICE OF PRIMARY ELECTRIC MOTORS FOR TRENTON WATER WORKS Sealed bids shall be received by Isabel C. Garcia,... [ Read on : ELECTRIC MOTOR SERVICE ] Status: Closes: Open 5/12/2026 11:00 AM",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-12T08:11:29.974698+00:00"
   },
   {
     "id": "opp-a7f6962f2fe2",
