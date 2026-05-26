@@ -31,7 +31,24 @@
     "description": "HOSTING ONLINE TAX SALES Bid No. RFP2026 \u2014 19 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: HOSTING ONLINE TAX SALES IN ACCORDANCE WITH... [ Read on : HOSTING ONLINE TAX SALES ] Status: Closes: Open 5/27/2026 11:00 ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246914+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667411+00:00"
+  },
+  {
+    "id": "opp-dd3c23ffd124",
+    "title": "TP-830 \u2014 Maintenance Bridge Fender Replacement Contract 2026 \u2014 1",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/1/2026",
+    "due_date": "6/1/2026",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-830",
+    "description": "Maintenance Bridge Fender Replacement Contract 2026 \u2014 1",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-26T23:10:33.212220+00:00"
   },
   {
     "id": "opp-7c97cd472d24",
@@ -48,7 +65,58 @@
     "description": "Administration Department 1 Bid RE \u2014 ADVERTISEMENT FINANCIAL CONSULTING SERVICES Bid No. RFP2026 \u2014 18B The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: RE \u2014 ADVERTISEMENT FINANCIAL CONSULTING... [ Read on : RE \u2014 ADVERT",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246912+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667409+00:00"
+  },
+  {
+    "id": "opp-6f5ddf45ac9e",
+    "title": "TP-828 \u2014 NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/2/2026",
+    "due_date": "6/2/2026",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-828",
+    "description": "NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-26T23:10:33.213419+00:00"
+  },
+  {
+    "id": "opp-ce417d1b3613",
+    "title": "TP-832 \u2014 Vegetation Safety Management Project I \u2014 280, I \u2014 195",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/3/2026",
+    "due_date": "6/3/2026",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-832",
+    "description": "Vegetation Safety Management Project I \u2014 280, I \u2014 195",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-26T23:10:33.211015+00:00"
+  },
+  {
+    "id": "opp-16d3164373bf",
+    "title": "TP-829 \u2014 US \u2014 40 Over Inside Thorofare Bridge Rehabilitation",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/4/2026",
+    "due_date": "6/4/2026",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-829",
+    "description": "US \u2014 40 Over Inside Thorofare Bridge Rehabilitation",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-05-26T23:10:33.212846+00:00"
   },
   {
     "id": "opp-71e4a0f99ce9",
@@ -65,24 +133,7 @@
     "description": "Contract 2026 \u2014 21 Atlantic City International Airport (ACY) Airport Janitorial Services Bid",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246916+00:00"
-  },
-  {
-    "id": "opp-d2d0c1035d1e",
-    "title": "TP-831 \u2014 ADA South, Contract \u2014 4 Advertised 5/26/26",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "5/26/26",
-    "due_date": "5/26/26",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-831",
-    "description": "ADA South, Contract \u2014 4 Advertised 5/26/26",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246857+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667413+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -99,7 +150,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246820+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667325+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -116,7 +167,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246843+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667343+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -133,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246838+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667340+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -150,41 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246846+00:00"
-  },
-  {
-    "id": "opp-cc02467f0c89",
-    "title": "TP-830 \u2014 Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "6/1/26",
-    "due_date": "6/1/26",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-830",
-    "description": "Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246859+00:00"
-  },
-  {
-    "id": "opp-9e7ecd56c9ae",
-    "title": "TP-828 \u2014 NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "6/2/26",
-    "due_date": "6/2/26",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-828",
-    "description": "NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246862+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667345+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -201,41 +218,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246848+00:00"
-  },
-  {
-    "id": "opp-0f3021e70789",
-    "title": "TP-832 \u2014 Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "6/3/26",
-    "due_date": "6/3/26",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-832",
-    "description": "Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246854+00:00"
-  },
-  {
-    "id": "opp-cc49ed9518c2",
-    "title": "TP-829 \u2014 US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
-    "source_id": "state-njdot-profserv",
-    "source_name": "NJDOT Professional Services",
-    "county": "Statewide",
-    "due_date_raw": "6/4/26",
-    "due_date": "6/4/26",
-    "url": "https://www.bidexpress.com/businesses/5643/home",
-    "access_type": "BidX (NJDOT forwards to BidX for documents)",
-    "record_type": "professional_services",
-    "contract_number": "TP-829",
-    "description": "US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246861+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667347+00:00"
   },
   {
     "id": "opp-5d6d7e81a4f8",
@@ -252,7 +235,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246850+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667349+00:00"
   },
   {
     "id": "opp-217a58a2538d",
@@ -269,7 +252,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246852+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667351+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -320,7 +303,7 @@
     "description": "Contract No. P200.865 Roadway Lighting Improvements",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246885+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667378+00:00"
   },
   {
     "id": "opp-f411d2beb180",
@@ -337,7 +320,7 @@
     "description": "RFP ENTERPRISE RESOURCE PLANNING (ERP) BUSINESS ADMINISTRATION SOFTWARE MANAGED SERVICES RM \u2014 196137",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246886+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667380+00:00"
   },
   {
     "id": "opp-72d798a20940",
@@ -354,7 +337,7 @@
     "description": "Order for Professional Services No. P4259",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246890+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667384+00:00"
   },
   {
     "id": "opp-832b985fa06d",
@@ -371,7 +354,7 @@
     "description": "RM \u2014 200613 RFP SELF \u2014 FUNDED HEALTH BENEFITS PROGRAM SERVICES",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246893+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667388+00:00"
   },
   {
     "id": "opp-19309a79db36",
@@ -388,7 +371,7 @@
     "description": "Contract No. P500.786 Construction of Pre \u2014 Engineered Metal Buildings",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246892+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667386+00:00"
   },
   {
     "id": "opp-76a59c5ee3f4",
@@ -405,7 +388,7 @@
     "description": "Order For Professional Services No. A4354",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246895+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667390+00:00"
   },
   {
     "id": "opp-acbcacb4b6ff",
@@ -422,7 +405,7 @@
     "description": "Order For Professional Services No. T4295 and P4311",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246896+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667392+00:00"
   },
   {
     "id": "opp-a073a5c2f6ec",
@@ -439,7 +422,7 @@
     "description": "R \u2014 200550 RFB Solar Powered Arrow Board Trailers",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246898+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667394+00:00"
   },
   {
     "id": "opp-a674035c6845",
@@ -456,7 +439,7 @@
     "description": "RM \u2014 200534 RFB Bobcat Parts, Repairs & Diagnostic Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246900+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667396+00:00"
   },
   {
     "id": "opp-77bc369fd24f",
@@ -473,7 +456,7 @@
     "description": "RM \u2014 200301 RFB Tree Trimming and Removal Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246901+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667398+00:00"
   },
   {
     "id": "opp-6f5b50f0e5de",
@@ -1714,7 +1697,7 @@
     "description": "Contract No. T200.904 Maintenance and Repair of Roadside Safety Features and Sign Structures on The New Jersey Turnpike",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246879+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667372+00:00"
   },
   {
     "id": "opp-e9969dd96fbe",
@@ -1731,7 +1714,7 @@
     "description": "Contract No. T200.889 Line Striping Installation and Maintenance Milepost 35 to 54",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246877+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667370+00:00"
   },
   {
     "id": "opp-03f72c03b463",
@@ -1748,7 +1731,7 @@
     "description": "Contract No. A200.915 Maintenance and Repair of Traffic Signals On The New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246888+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667382+00:00"
   },
   {
     "id": "opp-bbddd5aa162c",
@@ -1799,7 +1782,7 @@
     "description": "Contract No. T700.702 Underground Storage Tank Removal And Replacement Turnpike Maintenance District 6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246883+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667376+00:00"
   },
   {
     "id": "opp-470fd3cd5ed3",
@@ -2326,7 +2309,7 @@
     "description": "Show Me Open Bids Administration Department Finance Department Public Works Department Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246910+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667407+00:00"
   },
   {
     "id": "opp-342171587b35",
@@ -2343,7 +2326,7 @@
     "description": "New Jersey E \u2014 ZPass Merchant Services RM \u2014 178825",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246868+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667359+00:00"
   },
   {
     "id": "opp-7417a21576f5",
@@ -2360,7 +2343,7 @@
     "description": "OPS No. A4355 and A4356 On \u2014 Call Engineering Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246881+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667374+00:00"
   },
   {
     "id": "opp-d839e13cf436",
@@ -2411,7 +2394,7 @@
     "description": "RFQ Outside Counsel (AUTHORITY COUNSEL, AUTHORITY COUNSEL (CONFLICTS), SPECIAL COUNSELS SERVICES) RM \u2014 200603",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246874+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667366+00:00"
   },
   {
     "id": "opp-16a2549bd6ed",
@@ -2445,7 +2428,7 @@
     "description": "OPS No. A4211 On \u2014 Call Services For Resilience And Sustainability Programs",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246876+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667368+00:00"
   },
   {
     "id": "opp-6bfedf017e00",
@@ -2462,7 +2445,7 @@
     "description": "River Road (CR \u2014 543) Roadway Improvements, from North 36th Street (CR \u2014 611) to ... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246909+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667405+00:00"
   },
   {
     "id": "opp-4277c80fab15",
@@ -2479,7 +2462,7 @@
     "description": "Professional engineering services for Construction Management / Inspection Services for the Easton \u2014 Philipsburg Toll Bridge Route 22 Viaduct sidewalk replacement over Broad Street in Philipsburg, New Jersey. Document Download: Request for Proposals Pre \u2014 Proposal Submission Meeting Sign \u2014 In Sheet Schedules A&B (Excel)",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/CM-809ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246866+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667357+00:00"
   },
   {
     "id": "opp-8a2da0714c52",
@@ -2496,7 +2479,7 @@
     "description": "RM \u2014 200082 RFB Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246870+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667362+00:00"
   },
   {
     "id": "opp-1a1a241f693b",
@@ -2513,7 +2496,7 @@
     "description": "RM \u2014 200081 RFB Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246872+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667364+00:00"
   },
   {
     "id": "opp-64039f0ac101",
@@ -2530,7 +2513,7 @@
     "description": "Contract 1 Solicitation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246917+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667414+00:00"
   },
   {
     "id": "opp-26a663de415d",
@@ -2547,7 +2530,7 @@
     "description": "Springdale Road (CR \u2014 673) Improvements, from NJ Route 70 to the Burlington Cou... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246907+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667403+00:00"
   },
   {
     "id": "opp-3287b32bb523",
@@ -2581,7 +2564,7 @@
     "description": "Request for Proposals for CONSTRUCTION MANAGEMENT/ CONSTRUCTION INSPECTION... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246905+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667401+00:00"
   },
   {
     "id": "opp-7c8f55c3c876",
@@ -2612,10 +2595,10 @@
     "access_type": "Public access",
     "record_type": "professional_services",
     "contract_number": "Contract No. CM \u2014 816A",
-    "description": "Professional engineering services for Construction Management / Inspection Services for the Trenton \u2014 Morrisville Toll Bridge Electronic Surveillance System (ESS) Cameras and Highway Lighting Improvements in Trenton, New Jersey and Morrisville, Pennsylvania. Document Download: CM \u2014 816ARFPFinal",
+    "description": "Professional engineering services for Construction Management / Inspection Services for the Trenton \u2014 Morrisville Toll Bridge Electronic Surveillance System (ESS) Cameras and Highway Lighting Improvements in Trenton, New Jersey and Morrisville, Pennsylvania. Document Download: Request for Proposals",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/CM-816ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246864+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667354+00:00"
   },
   {
     "id": "opp-e99f101fe463",
@@ -2632,7 +2615,7 @@
     "description": "Berlin \u2014 Cross Keys Road (CR \u2014 689) Improvements \u2014 Contract 4, Borough of Pine Hi... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-05-25T23:02:35.246903+00:00"
+    "crawled_at": "2026-05-26T23:11:03.667399+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
@@ -3281,6 +3264,23 @@
     "crawled_at": "2026-05-21T12:45:21.127226+00:00"
   },
   {
+    "id": "opp-d2d0c1035d1e",
+    "title": "TP-831 \u2014 ADA South, Contract \u2014 4 Advertised 5/26/26",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "5/26/26",
+    "due_date": "5/26/26",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-831",
+    "description": "ADA South, Contract \u2014 4 Advertised 5/26/26",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-25T23:02:35.246857+00:00"
+  },
+  {
     "id": "opp-7a7fbc418f45",
     "title": "TP-828 \u2014 NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 5/26/26",
     "source_id": "state-njdot-profserv",
@@ -3432,5 +3432,73 @@
     "doc_url": "",
     "status": "expired",
     "crawled_at": "2026-05-07T08:03:01.671455+00:00"
+  },
+  {
+    "id": "opp-cc02467f0c89",
+    "title": "TP-830 \u2014 Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/1/26",
+    "due_date": "6/1/26",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-830",
+    "description": "Maintenance Bridge Fender Replacement Contract 2026 \u2014 1 Advertised 6/1/26",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-25T23:02:35.246859+00:00"
+  },
+  {
+    "id": "opp-9e7ecd56c9ae",
+    "title": "TP-828 \u2014 NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/2/26",
+    "due_date": "6/2/26",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-828",
+    "description": "NJ \u2014 47 Over Grassy Sound Bridge Rehabilitation Advertised 6/2/26",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-25T23:02:35.246862+00:00"
+  },
+  {
+    "id": "opp-0f3021e70789",
+    "title": "TP-832 \u2014 Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/3/26",
+    "due_date": "6/3/26",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-832",
+    "description": "Vegetation Safety Management Project I \u2014 280, I \u2014 195 Advertised 6/3/26",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-25T23:02:35.246854+00:00"
+  },
+  {
+    "id": "opp-cc49ed9518c2",
+    "title": "TP-829 \u2014 US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
+    "source_id": "state-njdot-profserv",
+    "source_name": "NJDOT Professional Services",
+    "county": "Statewide",
+    "due_date_raw": "6/4/26",
+    "due_date": "6/4/26",
+    "url": "https://www.bidexpress.com/businesses/5643/home",
+    "access_type": "BidX (NJDOT forwards to BidX for documents)",
+    "record_type": "professional_services",
+    "contract_number": "TP-829",
+    "description": "US \u2014 40 Over Inside Thorofare Bridge Rehabilitation Advertised 6/4/26",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-05-25T23:02:35.246861+00:00"
   }
 ]
