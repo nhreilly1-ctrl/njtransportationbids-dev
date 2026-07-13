@@ -48,7 +48,7 @@
     "description": "Rt.78, Route 22 to Drift Road/Dale Road",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722073+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849660+00:00"
   },
   {
     "id": "opp-df5f3f758a27",
@@ -65,7 +65,7 @@
     "description": "RE \u2014 ADVERTISEMENT PROFESSIONAL ENGINEERING SERVICES FOR ENVIRONMENTAL SITE ASSESSMENTS (ESA) Bid No. RFP2026 \u2014 23B The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: RE \u2014 ADVERTISEMENT PROFESSIONAL ENGINEERING... [ Read",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722123+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849703+00:00"
   },
   {
     "id": "opp-f119cb796ae4",
@@ -82,7 +82,7 @@
     "description": "Bridge Engineering Design Services for Operations Support",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722077+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849662+00:00"
   },
   {
     "id": "opp-c7796748368f",
@@ -99,7 +99,7 @@
     "description": "Administration Department 1 Bid BROKER INSURANCE SERVICES Bid No. CC2026 \u2014 08 The City of Trenton is soliciting request for competitive contracting proposals through a fairand open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: BROKER... [ Read on : BROKER INSURANCE SERVICES ] Status",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722121+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849701+00:00"
   },
   {
     "id": "opp-82ee82d909e0",
@@ -116,7 +116,24 @@
     "description": "South Main Street, Bridge Over Washington Secondary (Conrail)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722071+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849658+00:00"
+  },
+  {
+    "id": "opp-8d682378daa1",
+    "title": "CONSTRUCTION OF ADA COMPLIANT CURB RAMPS AND RELATED IMPROVEMENTS",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "7/28/2026",
+    "due_date": "7/28/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1194",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "CONSTRUCTION OF ADA COMPLIANT CURB RAMPS AND RELATED IMPROVEMENTS Bid No. BID2026 \u2014 82 Sealed bids shall be received by Isabel C. Garcia, QPA, Purchasing Agent, for the City of Trenton, County of Mercer, State of New Jersey on JULY 28, 2026, at 11:00 A.M.... [ Read on : CONSTRUCTION OF ADA COMPLIANT",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-07-13T22:56:11.683217+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -133,7 +150,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722046+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849631+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -150,7 +167,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722058+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849646+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -167,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722065+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849653+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -184,7 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722063+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849651+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -201,7 +218,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722061+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849649+00:00"
   },
   {
     "id": "opp-5d6d7e81a4f8",
@@ -218,7 +235,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722067+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849655+00:00"
   },
   {
     "id": "opp-217a58a2538d",
@@ -235,7 +252,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722069+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849657+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -1697,7 +1714,7 @@
     "description": "Contract No. T200.889 Line Striping Installation and Maintenance Milepost 35 to 54",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722117+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849697+00:00"
   },
   {
     "id": "opp-03f72c03b463",
@@ -2292,7 +2309,7 @@
     "description": "Show Me Open Bids Administration Department Housing & Economic Development Recreation, Natural Resources, & Culture Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722119+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849699+00:00"
   },
   {
     "id": "opp-342171587b35",
@@ -2309,7 +2326,7 @@
     "description": "New Jersey E \u2014 ZPass Merchant Services RM \u2014 178825",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722107+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849688+00:00"
   },
   {
     "id": "opp-7417a21576f5",
@@ -2377,7 +2394,7 @@
     "description": "RFQ Outside Counsel (AUTHORITY COUNSEL, AUTHORITY COUNSEL (CONFLICTS), SPECIAL COUNSELS SERVICES) RM \u2014 200603",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722109+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849690+00:00"
   },
   {
     "id": "opp-16a2549bd6ed",
@@ -2411,7 +2428,7 @@
     "description": "OPS No. A4211 On \u2014 Call Services For Resilience And Sustainability Programs",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722115+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849695+00:00"
   },
   {
     "id": "opp-6bfedf017e00",
@@ -2462,7 +2479,7 @@
     "description": "RM \u2014 200082 RFB Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722111+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849692+00:00"
   },
   {
     "id": "opp-1a1a241f693b",
@@ -2479,7 +2496,7 @@
     "description": "RM \u2014 200081 RFB Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722113+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849693+00:00"
   },
   {
     "id": "opp-64039f0ac101",
@@ -2530,7 +2547,7 @@
     "description": "Contract 0 Solicitations",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722125+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849705+00:00"
   },
   {
     "id": "opp-1cfc12438a85",
@@ -2632,7 +2649,7 @@
     "description": "RM \u2014 202029 RFB 2026 \u2014 2029 Snow Removal and Salting Services at Various Locations on the New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722101+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849683+00:00"
   },
   {
     "id": "opp-c9a831d19edc",
@@ -2649,7 +2666,7 @@
     "description": "R \u2014 201246 RFB Supply and Replace 27 Eaton 9170 UPS Systems",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722105+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849686+00:00"
   },
   {
     "id": "opp-f65614b6e387",
@@ -2666,7 +2683,7 @@
     "description": "R \u2014 202117 RFB RMGT Model 340HA \u2014 2 Two Color Press and Envelope Feeder with Conveyor",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722103+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849685+00:00"
   },
   {
     "id": "opp-4a968b2a080c",
@@ -2700,7 +2717,7 @@
     "description": "OPS No. A4353 On \u2014 Call Bridge Security Design Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722099+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849681+00:00"
   },
   {
     "id": "opp-f6600f439998",
@@ -2717,7 +2734,7 @@
     "description": "Contract A500.954 Immediate and Scheduled Repairs of Mechanical Systems",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722092+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849675+00:00"
   },
   {
     "id": "opp-128788945289",
@@ -2734,7 +2751,7 @@
     "description": "Contract No. A500.950 Immediate and Scheduled Repairs of Facilities",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722090+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849673+00:00"
   },
   {
     "id": "opp-9c36c3e48b8d",
@@ -2768,7 +2785,7 @@
     "description": "RM \u2014 202205 RFB VMS Cabinets",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722096+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849678+00:00"
   },
   {
     "id": "opp-7d6ab00df1fd",
@@ -2785,7 +2802,7 @@
     "description": "RM \u2014 202150 VMS Cabinet Access Controls",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722094+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849676+00:00"
   },
   {
     "id": "opp-0d57f76e82b8",
@@ -2802,7 +2819,7 @@
     "description": "RM \u2014 202043 RFB Roadway Sweeping Service for the Northern and Southern Areas of the Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722097+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849680+00:00"
   },
   {
     "id": "opp-a6136924963b",
@@ -2819,7 +2836,7 @@
     "description": "OPS No. A4327 Design Services For Contract Nos. P100.969 And T100.970 Repainting Structural Steel And Miscellaneous Bridge Improvements",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722088+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849671+00:00"
   },
   {
     "id": "opp-8260a09171c4",
@@ -2836,7 +2853,7 @@
     "description": "RM \u2014 201575 RFB Routine Towing Services on Various Areas of the New Jersey Turnpike and/or Routine Towing Services and Emergency Services on the Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722086+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849670+00:00"
   },
   {
     "id": "opp-c5836567cefb",
@@ -2853,7 +2870,7 @@
     "description": "RM \u2014 202029 RFB RE \u2014 BID 2026 \u2014 2029 Snow Removal and Salting Services for Various Locations Along the New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722080+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849664+00:00"
   },
   {
     "id": "opp-e8b6556a789f",
@@ -2870,7 +2887,7 @@
     "description": "R \u2014 202858 RFB Toll MOXA Devices",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722082+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849666+00:00"
   },
   {
     "id": "opp-0b84f6f4fc0f",
@@ -2887,7 +2904,7 @@
     "description": "R \u2014 202617 RFB Epson Omnilink Receipt Printers",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-07-13T12:31:30.722084+00:00"
+    "crawled_at": "2026-07-13T22:56:19.849668+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
