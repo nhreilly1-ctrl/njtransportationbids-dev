@@ -14,7 +14,7 @@
     "description": "Rt.78, Route 22 to Drift Road/Dale Road",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356366+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852064+00:00"
   },
   {
     "id": "opp-82ee82d909e0",
@@ -31,24 +31,7 @@
     "description": "South Main Street, Bridge Over Washington Secondary (Conrail)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356364+00:00"
-  },
-  {
-    "id": "opp-060ed59139ca",
-    "title": "F \u2014 130 \u2014 2026 \u2014 CONSTRUCTION OF PARKING LOT AT PLEASANT VALLEY PARK, MARLBORO, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "8/19/2026",
-    "due_date": "8/19/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-130-2026&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 130 \u2014 2026",
-    "description": "CONSTRUCTION OF PARKING LOT AT PLEASANT VALLEY PARK, MARLBORO, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-08-19T10:33:14.737638+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852063+00:00"
   },
   {
     "id": "opp-c587aa2d99f9",
@@ -65,7 +48,24 @@
     "description": "Contract 2026 \u2014 28 Purchase and Delivery Light Duty Parts and Accessories (14,999 GVWR or Less) and Heavy Duty Parts and Accessories (15,000 GVWR or More) for Vehicles and Equipment",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356430+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852099+00:00"
+  },
+  {
+    "id": "opp-0de0347aedf0",
+    "title": "F \u2014 17 \u2014 2027 \u2014 PREVENTIVE MAINTENANCE, TESTING, INSPECTION, SERVICE AND REPAIR OF FIRE ALARM SYSTEMS AT VARIOUS MONMOUTH COUNTY LOCATIONS FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH ONE (1) TWO \u2014 Y",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "9/30/2026",
+    "due_date": "9/30/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-17-2027&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 17 \u2014 2027",
+    "description": "PREVENTIVE MAINTENANCE, TESTING, INSPECTION, SERVICE AND REPAIR OF FIRE ALARM SYSTEMS AT VARIOUS MONMOUTH COUNTY LOCATIONS FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH ONE (1) TWO \u2014 Y",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-09-18T23:54:06.667676+00:00"
   },
   {
     "id": "opp-a97812d7a786",
@@ -82,7 +82,7 @@
     "description": "Housing & Economic Development 1 Bid REQUEST FOR QUALIFICATIONS EMERGENCY STABILIZATION OF IMMINENTLY HAZARDOUS AND UNSAFE STRUCTURES Bid No. RFQ2026 \u2014 01B RE \u2014 ADVERTISEMENT REQUEST FOR QUALIFICATIONS FROM THE CITY OF TRENTON PREQUALIFICATION OF CONTRACTORS FOR EMERGENCY STABILIZATION OF IMMINENTLY",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356428+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852097+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -99,7 +99,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356333+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852039+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -116,7 +116,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356351+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852053+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -133,7 +133,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356358+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852059+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -150,7 +150,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356356+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852057+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -167,7 +167,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356354+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852056+00:00"
   },
   {
     "id": "opp-5d6d7e81a4f8",
@@ -184,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356360+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852060+00:00"
   },
   {
     "id": "opp-217a58a2538d",
@@ -201,7 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356362+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852061+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -2462,7 +2462,7 @@
     "description": "Contract 1 Solicitation",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356432+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852100+00:00"
   },
   {
     "id": "opp-26a663de415d",
@@ -2870,7 +2870,7 @@
     "description": "Contract No. A200.915 \u2014 1 Maintenance and Repair of Traffic Signals On The New Jersey Turnpike and Garden State Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356422+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852092+00:00"
   },
   {
     "id": "opp-b6983dbfe749",
@@ -2887,7 +2887,7 @@
     "description": "RM \u2014 202112 RFB Extra Heavy Duty Towing and Recovery Services on the New Jersey Turnpike and Garden Sate Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356407+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852082+00:00"
   },
   {
     "id": "opp-30282511f024",
@@ -2921,7 +2921,7 @@
     "description": "Show Me Open Bids Housing & Economic Development Police Department Public Works Department Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356426+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852096+00:00"
   },
   {
     "id": "opp-66bd776a9a2d",
@@ -2955,7 +2955,7 @@
     "description": "OPS No. P3340 Supervision of Construction Services for Contract No. P200.831 Guide Rail Improvements, Milepost 160.0 to 172.4",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356418+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852090+00:00"
   },
   {
     "id": "opp-0064fbb16e83",
@@ -2972,7 +2972,7 @@
     "description": "Multi \u2014 Project Solicitation OPS No. T4094 2027 Inspection Services for the New Jersey Turnpike Authority Bridge Inspection Program New Jersey Turnpike \u2014 Sign Structures, Milepost 0 to 67 and the Pearl Harbor Memorial Turnpike Extension \u2014 Group 1 and OPS No. T4095 2027 Inspection Services for the New Jersey Turnpike Authority Bridge Inspection Program New Jersey Turnpike \u2014 Sign Structures, Milepost 67 to 97.7 \u2014 Group 2",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356420+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852091+00:00"
   },
   {
     "id": "opp-d58604f425eb",
@@ -3006,7 +3006,7 @@
     "description": "Multi \u2014 Project Solicitation Order for Professional Services No. P4096 2027 Inspection Services for the New Jersey Turnpike Authority Bridge Inspection Program Garden State Parkway \u2014 Group 1 And Order for Professional Services No. P4097 2027 Inspection Services for the New Jersey Turnpike Authority Bridge Inspection Program Garden State Parkway \u2014 Group 3 And Order for Professional Services No. P4276 2027 Inspection Services for the New Jersey Turnpike Authority Bridge Inspection Program Garden State Parkway \u2014 Group 5",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356414+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852087+00:00"
   },
   {
     "id": "opp-2a8aded0a2d8",
@@ -3040,7 +3040,7 @@
     "description": "R \u2014 203173 RFB Axis Cameras and Mounting Accessories",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356416+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852088+00:00"
   },
   {
     "id": "opp-f8bb054b896a",
@@ -3159,7 +3159,7 @@
     "description": "Order For Professional Services No. A4374 On \u2014 Call MEP Support Services And Design",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356409+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852083+00:00"
   },
   {
     "id": "opp-e14086501aa1",
@@ -3176,7 +3176,7 @@
     "description": "RFQ BROKER DEALER PROFESSIONAL SERVICES RM \u2014 200962",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356411+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852084+00:00"
   },
   {
     "id": "opp-50eb73e3b57d",
@@ -3193,7 +3193,7 @@
     "description": "RFQ Title Search and Insurance Services RM \u2014 203652",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356412+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852085+00:00"
   },
   {
     "id": "opp-13625f4e22c2",
@@ -3210,7 +3210,7 @@
     "description": "PROFESSIONAL ENGINEERING DESIGN SERVICES FOR IMPROVEMENTS TO BROADWAY (CR 551... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356424+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852094+00:00"
   },
   {
     "id": "opp-3933fbf0388a",
@@ -3227,7 +3227,7 @@
     "description": "Order for Professional Services No. T4224 Design Services for Contract Nos. T200.737 Guide Rail Improvements, Milepost 98 to 104 and T200.738, Guide Rail Improvements, Milepost 94 to 98",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356386+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852078+00:00"
   },
   {
     "id": "opp-571b7c36eb05",
@@ -3244,7 +3244,7 @@
     "description": "Order for Professional Services No. T4036 Supervision Of Construction Services for Contract No. T500.709 Construction Of Pre \u2014 Engineered Metal Building at New Jersey Turnpike Maintenance District 9, Milepost N5.9",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356388+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852079+00:00"
   },
   {
     "id": "opp-002837ed19c3",
@@ -3261,7 +3261,7 @@
     "description": "RM \u2014 200301 RFB REBID Tree Trimming and Removal Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356405+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852080+00:00"
   },
   {
     "id": "opp-65a38b14d4f4",
@@ -3278,7 +3278,7 @@
     "description": "RFP Occupational Healthcare and Physician Services RM \u2014 201903",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356384+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852076+00:00"
   },
   {
     "id": "opp-eca4a7a67b6e",
@@ -3295,7 +3295,7 @@
     "description": "Contract No. A900.888 Automated Vehicular Gates at NJSP/TMD 7",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356373+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852068+00:00"
   },
   {
     "id": "opp-71a4720c8de3",
@@ -3312,7 +3312,7 @@
     "description": "Order For Professional Services No. T4124, T4125, T4275 \u2014 Multi \u2014 Project Solicitation \u2014 2027 Inspection Services For The New Jersey Turnpike Authority Bridge Inspection Program New Jersey Turnpike \u2014 Groups 2, 4, and 6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356379+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852072+00:00"
   },
   {
     "id": "opp-cb220915a6bf",
@@ -3329,7 +3329,7 @@
     "description": "Order For Professional Services No. T3884 Supervision Of Construction Services For Contract No. T100.623 Bridge Repairs And Resurfacing, Milepost 92 To 122 And The Newark Bay \u2014 Hudson County Extension (2027 \u2014 2028)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356381+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852073+00:00"
   },
   {
     "id": "opp-9cbfcbe8b307",
@@ -3346,7 +3346,7 @@
     "description": "RM \u2014 204215 Prequalification of Contractors for Routine Towing Services on ZONE 7 of the New Jersey Turnpike",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356382+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852075+00:00"
   },
   {
     "id": "opp-de1c25d01f01",
@@ -3363,7 +3363,7 @@
     "description": "RFQ Special Counsel \u2014 Workers\u2019 Compensation RM \u2014 203961",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356377+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852071+00:00"
   },
   {
     "id": "opp-ffdb4e4d7e6e",
@@ -3380,7 +3380,7 @@
     "description": "RFQ Special Counsel \u2014 Collections RM \u2014 203963",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356375+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852069+00:00"
   },
   {
     "id": "opp-f82f46c0fedc",
@@ -3397,7 +3397,7 @@
     "description": "Professional engineering services for Construction Management / Inspection Services for the Portland \u2014 Columbia Toll \u2014 Supported Pedestrian Bridge Rehabilitation in Northampton County, PA and Warren County, NJ. Document Download: Request for Proposals",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/CM-622ARFPFinal.pdf",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356368+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852065+00:00"
   },
   {
     "id": "opp-cadea5e34322",
@@ -3414,7 +3414,41 @@
     "description": "Order for Professional Services No. P4166 Supervision of Construction Services for Contract No. P200.753 Roadway Resurfacing Milepost 0 to 126 Section 8 and 12 (2027)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-09-18T14:07:44.356371+00:00"
+    "crawled_at": "2026-09-18T23:54:27.852067+00:00"
+  },
+  {
+    "id": "opp-21c8dd42945c",
+    "title": "RFP#26 \u2014 38 \u2014 ON \u2014 CALL PROFESSIONAL ENGINEERING FOR BRIDGE DESIGN AND BRIDGE CONSTRUCTION IN...",
+    "source_id": "county-camden",
+    "source_name": "Camden County Procurements",
+    "county": "Camden",
+    "due_date_raw": "",
+    "due_date": "",
+    "url": "https://procurements.camdencounty.com/procurements/4120",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "RFP#26 \u2014 38",
+    "description": "ON \u2014 CALL PROFESSIONAL ENGINEERING FOR BRIDGE DESIGN AND BRIDGE CONSTRUCTION IN... View Advertisement",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-09-18T23:54:04.521455+00:00"
+  },
+  {
+    "id": "opp-ba35b9d321e9",
+    "title": "RFP#26 \u2014 37 \u2014 ON \u2014 CALL PROFESSIONAL ENGINEERING FOR DAM DESIGN AND INSPECTION SERVICES OF VA...",
+    "source_id": "county-camden",
+    "source_name": "Camden County Procurements",
+    "county": "Camden",
+    "due_date_raw": "",
+    "due_date": "",
+    "url": "https://procurements.camdencounty.com/procurements/4119",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "RFP#26 \u2014 37",
+    "description": "ON \u2014 CALL PROFESSIONAL ENGINEERING FOR DAM DESIGN AND INSPECTION SERVICES OF VA... View Advertisement",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-09-18T23:54:04.521685+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
@@ -4979,6 +5013,23 @@
     "doc_url": "",
     "status": "expired",
     "crawled_at": "2026-08-04T12:02:16.726174+00:00"
+  },
+  {
+    "id": "opp-060ed59139ca",
+    "title": "F \u2014 130 \u2014 2026 \u2014 CONSTRUCTION OF PARKING LOT AT PLEASANT VALLEY PARK, MARLBORO, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "8/19/2026",
+    "due_date": "8/19/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-130-2026&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 130 \u2014 2026",
+    "description": "CONSTRUCTION OF PARKING LOT AT PLEASANT VALLEY PARK, MARLBORO, NJ FOR THE MONMOUTH COUNTY PARK SYSTEM",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-08-19T10:33:14.737638+00:00"
   },
   {
     "id": "opp-9f82e8bac8ae",
