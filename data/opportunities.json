@@ -14,7 +14,7 @@
     "description": "Rt.78, Route 22 to Drift Road/Dale Road",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368334+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344243+00:00"
   },
   {
     "id": "opp-82ee82d909e0",
@@ -31,41 +31,7 @@
     "description": "South Main Street, Bridge Over Washington Secondary (Conrail)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368332+00:00"
-  },
-  {
-    "id": "opp-ead277bcf253",
-    "title": "PUBLIC VEHICLE SALE",
-    "source_id": "municipal-trenton",
-    "source_name": "City of Trenton Bid Postings",
-    "county": "Mercer",
-    "due_date_raw": "10/13/2026",
-    "due_date": "10/13/2026",
-    "url": "https://www.trentonnj.org/bids.aspx?bidID=1213",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "",
-    "description": "Administration Department 1 Bid PUBLIC VEHICLE SALE Bid No. BID2026 \u2014 96 PUBLIC VEHICLE SALE BID2026 \u2014 96 The City of Trenton, in the County of Mercer, State of New Jersey, will solicit sealed bids for the Public Vehicle Sale to be received by... [ Read on : PUBLIC VEHICLE SALE ] Status: Closes: Ope",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-13T02:51:41.148269+00:00"
-  },
-  {
-    "id": "opp-243361829ff7",
-    "title": "F \u2014 27 \u2014 2027 \u2014 FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "10/15/2026",
-    "due_date": "10/15/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-27-2027&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 27 \u2014 2027",
-    "description": "FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368378+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344241+00:00"
   },
   {
     "id": "opp-9ca422b6437a",
@@ -82,7 +48,24 @@
     "description": "Housing & Economic Development 1 Bid INSTALLATION OF HOLIDAY LIGHTS FROM SOUTH WARREN STREET BETWEEN STATE STREET TO LAFAYETTE STREET Bid No. BID2026 \u2014 94 CITY OF TRENTON NOTICE TO BIDDERS BID2026 \u2014 94 Sealed bids shall be received by Isabel C. Garcia, QPA, Purchasing Agent, for the City of Trenton,",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:22:57.201944+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344303+00:00"
+  },
+  {
+    "id": "opp-243361829ff7",
+    "title": "F \u2014 27 \u2014 2027 \u2014 FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "10/28/2026",
+    "due_date": "10/28/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-27-2027&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 27 \u2014 2027",
+    "description": "FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-10-14T00:54:44.344297+00:00"
   },
   {
     "id": "opp-a7a490fb42c1",
@@ -99,7 +82,7 @@
     "description": "ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368380+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344295+00:00"
   },
   {
     "id": "opp-372524fcd021",
@@ -116,7 +99,7 @@
     "description": "OPERATING AND TENDING SERVICES FOR FOUR (4) COUNTY OWNED MOVABLE DRAWBRIDGES AT VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH TWO (2) ONE \u2014 ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368382+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344298+00:00"
   },
   {
     "id": "opp-5384d0f226c0",
@@ -133,7 +116,7 @@
     "description": "ON \u2014 SITE INTERPRETING AND TRANSLATING SERVICES AND TELEPHONIC INTERPRETING AND/OR TRANSLATING SERVICE Bid No. RFP2026 \u2014 30 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: O N \u2014 SITE INTERPRETING AND TRANSLATING... [ ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368386+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344304+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -150,7 +133,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368308+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344215+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -167,7 +150,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368318+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344227+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -184,7 +167,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368326+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344235+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -201,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368323+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344233+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -218,7 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368321+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344230+00:00"
   },
   {
     "id": "opp-5d6d7e81a4f8",
@@ -235,7 +218,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368328+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344237+00:00"
   },
   {
     "id": "opp-217a58a2538d",
@@ -252,7 +235,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368330+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344239+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -2547,7 +2530,7 @@
     "description": "Contract 0 Solicitations",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368388+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344306+00:00"
   },
   {
     "id": "opp-1cfc12438a85",
@@ -2938,7 +2921,7 @@
     "description": "RM \u2014 202112 RFB Extra Heavy Duty Towing and Recovery Services on the New Jersey Turnpike and Garden Sate Parkway",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368350+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344265+00:00"
   },
   {
     "id": "opp-30282511f024",
@@ -2972,7 +2955,7 @@
     "description": "Show Me Open Bids Housing & Economic Development Municipal Court Public Works Department Water & Sewer Sorted By Category Bid Title Closing Date Bid Number (Ascending) Bid Number (Descending) Show Closed/Awarded/Cancelled Bids:",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368384+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344300+00:00"
   },
   {
     "id": "opp-66bd776a9a2d",
@@ -3278,7 +3261,7 @@
     "description": "Order for Professional Services No. T4224 Design Services for Contract Nos. T200.737 Guide Rail Improvements, Milepost 98 to 104 and T200.738, Guide Rail Improvements, Milepost 94 to 98",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368368+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344284+00:00"
   },
   {
     "id": "opp-571b7c36eb05",
@@ -3295,7 +3278,7 @@
     "description": "Order for Professional Services No. T4036 Supervision Of Construction Services for Contract No. T500.709 Construction Of Pre \u2014 Engineered Metal Building at New Jersey Turnpike Maintenance District 9, Milepost N5.9",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368370+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344286+00:00"
   },
   {
     "id": "opp-002837ed19c3",
@@ -3329,7 +3312,7 @@
     "description": "RFP Occupational Healthcare and Physician Services RM \u2014 201903",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368364+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344280+00:00"
   },
   {
     "id": "opp-eca4a7a67b6e",
@@ -3346,7 +3329,7 @@
     "description": "Contract No. A900.888 Automated Vehicular Gates at NJSP/TMD 7",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368354+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344269+00:00"
   },
   {
     "id": "opp-71a4720c8de3",
@@ -3363,7 +3346,7 @@
     "description": "Order For Professional Services No. T4124, T4125, T4275 \u2014 Multi \u2014 Project Solicitation \u2014 2027 Inspection Services For The New Jersey Turnpike Authority Bridge Inspection Program New Jersey Turnpike \u2014 Groups 2, 4, and 6",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368362+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344277+00:00"
   },
   {
     "id": "opp-cb220915a6bf",
@@ -3380,7 +3363,7 @@
     "description": "Order For Professional Services No. T3884 Supervision Of Construction Services For Contract No. T100.623 Bridge Repairs And Resurfacing, Milepost 92 To 122 And The Newark Bay \u2014 Hudson County Extension (2027 \u2014 2028)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368360+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344275+00:00"
   },
   {
     "id": "opp-9cbfcbe8b307",
@@ -3397,7 +3380,7 @@
     "description": "RM \u2014 204215 Prequalification of Contractors for Routine Towing Services on ZONE 7 of the New Jersey Turnpike",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368366+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344282+00:00"
   },
   {
     "id": "opp-de1c25d01f01",
@@ -3414,7 +3397,7 @@
     "description": "RFQ Special Counsel \u2014 Workers\u2019 Compensation RM \u2014 203961",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368358+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344273+00:00"
   },
   {
     "id": "opp-ffdb4e4d7e6e",
@@ -3431,7 +3414,7 @@
     "description": "RFQ Special Counsel \u2014 Collections RM \u2014 203963",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368356+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344271+00:00"
   },
   {
     "id": "opp-f82f46c0fedc",
@@ -3465,7 +3448,7 @@
     "description": "Order for Professional Services No. P4166 Supervision of Construction Services for Contract No. P200.753 Roadway Resurfacing Milepost 0 to 126 Section 8 and 12 (2027)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368344+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344259+00:00"
   },
   {
     "id": "opp-21c8dd42945c",
@@ -3482,7 +3465,7 @@
     "description": "ON \u2014 CALL PROFESSIONAL ENGINEERING FOR BRIDGE DESIGN AND BRIDGE CONSTRUCTION IN... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368374+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344291+00:00"
   },
   {
     "id": "opp-ba35b9d321e9",
@@ -3499,7 +3482,7 @@
     "description": "ON \u2014 CALL PROFESSIONAL ENGINEERING FOR DAM DESIGN AND INSPECTION SERVICES OF VA... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368376+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344293+00:00"
   },
   {
     "id": "opp-169348f4ab17",
@@ -3516,7 +3499,7 @@
     "description": "RFQ BROKER DEALER PROFESSIONAL SERVICES RM \u2014 200962 REBID",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368352+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344267+00:00"
   },
   {
     "id": "opp-8d70ab873839",
@@ -3533,7 +3516,7 @@
     "description": "Contract No. P200.831 Guide Rail Improvements, Milepost 160.0 to 172.4",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368342+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344257+00:00"
   },
   {
     "id": "opp-b06e44a24418",
@@ -3567,7 +3550,7 @@
     "description": "Order for Professional Services No. T4251 Environmental Compliance Services at Clara Barton Service Area 1S, John Fenwick Service Area 1N,Walt Whitman Service Area 3S and James Fenimore Cooper Service Area 4N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368338+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344252+00:00"
   },
   {
     "id": "opp-f03de6a980f6",
@@ -3584,7 +3567,7 @@
     "description": "RM \u2014 203983 Safety Inspections and Routine Maintenance of Elevators and Dumbwaiters",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368346+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344261+00:00"
   },
   {
     "id": "opp-b50fbd44c31e",
@@ -3601,7 +3584,7 @@
     "description": "R \u2014 204522 Sick Overhead Scanners",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368348+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344263+00:00"
   },
   {
     "id": "opp-ce2c554fafa4",
@@ -3618,7 +3601,7 @@
     "description": "Order For Professional Services No. P4302 Supervision Of Construction Services For Contract No. P100.859 Miscellaneous Structural Repairs, Structure No. 127.2N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368340+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344254+00:00"
   },
   {
     "id": "opp-afbbbf72e6d2",
@@ -3635,7 +3618,7 @@
     "description": "RFP#26 \u2014 43 Lobbyist Services for NJCE View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368372+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344289+00:00"
   },
   {
     "id": "opp-e656a8c81cab",
@@ -3652,7 +3635,7 @@
     "description": "RFQ Investment Banking Services: Senior Manager and Co \u2014 Manager Pools RM \u2014 204558",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:23:04.368336+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344245+00:00"
   },
   {
     "id": "opp-b31a5f59a2d6",
@@ -3669,7 +3652,7 @@
     "description": "RM \u2014 200082 REBID Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:22:43.574631+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344248+00:00"
   },
   {
     "id": "opp-b468d1d355b6",
@@ -3686,7 +3669,7 @@
     "description": "RM \u2014 200081 REBID Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-10-13T17:22:43.575068+00:00"
+    "crawled_at": "2026-10-14T00:54:44.344250+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
@@ -4027,6 +4010,23 @@
     "doc_url": "",
     "status": "expired",
     "crawled_at": "2026-09-24T14:39:28.297171+00:00"
+  },
+  {
+    "id": "opp-ead277bcf253",
+    "title": "PUBLIC VEHICLE SALE",
+    "source_id": "municipal-trenton",
+    "source_name": "City of Trenton Bid Postings",
+    "county": "Mercer",
+    "due_date_raw": "10/13/2026",
+    "due_date": "10/13/2026",
+    "url": "https://www.trentonnj.org/bids.aspx?bidID=1213",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "",
+    "description": "Administration Department 1 Bid PUBLIC VEHICLE SALE Bid No. BID2026 \u2014 96 PUBLIC VEHICLE SALE BID2026 \u2014 96 The City of Trenton, in the County of Mercer, State of New Jersey, will solicit sealed bids for the Public Vehicle Sale to be received by... [ Read on : PUBLIC VEHICLE SALE ] Status: Closes: Ope",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-10-13T02:51:41.148269+00:00"
   },
   {
     "id": "opp-a97812d7a786",
