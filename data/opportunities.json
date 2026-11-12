@@ -14,7 +14,7 @@
     "description": "Rt.78, Route 22 to Drift Road/Dale Road",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086016+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352464+00:00"
   },
   {
     "id": "opp-82ee82d909e0",
@@ -31,75 +31,7 @@
     "description": "South Main Street, Bridge Over Washington Secondary (Conrail)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086014+00:00"
-  },
-  {
-    "id": "opp-243361829ff7",
-    "title": "F \u2014 27 \u2014 2027 \u2014 FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "10/28/2026",
-    "due_date": "10/28/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-27-2027&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 27 \u2014 2027",
-    "description": "FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-28T00:59:53.138482+00:00"
-  },
-  {
-    "id": "opp-a7a490fb42c1",
-    "title": "F \u2014 145 \u2014 2026 \u2014 ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "10/28/2026",
-    "due_date": "10/28/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-145-2026&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 145 \u2014 2026",
-    "description": "ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-21T14:52:58.703960+00:00"
-  },
-  {
-    "id": "opp-372524fcd021",
-    "title": "F \u2014 34 \u2014 2027 \u2014 OPERATING AND TENDING SERVICES FOR FOUR (4) COUNTY OWNED MOVABLE DRAWBRIDGES AT VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH TWO (2) ONE \u2014 ",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "10/28/2026",
-    "due_date": "10/28/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-34-2027&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 34 \u2014 2027",
-    "description": "OPERATING AND TENDING SERVICES FOR FOUR (4) COUNTY OWNED MOVABLE DRAWBRIDGES AT VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH TWO (2) ONE \u2014 ",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-28T00:59:53.138484+00:00"
-  },
-  {
-    "id": "opp-250bc94df6c3",
-    "title": "F \u2014 145 \u2014 2026 \u2014 ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD (ADDENDUM #1 ISSU",
-    "source_id": "county-monmouth",
-    "source_name": "Monmouth County Purchasing",
-    "county": "Monmouth",
-    "due_date_raw": "10/28/2026",
-    "due_date": "10/28/2026",
-    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-145-2026&BidType=0",
-    "access_type": "Public access",
-    "record_type": "construction",
-    "contract_number": "F \u2014 145 \u2014 2026",
-    "description": "ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD (ADDENDUM #1 ISSU",
-    "doc_url": "",
-    "status": "open",
-    "crawled_at": "2026-10-28T00:59:53.138480+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352461+00:00"
   },
   {
     "id": "opp-a2a26aaff831",
@@ -150,7 +82,7 @@
     "description": "Administration Department 2 Bids ONLINE AUCTION CITY OF TRENTON ONLINE AUCTION NOTICE IS HEREBY GIVEN the City of Trenton intends to utilize the online auction services GovDeals Auction through Source well Contract... [ Read on : ONLINE AUCTION ] Status: Closes: Open Upon Contract PUBLIC VEHICLE SAL",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086054+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352509+00:00"
   },
   {
     "id": "opp-704e3b95fd2b",
@@ -184,7 +116,7 @@
     "description": "ARCHITECTURAL CONSTRUCTION OVERSIGHT AND ADMINISTRATION SERVICES FOR THE TRENTON CARVER CENTER BUILD Bid No. RFP2026 \u2014 31 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: ADDENDUM NO. 1 AND POSTPONEMENT NOTICE TO... [ ",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086056+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352511+00:00"
   },
   {
     "id": "opp-8ee03cbd70f5",
@@ -201,7 +133,24 @@
     "description": "COMPREHENSIVE DENTAL HEALTHCARE SERVICES FOR UNINSURED CHILDREN AND ADULTS Bid No. RFP2026 \u2014 35 The City of Trenton is soliciting proposals through a fair and open process in accordance with N.J.S.A. 19:44A \u2014 20.4 et seq. for: COMPREHENSIVE DENTAL HEALTHCARE SERVICES... [ Read on : COMPREHENSIVE DEN",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086058+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352512+00:00"
+  },
+  {
+    "id": "opp-97efbf3f5a35",
+    "title": "F \u2014 39 \u2014 2027 \u2014 2027 ON \u2014 CALL MAINTENANCE CONTRACT FOR ROADWAYS AND BRIDGES, VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD OF JANUARY 1, 2027 THROUGH DECEMBER 31, 2027",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "12/2/2026",
+    "due_date": "12/2/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-39-2027&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 39 \u2014 2027",
+    "description": "2027 ON \u2014 CALL MAINTENANCE CONTRACT FOR ROADWAYS AND BRIDGES, VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD OF JANUARY 1, 2027 THROUGH DECEMBER 31, 2027",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-11-12T17:56:27.741811+00:00"
   },
   {
     "id": "opp-fda2e5593deb",
@@ -218,7 +167,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.085991+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352438+00:00"
   },
   {
     "id": "opp-e73121e39437",
@@ -235,7 +184,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086003+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352449+00:00"
   },
   {
     "id": "opp-51d385b1d379",
@@ -252,7 +201,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086009+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352455+00:00"
   },
   {
     "id": "opp-beb6543165a1",
@@ -269,7 +218,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086007+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352453+00:00"
   },
   {
     "id": "opp-f61bd1a8d714",
@@ -286,7 +235,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086005+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352451+00:00"
   },
   {
     "id": "opp-5d6d7e81a4f8",
@@ -303,7 +252,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086011+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352457+00:00"
   },
   {
     "id": "opp-217a58a2538d",
@@ -320,7 +269,7 @@
     "description": "",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086012+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352459+00:00"
   },
   {
     "id": "opp-0e3a003b5a06",
@@ -2615,7 +2564,7 @@
     "description": "Contract 0 Solicitations",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086059+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352514+00:00"
   },
   {
     "id": "opp-1cfc12438a85",
@@ -3533,7 +3482,7 @@
     "description": "Order for Professional Services No. P4166 Supervision of Construction Services for Contract No. P200.753 Roadway Resurfacing Milepost 0 to 126 Section 8 and 12 (2027)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086046+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352501+00:00"
   },
   {
     "id": "opp-21c8dd42945c",
@@ -3601,7 +3550,7 @@
     "description": "Contract No. P200.831 Guide Rail Improvements, Milepost 160.0 to 172.4",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086045+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352500+00:00"
   },
   {
     "id": "opp-b06e44a24418",
@@ -3635,7 +3584,7 @@
     "description": "Order for Professional Services No. T4251 Environmental Compliance Services at Clara Barton Service Area 1S, John Fenwick Service Area 1N,Walt Whitman Service Area 3S and James Fenimore Cooper Service Area 4N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086043+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352498+00:00"
   },
   {
     "id": "opp-f03de6a980f6",
@@ -3652,7 +3601,7 @@
     "description": "RM \u2014 203983 Safety Inspections and Routine Maintenance of Elevators and Dumbwaiters",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086047+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352503+00:00"
   },
   {
     "id": "opp-b50fbd44c31e",
@@ -3686,7 +3635,7 @@
     "description": "Order For Professional Services No. P4302 Supervision Of Construction Services For Contract No. P100.859 Miscellaneous Structural Repairs, Structure No. 127.2N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086042+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352496+00:00"
   },
   {
     "id": "opp-afbbbf72e6d2",
@@ -3720,7 +3669,7 @@
     "description": "RFQ Investment Banking Services: Senior Manager and Co \u2014 Manager Pools RM \u2014 204558",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086033+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352486+00:00"
   },
   {
     "id": "opp-b31a5f59a2d6",
@@ -3737,7 +3686,7 @@
     "description": "RM \u2014 200082 REBID Banking and Money Counting Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086038+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352492+00:00"
   },
   {
     "id": "opp-b468d1d355b6",
@@ -3754,7 +3703,7 @@
     "description": "RM \u2014 200081 REBID Armored Car Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086040+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352494+00:00"
   },
   {
     "id": "opp-e90f8ed5e1f1",
@@ -3771,7 +3720,7 @@
     "description": "Contract No. T100.623 Bridge Deck Repairs and Resurfacing, Milepost 92 to 122 and the Newark Bay \u2014 Hudson County Extension (2027 \u2014 2028)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086030+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352482+00:00"
   },
   {
     "id": "opp-4aca5d31c4e9",
@@ -3805,7 +3754,7 @@
     "description": "RM \u2014 203695 RFB Ventrac Mower Parts",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086035+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352490+00:00"
   },
   {
     "id": "opp-38445388c875",
@@ -3822,7 +3771,7 @@
     "description": "R \u2014 204522 REBID Sick Overhead Scanners",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086036+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352488+00:00"
   },
   {
     "id": "opp-0b799f05c7fa",
@@ -3839,7 +3788,7 @@
     "description": "The Delaware River Joint Toll Bridge Commission (DRJTBC) issues this Request for Proposals (RFP) to procure licensing, implementation, and ongoing support for a cloud \u2014 based Enterprise Resource Planning (ERP) solution. DRJTBC intends to replace fragmented legacy systems \u2014 including Tyler Munis, manual Excel \u2014 based processes, and disparate departmental databases \u2014 with an integrated SaaS platform. The ERP will be the system of record and standardized processes across these functional areas: \u2022 A",
     "doc_url": "https://www.drjtbc.org/wp-content/uploads/DRJTBC_C-798A_ERP_RFP.pdf",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086018+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352466+00:00"
   },
   {
     "id": "opp-84fb79c14e0a",
@@ -3856,7 +3805,7 @@
     "description": "Multi \u2014 Project Solicitation Order for Professional Services No. T3301 Supervision of Construction Services for Contract No. T200.748 Roadway Resurfacing Milepost 83 to 122 Section 15 (2027) And Order for Professional Services No. T4161 Supervision of Construction Services for Contract No. T200.765 Roadway Resurfacing Milepost 83 to 122 Section 18 (2027)",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086023+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352472+00:00"
   },
   {
     "id": "opp-c43fc0153d25",
@@ -3941,7 +3890,7 @@
     "description": "Surplus 26 \u2014 S \u2014 3",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086027+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352478+00:00"
   },
   {
     "id": "opp-5580d9192e85",
@@ -3958,7 +3907,7 @@
     "description": "RFP Employee Assistance Program Services RM \u2014 202352",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086032+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352484+00:00"
   },
   {
     "id": "opp-832edec37495",
@@ -3975,7 +3924,7 @@
     "description": "RM \u2014 203983 RFB Safety Inspection and Routine Maintenance of Elevators and Dumbwaiters REBID",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086026+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352476+00:00"
   },
   {
     "id": "opp-040299e9b300",
@@ -3992,7 +3941,7 @@
     "description": "RM \u2014 205023 RFB Sand, Stone, Rip Rap and Screened Topsoil",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086024+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352474+00:00"
   },
   {
     "id": "opp-f4b4440bdcf1",
@@ -4009,7 +3958,7 @@
     "description": "RM \u2014 204890 RFB Underground Utility Locating and Marking Services",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086029+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352480+00:00"
   },
   {
     "id": "opp-74d7f7d7226a",
@@ -4026,7 +3975,7 @@
     "description": "Contract No. P100.859 Miscellaneous Structural Repairs Northbound Driscoll Bridge, Str. No. 127.2N Milepost 126.9N to 127.8N",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086021+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352468+00:00"
   },
   {
     "id": "opp-774df1c7347f",
@@ -4043,7 +3992,7 @@
     "description": "Camden City Port Access Truck Route Reconstruction, Camden City, Camden Count... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086051+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352505+00:00"
   },
   {
     "id": "opp-2f1a36e37fde",
@@ -4060,7 +4009,7 @@
     "description": "Order for Professional Services No. P4345 Supervision of Construction Services for Contract No. P300.717",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086020+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352470+00:00"
   },
   {
     "id": "opp-e4312e31b2fd",
@@ -4077,7 +4026,58 @@
     "description": "RFP# 26 \u2014 55 \u2014 CONSTRUCTION MANAGEMENT / CONSTRUCTION INSPECTION SERVICES FOR C... View Advertisement",
     "doc_url": "",
     "status": "open",
-    "crawled_at": "2026-11-12T02:43:07.086053+00:00"
+    "crawled_at": "2026-11-12T17:56:47.352506+00:00"
+  },
+  {
+    "id": "opp-72cd6a63899f",
+    "title": "Contract No. C \u2014 829A \u2014 General Engineering Consultant (GEC) Services Task Order Agreement",
+    "source_id": "state-drjtbc-profserv",
+    "source_name": "DRJTBC Current Procurements",
+    "county": "Warren/Hunterdon/Mercer",
+    "due_date_raw": "December 17, 2026",
+    "due_date": "December 17, 2026",
+    "url": "https://www.drjtbc.org/wp-content/uploads/C-829ARFPFinal.pdf",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "Contract No. C \u2014 829A",
+    "description": "Professional engineering services to perform annual National Bridge Inspection Standards Inspections (NBIS) of the Commission\u2019s Toll Bridges (odd years) and Toll \u2014 Supported Bridges (even years) and associated building and roadway facilities. Document Download: Request for Proposals",
+    "doc_url": "https://www.drjtbc.org/wp-content/uploads/C-829ARFPFinal.pdf",
+    "status": "open",
+    "crawled_at": "2026-11-12T17:56:21.769816+00:00"
+  },
+  {
+    "id": "opp-77ed70ebb13c",
+    "title": "RFP Park \u2014 Ride Management Services RM \u2014 205311",
+    "source_id": "state-njta",
+    "source_name": "NJ Turnpike Authority",
+    "county": "Statewide",
+    "due_date_raw": "",
+    "due_date": "",
+    "url": "https://www.njta.gov/business-hub/current-solicitations/rfp-park-ride-management-services-rm-205311/",
+    "access_type": "BidX (NJTA)",
+    "record_type": "professional_services",
+    "contract_number": "",
+    "description": "RFP Park \u2014 Ride Management Services RM \u2014 205311",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-11-12T17:56:23.529750+00:00"
+  },
+  {
+    "id": "opp-162c5d73df00",
+    "title": "2027 \u2014 04 \u2014 RFP Environmental Engineer",
+    "source_id": "county-camden",
+    "source_name": "Camden County Procurements",
+    "county": "Camden",
+    "due_date_raw": "",
+    "due_date": "",
+    "url": "https://procurements.camdencounty.com/procurements/4163",
+    "access_type": "Public access",
+    "record_type": "professional_services",
+    "contract_number": "2027 \u2014 04",
+    "description": "REQUEST FOR PROPOSALS FOR ENGINEERING SERVICES (Environmental Engineer) View Advertisement",
+    "doc_url": "",
+    "status": "open",
+    "crawled_at": "2026-11-12T17:56:25.548076+00:00"
   },
   {
     "id": "opp-8c8c555cad3c",
@@ -4469,6 +4469,74 @@
     "doc_url": "",
     "status": "expired",
     "crawled_at": "2026-10-20T00:55:33.769146+00:00"
+  },
+  {
+    "id": "opp-243361829ff7",
+    "title": "F \u2014 27 \u2014 2027 \u2014 FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "10/28/2026",
+    "due_date": "10/28/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-27-2027&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 27 \u2014 2027",
+    "description": "FURNISH MAJOR AND MINOR INSPECTIONS, LABOR AND PARTS FOR REPAIRS FOR GENERATORS AT VARIOUS MONMOUTH COUNTY LOCATIONS ON \u2014 CALL AS NEEDED FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH T",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-10-28T00:59:53.138482+00:00"
+  },
+  {
+    "id": "opp-a7a490fb42c1",
+    "title": "F \u2014 145 \u2014 2026 \u2014 ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "10/28/2026",
+    "due_date": "10/28/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-145-2026&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 145 \u2014 2026",
+    "description": "ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-10-21T14:52:58.703960+00:00"
+  },
+  {
+    "id": "opp-372524fcd021",
+    "title": "F \u2014 34 \u2014 2027 \u2014 OPERATING AND TENDING SERVICES FOR FOUR (4) COUNTY OWNED MOVABLE DRAWBRIDGES AT VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH TWO (2) ONE \u2014 ",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "10/28/2026",
+    "due_date": "10/28/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-34-2027&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 34 \u2014 2027",
+    "description": "OPERATING AND TENDING SERVICES FOR FOUR (4) COUNTY OWNED MOVABLE DRAWBRIDGES AT VARIOUS LOCATIONS IN THE COUNTY OF MONMOUTH FOR THE PERIOD JANUARY 1, 2027 THROUGH DECEMBER 31, 2027 WITH TWO (2) ONE \u2014 ",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-10-28T00:59:53.138484+00:00"
+  },
+  {
+    "id": "opp-250bc94df6c3",
+    "title": "F \u2014 145 \u2014 2026 \u2014 ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD (ADDENDUM #1 ISSU",
+    "source_id": "county-monmouth",
+    "source_name": "Monmouth County Purchasing",
+    "county": "Monmouth",
+    "due_date_raw": "10/28/2026",
+    "due_date": "10/28/2026",
+    "url": "https://pol.co.monmouth.nj.us/BidDetails?ID=F-145-2026&BidType=0",
+    "access_type": "Public access",
+    "record_type": "construction",
+    "contract_number": "F \u2014 145 \u2014 2026",
+    "description": "ROADWAY IMPROVEMENTS TO THREE BROOKS ROAD FROM US HIGHWAY 9 TO COUNTY ROUTE 55 (HALLS MILL ROAD) AND THE REPLACEMENT OF BRIDGES F \u2014 26, F \u2014 27, AND F \u2014 28 IN THE TOWNSHIP OF FREEHOLD (ADDENDUM #1 ISSU",
+    "doc_url": "",
+    "status": "expired",
+    "crawled_at": "2026-10-28T00:59:53.138480+00:00"
   },
   {
     "id": "opp-5384d0f226c0",
